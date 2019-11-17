@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Login.css" 
+import "./Content.css" 
 
 class Login extends Component {
   render() {
@@ -10,10 +11,12 @@ class Login extends Component {
           <input type="text"></input>
           <p>Lozinka:</p>
           <input type="password"></input>
+          <br/>
+          <p></p>
+          <input type="submit" value="Prijavi se"></input>
         </form>
-        <br/>
-        <button>Prijavi se</button>
-        <p>Zaboravljena lozinka</p>
+        
+        <a href="www.google.com" id="zaboravljena_lozinka">Zaboravljena lozinka</a>
       </div>
     );
   }

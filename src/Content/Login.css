@@ -12,8 +12,13 @@
     font-size: 17px;
     margin-bottom: 3px;
 }
-.Login button {
-    width: 120px;
+input[type="submit"]{
+    width: 100px;
     height: 30px;
-    font-size: 17px;
+    text-align: center;
+    margin-left: 90px;
+}
+#zaboravljena_lozinka{
+    cursor: pointer;
+    margin: 65px;
 }
