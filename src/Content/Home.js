@@ -6,8 +6,8 @@ class Home extends Component {
   render() {
     return (
       <div className="Home">
-        <h2>Dobrodosli</h2>
-        <p>Zdravstveno informacioni sistem Srbije.</p>
+        <h2>Добродошли</h2>
+        <p>Здравствено информациони систем Србије.</p>
       </div>
     );
   }

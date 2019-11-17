@@ -13,7 +13,7 @@ class App extends Component {
       <HashRouter>
         <div>
           <header className="App-header">
-            <h1 className="App-title">Zdravstveno informacioni sistem Srbije</h1>
+            <h1 className="App-title">Здравствено информациони систем Србије</h1>
             <Menu className="App-menu"/>
           </header>
           <p className="App-intro">

@@ -7,16 +7,16 @@ class Login extends Component {
     return (
       <div className="Login">
         <form>
-          <p>Korisničko ime:</p>
+          <p>Корисничко име:</p>
           <input type="text"></input>
-          <p>Lozinka:</p>
+          <p>Лозинка:</p>
           <input type="password"></input>
           <br/>
           <p></p>
-          <input type="submit" value="Prijavi se"></input>
+          <input type="submit" value="Пријави се"></input>
         </form>
         
-        <a href="www.google.com" id="zaboravljena_lozinka">Zaboravljena lozinka</a>
+        <a href="www.google.com" id="zaboravljena_lozinka">Заборављена лозинка</a>
       </div>
     );
   }
