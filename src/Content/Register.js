@@ -85,7 +85,7 @@ class Register extends Component {
         "lbo" : this.state.lbo
       }
       
-      const url = 'http://localhost:8081/login/patient';
+      const url = 'http://localhost:8081/patient/register';
       const options = {
         method: 'POST',
         headers: {
@@ -98,16 +98,13 @@ class Register extends Component {
       fetch(url, options)
         .then(response => {
           console.log(response.status);
-          if(response === 0){
+          console.log(response)
+          if(response.status === 201){
             document.forms['patientRegForm'].reset();
-            alert("Zahtev uspesno poslat! Putem mejla cete dobiti obavestenje da li je"+
-                  +"zahtev odobren ili odbijen.");
+            alert("Zahtev uspesno poslat! Putem mejla cete dobiti obavestenje da li je zahtev odobren ili odbijen.");
           }
-          else if(response === -1){
-            alert("Proveriti da li je lbo validno unesen.");
-          }
-          else{
-            alert("Mejl adresa mora biti jedinstvena na nivou sistema.");
+          else {
+            alert("Proveriti da li je LBO/Email adresa validno unesena.");
           }
         });
      }
