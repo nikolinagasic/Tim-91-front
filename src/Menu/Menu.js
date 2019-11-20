@@ -8,6 +8,8 @@ const menu = () => {
             <a><NavLink to="/">ПОЧЕТНА</NavLink></a>
             <a><NavLink to="/register">РЕГИСТРУЈ СЕ</NavLink></a>
             <a><NavLink to="/login">ПРИЈАВИ СЕ</NavLink></a>
+            <a><NavLink to="/medical">Медицинско особље</NavLink></a>
+
         </div>
     )
 };
