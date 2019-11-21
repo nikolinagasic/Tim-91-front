@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import "./RegisterMedical.css"
+import "./RegisterAdmin.css"
 
 
-class RegisterMedical extends Component {
+class RegisterAdmin extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,8 +32,8 @@ class RegisterMedical extends Component {
       err = <strong>Лозинка мора садржати минимално 7 карактера.</strong>;
       this.setState({errormessage:err});
     }
-    else if(!(document.getElementById("doctor").checked || document.getElementById("nurse").checked)){
-        err = <strong>Морате изабрати тип медицинског особља за регистрацију.</strong>;
+    else if(!(document.getElementById("clinic").checked || document.getElementById("cliniccentre").checked)){
+        err = <strong>Морате изабрати тип администратора за регистрацију.</strong>;
         this.setState({errormessage:err});
       }
     else{
@@ -47,11 +47,11 @@ class RegisterMedical extends Component {
       
       var url;
 
-      if ( document.getElementById("doctor").checked === true) {
-        url = 'http://localhost:8081/clinicAdministrator/registerDoctor';
+      if ( document.getElementById("clinic").checked === true) {
+        url = 'http://localhost:8081/ccadmin/register_admin';
       }
       else {
-        url = 'http://localhost:8081/clinicAdministrator/registerNurse';
+        url = 'http://localhost:8081/ccadmin/register_ccadmin';
       }
       const options = {
         method: 'POST',
@@ -65,8 +65,8 @@ class RegisterMedical extends Component {
       fetch(url, options)
         .then(response => {
           console.log(response.status);
-          if(response.ok){
-            document.forms['medicalRegForm'].reset();
+          if(response.ok === true){
+            document.forms['adminRegForm'].reset();
             alert("Registracija uspešna!");
           }
           else{
@@ -79,7 +79,7 @@ class RegisterMedical extends Component {
   render() {
     return (
     <div className="Register">
-      <form name="medicalRegForm" onSubmit={this.mySubmitHandler}>
+      <form name="adminRegForm" onSubmit={this.mySubmitHandler}>
         <table>
           <tr>
         <td>          
@@ -90,19 +90,19 @@ class RegisterMedical extends Component {
               required></input>
           
           <p>Лозинка:</p>
-          <input
+          <input type='password'
               name='password'
               onChange={this.myChangeHandler}
               required></input>
           <p></p>
 
-          <input id="doctor" type="radio" name="container"
+          <input id="clinic" type="radio" name="container"
           onChange={this.myChangeHandler}></input>
-          <label id="text">Доктор</label>
+          <label id="text">Администратор клинике</label>
           <p></p>
-          <input id="nurse" type="radio" name="container"
+          <input id="cliniccentre" type="radio" name="container"
           onChange={this.myChangeHandler}></input>
-          <label id="text">Медицинска сестра</label>
+          <label id="text">Администратор клиничког центра</label>
           
           <p></p>
           {this.state.errormessage}
@@ -117,4 +117,4 @@ class RegisterMedical extends Component {
   }
 }
  
-export default RegisterMedical;
+export default RegisterAdmin;
