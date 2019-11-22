@@ -6,9 +6,9 @@ class Clinic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Name: '',
+      name: '',
       address: '',
-      adescription: '',
+      description: '',
       
       errormessage: ''
     };
@@ -28,12 +28,12 @@ class Clinic extends Component {
     event.preventDefault();
       
       let obj = {
-        "Name" : this.state.Name,
+        "name" : this.state.name,
         "address" : this.state.address,
-        "adescription" : this.state.adescription,
+        "description" : this.state.description,
       }
       
-      var url = 'http://localhost:8081/register_clinic'
+      var url = 'http://localhost:8081/ccadmin/register_clinic'
 
       const options = {
         method: 'POST',
@@ -67,7 +67,7 @@ class Clinic extends Component {
         <td>          
           <p>Назив:</p>
           <input id="id_name" type='text'
-              name='Name'
+              name='name'
               onChange={this.myChangeHandler}
               required></input>
           
@@ -79,8 +79,8 @@ class Clinic extends Component {
 
           <p>Опис:</p>
             <textarea
-                id="id_desc"
-                name='adescription'
+                id="textarea"
+                name='description'
                 onChange={this.myChangeHandler}
             />
 
