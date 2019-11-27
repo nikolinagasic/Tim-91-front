@@ -1,0 +1,13 @@
+#clinic {
+    width: 20px;
+    vertical-align: bottom;
+}
+#cliniccentre {
+    width: 20px;
+    vertical-align: bottom;
+}
+#text {
+    vertical-align: center;
+    font-family:"Times New Roman", Times, serif;  
+    font-size: 20px; 
+}

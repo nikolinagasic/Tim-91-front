@@ -7,9 +7,7 @@ class Login extends Component {
     super(props);
     this.state = {
       email: '',
-      password: '',
-      
-      errormessage: ''
+      password: ''
     };
   }
 
@@ -23,9 +21,7 @@ class Login extends Component {
 
   mySubmitHandler = (event) => {
     event.preventDefault();
-    this.setState({errormessage:''});
-    console.log('sve ok, salji objekat');
-    
+  
     let obj = {
       "username" : this.state.email,
       "password" : this.state.password
@@ -43,38 +39,37 @@ class Login extends Component {
 
     fetch(url, options)
       .then(response => {
-        console.log(response.status);
-        console.log(response)
-        if(response.ok){
+        console.log(response.status+" "+response.ok);
+        if(response.ok === true) {
           document.forms['patientLogForm'].reset();
-          alert("Uspesno ste se ulogovali!");
+          alert("Uspesno ste se prijavili.");
         }
         else {
-          alert("Email adresa ili lozinka nisu validni");
+          alert("Lozinka ili e-mail adresa nisu validni.");
         }
       });
-  }
+    }
 
   render() {
     return (
       <div className="Login">
         <form id="patientLogForm" onSubmit={this.mySubmitHandler}>
-          <p>Email adresa:</p>
+          <p>Адреса е-поште:</p>
           <input type='email'
               name='email'
               onChange={this.myChangeHandler}
               required></input>
-          <p>Lozinka:</p>
+          <p>Лозинка:</p>
           <input type='password'
               name='password'
               onChange={this.myChangeHandler}
               required></input>
           <br/>
           <p></p>
-          <input type="submit" value="Prijavi se"></input>
+          <input type="submit" value="Пријави се"></input>
         </form>
         
-        <a href="www.google.com" id="zaboravljena_lozinka">Zaboravljena lozinka</a>
+        <a href="www.google.com" id="zaboravljena_lozinka">Заборављена лозинка</a>
       </div>
     );
   }

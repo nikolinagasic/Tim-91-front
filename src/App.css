@@ -1,4 +1,6 @@
-
+.App {
+  overflow: auto;
+}
 
 .App-logo {
   height: 200px;
