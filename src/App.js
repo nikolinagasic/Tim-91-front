@@ -8,6 +8,8 @@ import RegisterMedical from "./Content/RegisterMedical";
 import RegisterAdmin from "./Content/RegisterAdmin";
 import Clinic from "./Content/Clinic";
 import Menu from './Menu/Menu';
+import PagePatient from './Content/mainPage/PagePatient';
+import ProfilePatient from './Content/mainPage/ProfilePatient';
 import './App.css';
 
 class App extends Component {
@@ -29,6 +31,8 @@ class App extends Component {
             <Route path="/medical" component={RegisterMedical}/>
             <Route path="/admin" component={RegisterAdmin}/>
             <Route path="/clinic" component={Clinic}/>
+            <Route path="/pagepatient" component={PagePatient}/>
+            <Route path="/profilepatient" component={ProfilePatient}/>
           </div>
         </div>
       </HashRouter>

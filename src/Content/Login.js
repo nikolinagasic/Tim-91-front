@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
 import "./Login.css" 
 import "./Content.css" 
 
@@ -36,18 +36,25 @@ class Login extends Component {
       },
       body: JSON.stringify(obj)
     };
-
+    
     fetch(url, options)
-      .then(response => {
-        console.log(response.status+" "+response.ok);
-        if(response.ok === true) {
+    .then(dataWrappedByPromise => dataWrappedByPromise.json())
+      .then(data => {
+        if(data !== null) {
           document.forms['patientLogForm'].reset();
           alert("Uspesno ste se prijavili.");
+          console.log(data);
+          this.props.history.push({
+            pathname: '/pagepatient',
+            state: { detail: data }
+          })
         }
         else {
           alert("Lozinka ili e-mail adresa nisu validni.");
         }
-      });
+      }).catch((error) => {
+        console.log(error)
+      })
     }
 
   render() {
