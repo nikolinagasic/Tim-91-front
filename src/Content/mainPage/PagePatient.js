@@ -6,36 +6,17 @@ class PagePatient extends Component {
   myClickHandler = (event) => {
     event.preventDefault();
     
-    let token = this.props.location.state.detail.accessToken;
+    let patient = this.props.location.state.detail;
     let nam = event.target.id;
     
     if(nam === "karton"){
       console.log('click karton');
     }
     else if(nam === "profil"){
-      const url = 'http://localhost:8081/patient/getByToken/'+token;
-      const options = {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
-      };
-
-      fetch(url, options)
-        .then(responseWrapped => responseWrapped.json())
-        .then(response => {
-          console.log(response)
-          if(response !== null){
-            this.props.history.push({
-              pathname: '/profilepatient',
-              state: { detail: response }
-            })
-          }
-          else {
-            console.log('Nesto nije u redu');
-          }
-        });
+      this.props.history.push({
+        pathname: '/profilepatient',
+        state: { detail: patient }
+      })
     }
     else if(nam === "istorija"){
       console.log('click istorija');

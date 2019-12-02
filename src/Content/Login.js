@@ -7,7 +7,8 @@ class Login extends Component {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      korisnik: null
     };
   }
 
@@ -41,21 +42,79 @@ class Login extends Component {
     .then(dataWrappedByPromise => dataWrappedByPromise.json())
       .then(data => {
         if(data !== null) {
+          //console.log("data: "+data);
           document.forms['patientLogForm'].reset();
-          alert("Uspesno ste se prijavili.");
-          console.log(data);
-          this.props.history.push({
-            pathname: '/pagepatient',
-            state: { detail: data }
-          })
+          this.preuzmi_korisnika(data);
         }
         else {
           alert("Lozinka ili e-mail adresa nisu validni.");
         }
       }).catch((error) => {
-        console.log(error)
+        console.log(error);
+        alert("Lozinka ili e-mail adresa nisu validni.");
       })
     }
+
+  // f-ja koja na osnovu tokena vraca koji je korisnik prijavljen
+  preuzmi_korisnika = (data) => {
+    let token = data.accessToken;
+    
+    const url = 'http://localhost:8081/auth/getByToken/'+token;
+      const options = {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+      };
+
+      fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+          console.log(response)
+          if(response !== null){
+            this.setState({korisnik: response});
+            console.log(response.role);
+            if(response.role === "patient"){
+              this.props.history.push({
+                pathname: '/pagepatient',
+                state: { detail: response }
+              })
+            }
+            else if(response.role === "doctor"){
+              this.props.history.push({
+                pathname: '/putanja_do_pocetne_doctora',
+                state: { detail: response }
+              })
+            }
+            else if(response.role === "nurse"){
+              this.props.history.push({
+                pathname: '/putanja_do_pocetne_nurse',
+                state: { detail: response }
+              })
+            }
+            else if(response.role === "ccadmin"){
+              this.props.history.push({
+                pathname: '/putanja_do_pocetne_ccadmina',
+                state: { detail: response }
+              })
+            }
+            else if(response.role === "cadmin"){
+              this.props.history.push({
+                pathname: '/putanja_do_pocetne_cadmina',
+                state: { detail: response }
+              })
+            }
+            else{
+              console.log('Greska [role]');  
+            }
+          }
+          else {
+            console.log('Nesto nije u redu');
+            this.setState({korisnik: null});
+          }
+        });
+  }
 
   render() {
     return (
