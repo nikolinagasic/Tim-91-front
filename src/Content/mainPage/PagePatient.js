@@ -3,44 +3,47 @@ import "./PagePatient.css"
 // import {Link} from 'react-router-dom';
 
 class PagePatient extends Component {
-  myClickHandler = (event) => {
-    event.preventDefault();
-    
+  clickKarton = (event) => {
+    event.preventDefault(); 
+  
+  }
+
+  clickProfil = (event) => {
+    event.preventDefault(); 
     let patient = this.props.location.state.detail;
-    let nam = event.target.id;
     
-    if(nam === "karton"){
-      console.log('click karton');
-    }
-    else if(nam === "profil"){
-      this.props.history.push({
-        pathname: '/profilepatient',
-        state: { detail: patient }
-      })
-    }
-    else if(nam === "istorija"){
-      console.log('click istorija');
-    }
-    else if(nam === "klinike"){
-      console.log('click klinike');
-    }
-    else{
-      console.log('greska');
-    }
+    this.props.history.push({
+      pathname: '/profilepatient',
+      state: { detail: patient }
+    });
+  }
+
+  clickIstorija = (event) => {
+    event.preventDefault(); 
+  
+  }
+
+  clickKlinike = (event) => {
+    event.preventDefault(); 
+  
   }
 
   render() {
       return (
-        <div>
-            <ul id="unordered_list">
-              <li><p id="karton"
-              onClick={this.myClickHandler}> Zdravstveni karton </p></li>
-              <li><p id="profil" 
-              onClick={this.myClickHandler}> Profil korisnika </p></li>
-              <li><p id="istorija" 
-              onClick={this.myClickHandler}> Istorija pregleda i operacija </p></li>
-              <li><p id="klinike"
-              onClick={this.myClickHandler}> Lista klinika </p></li>
+        <div className="main_div">
+            <ul id="unordered_list" className="ul_list">
+              <li className="li_list"><a 
+              id="karton"
+              onClick={this.clickKarton}> Здравствени картон </a></li>
+              <li className="li_list"><a 
+              id="profil" 
+              onClick={this.clickProfil}> Профил корисника </a></li>
+              <li className="li_list"><a 
+              id="istorija" 
+              onClick={this.clickIstorija}> Историја </a></li>
+              <li className="li_list"><a 
+              id="klinike"
+              onClick={this.clickKlinike}> Листа клиника </a></li>
             </ul>
         </div>
       );

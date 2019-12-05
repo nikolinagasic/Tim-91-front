@@ -18,7 +18,25 @@ input[type="submit"]{
     text-align: center;
     margin-left: 90px;
 }
+.zab_lozinka{
+    width: 60%;
+    height: 30px;
+    text-align: center;
+    border-radius: 12px;
+}
 #zaboravljena_lozinka{
     cursor: pointer;
     margin: 65px;
+}
+p#zaboravljena_lozinka{
+    color: blue;
+}
+p#zaboravljena_lozinka:hover{
+    cursor: pointer;
+    color: rgba(0, 0, 255, 0.521);
+    text-decoration: underline;
+}
+p#pZab_greska{
+    color: red;
+    font-size: 15px;
 }

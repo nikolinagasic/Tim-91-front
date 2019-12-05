@@ -115,6 +115,7 @@ class Register extends Component {
     <div className="Register">
       <form name="patientRegForm" onSubmit={this.mySubmitHandler}>
         <table>
+          <tbody>
           <tr>
         <td>
           <p>Име:</p>
@@ -181,6 +182,7 @@ class Register extends Component {
           <input type="submit" id="id_submit" value="Региструј се"></input>
         </td>
         </tr>
+        </tbody>
         </table>
         </form>
       </div>

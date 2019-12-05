@@ -22,7 +22,7 @@ class App extends Component {
             <Menu className="App-menu"/>
           </header>
           <p className="App-intro">
-            <img src={logo} className="App-logo" alt="logo" />        
+            <img src={logo} className="App-logo" alt="logo" id="logo_img"/>        
           </p>
           <div className="content">
             <Route exact path="/" component={Home}/>

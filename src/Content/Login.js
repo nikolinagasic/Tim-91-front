@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import "./Login.css" 
 import "./Content.css" 
+import Modal from "./Modal" 
 
 class Login extends Component {
   constructor(props) {
@@ -8,7 +9,7 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      korisnik: null
+      isShowing: false
     };
   }
 
@@ -73,8 +74,11 @@ class Login extends Component {
         .then(response => {
           console.log(response)
           if(response !== null){
-            this.setState({korisnik: response});
             console.log(response.role);
+            alert('Добродошли ' + response.firstName + " " + response.lastName + ".");
+            
+            // hocu da sakrijem onaj krst sa desne strane kad se ulogujem
+            document.getElementById("logo_img").style.visibility = "hidden"; 
             if(response.role === "patient"){
               this.props.history.push({
                 pathname: '/pagepatient',
@@ -116,6 +120,57 @@ class Login extends Component {
         });
   }
 
+  openModalHandler = (event) => {
+    this.setState({
+      isShowing: true
+   });    
+  }
+  
+  closeModalHandler = () => {
+    this.setState({
+        isShowing: false
+    });
+  }
+
+  sendModalHandler = () => {
+    console.log('usao u send');
+    let mail = document.getElementById("zab_mail").value;
+    let ime = document.getElementById("zab_ime").value;
+    let prezime = document.getElementById("zab_prezime").value;
+
+    if(ime === "" || prezime === "" || mail === ""){
+      document.getElementById("pZab_greska").innerHTML = "Sva polja na formi moraju biti popunjena.";
+    }
+    else{
+      
+      // posalji upisane parametre
+      const url = 'http://localhost:8081/auth/forgetPassword/'+mail+"/"+ime+"/"+prezime;
+      const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      }
+    };
+    
+    fetch(url, options)
+      .then(response => {
+        if(response.ok) {
+          alert("Лозинка је послата на вашу адресу е-поште.");
+        }
+        else {
+          alert("Унети подаци нису валидни.");
+        }
+      })      
+
+      // izbrisi poruku greske i ukloni modalni dijalog
+      document.getElementById("pZab_greska").innerHTML = "";
+      this.setState({
+        isShowing: false
+      });
+    }
+  }
+
   render() {
     return (
       <div className="Login">
@@ -133,9 +188,26 @@ class Login extends Component {
           <br/>
           <p></p>
           <input type="submit" value="Пријави се"></input>
+          <p id="zaboravljena_lozinka" onClick={this.openModalHandler}>Заборављена лозинка</p>
         </form>
-        
-        <a href="www.google.com" id="zaboravljena_lozinka">Заборављена лозинка</a>
+
+        { this.state.isShowing ? <div onClick={this.closeModalHandler} 
+                className="back-drop"></div> : null }
+        <Modal
+            className="modal"
+            show={this.state.isShowing}
+            close={this.closeModalHandler}
+            send={this.sendModalHandler}>
+                <form>
+                  <p>*Адреса Е-поште:</p>
+                  <input type="email" className="zab_lozinka" id="zab_mail"></input>
+                  <p>Име:</p>
+                  <input type="text" className="zab_lozinka" id="zab_ime"></input>
+                  <p>Презиме:</p>
+                  <input type="text" className="zab_lozinka" id="zab_prezime"></input>
+                </form>
+                <p id="pZab_greska"></p>
+        </Modal>
       </div>
     );
   }
