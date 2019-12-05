@@ -10,7 +10,12 @@ import Clinic from "./Content/Clinic";
 import Menu from './Menu/Menu';
 import PagePatient from './Content/mainPage/PagePatient';
 import ProfilePatient from './Content/mainPage/ProfilePatient';
+import PageCAdmin from './Content/ccadminPage/PageCAdmin';
+import ProfileCAdmin from './Content/ccadminPage/ProfileCAdmin';
+import PageAdmin from './Content/adminPage/PageAdmin';
+import ProfileAdmin from './Content/adminPage/ProfileAdmin';
 import './App.css';
+
 
 class App extends Component {
   render() {
@@ -33,6 +38,10 @@ class App extends Component {
             <Route path="/clinic" component={Clinic}/>
             <Route path="/pagepatient" component={PagePatient}/>
             <Route path="/profilepatient" component={ProfilePatient}/>
+            <Route path="/pagecadmin" component={PageCAdmin}/>
+            <Route path="/profilecadmin" component={ProfileCAdmin}/>
+            <Route path="/pageadmin" component={PageAdmin}/>
+            <Route path="/profileadmin" component={ProfileAdmin}/>
           </div>
         </div>
       </HashRouter>

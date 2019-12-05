@@ -93,15 +93,15 @@ class Login extends Component {
                 state: { detail: response }
               })
             }
-            else if(response.role === "ccadmin"){
+            else if(response.role === "cadmin"){
               this.props.history.push({
-                pathname: '/putanja_do_pocetne_ccadmina',
+                pathname: '/pageadmin',
                 state: { detail: response }
               })
             }
-            else if(response.role === "cadmin"){
+            else if(response.role === "ccadmin"){
               this.props.history.push({
-                pathname: '/putanja_do_pocetne_cadmina',
+                pathname: '/pagecadmin',
                 state: { detail: response }
               })
             }

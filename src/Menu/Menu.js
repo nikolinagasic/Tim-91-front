@@ -9,8 +9,6 @@ const menu = () => {
             <a><NavLink to="/register">РЕГИСТРУЈ СЕ</NavLink></a>
             <a><NavLink to="/login">ПРИЈАВИ СЕ</NavLink></a>
             <a><NavLink to="/medical">Медицинско особље</NavLink></a>
-            <a><NavLink to="/admin">Администратори</NavLink></a>
-            <a><NavLink to="/clinic">Клиника</NavLink></a>
         </div>
     )
 };
