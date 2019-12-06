@@ -14,6 +14,10 @@ import PageCAdmin from './Content/ccadminPage/PageCAdmin';
 import ProfileCAdmin from './Content/ccadminPage/ProfileCAdmin';
 import PageAdmin from './Content/adminPage/PageAdmin';
 import ProfileAdmin from './Content/adminPage/ProfileAdmin';
+import PageDoctor from './Content/doctorPage/PageDoctor';
+import ProfileDoctor from './Content/doctorPage/ProfileDoctor';
+import PageNurse from './Content/nursePage/PageNurse';
+import ProfileNurse from './Content/nursePage/ProfileNurse';
 import './App.css';
 
 
@@ -42,6 +46,10 @@ class App extends Component {
             <Route path="/profilecadmin" component={ProfileCAdmin}/>
             <Route path="/pageadmin" component={PageAdmin}/>
             <Route path="/profileadmin" component={ProfileAdmin}/>
+            <Route path="/pagedoctor" component={PageDoctor}/>
+            <Route path="/profiledoctor" component={ProfileDoctor}/>
+            <Route path="/pagenurse" component={PageNurse}/>
+            <Route path="/profilenurse" component={ProfileNurse}/>
           </div>
         </div>
       </HashRouter>
