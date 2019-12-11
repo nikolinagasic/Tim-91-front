@@ -37,12 +37,12 @@ class Register extends Component {
     }
     if (nam === "lbo") {
       if (!Number(val)) {
-        err = <strong>ЛБО се састоји искључиво од цифара.</strong>;
+        err = <strong>ЛБО се мора састојати искључиво од цифара.</strong>;
       }
     }
     if (nam === "telephone") {
       if (!Number(val)) {
-        err = <strong>Телефон се састоји искључиво од цифара.</strong>;
+        err = <strong>Телефон се мора састојати искључиво од цифара.</strong>;
       }
     }
     
@@ -57,8 +57,8 @@ class Register extends Component {
     let lbo = this.state.lbo;
     let err = '';
 
-    if (pass.length < 7 || pass2.length < 7) {
-      err = <strong>Лозинка мора садржати минимално 7 карактера.</strong>;
+    if (pass.length < 8 || pass2.length < 8) {
+      err = <strong>Лозинка мора садржати минимално 8 карактера.</strong>;
       this.setState({errormessage:err});
     }
     else if(pass !== pass2){

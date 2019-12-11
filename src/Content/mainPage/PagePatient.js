@@ -1,50 +1,234 @@
 import React, { Component } from 'react';
 import "./PagePatient.css" 
+import ProfilePatient from './ProfilePatient'
+import Modal from "../Modal" 
 // import {Link} from 'react-router-dom';
 
 class PagePatient extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      patient: this.props.location.state.detail,   // ono sto sam poslao iz prijave
+      isKarton: false,
+      isProfil: false,
+      isIstorija: false,
+      isKlinike: false,
+
+      modalShowing: false,
+      headerText: '',
+      staraVrednost: '',
+      changedValue: ''
+    };
+  }
+
+
   clickKarton = (event) => {
-    event.preventDefault(); 
-  
+    alert("Страница је у процесу израде");
   }
 
   clickProfil = (event) => {
-    event.preventDefault(); 
-    let patient = this.props.location.state.detail;
-    
-    this.props.history.push({
-      pathname: '/profilepatient',
-      state: { detail: patient }
+    console.log('kliknuo na profil');
+    document.getElementById("logo_img").style.visibility = "hidden"; 
+    this.setState({
+      isKarton: false
+    });
+    this.setState({
+      isProfil: true
+    });
+    this.setState({
+      isIstorija: false
+    });
+    this.setState({
+      isKlinike: false
     });
   }
 
   clickIstorija = (event) => {
-    event.preventDefault(); 
-  
+    alert("Страница је у процесу израде");
   }
 
   clickKlinike = (event) => {
-    event.preventDefault(); 
-  
+    alert("Страница је у процесу израде");
   }
 
+  clickZabrana = (polje) => {
+    console.log(polje);
+    if(polje === 'mail'){
+      alert('Није могуће мењати вредност поља е-поште.');
+    }
+    else if(polje === 'lbo'){
+      alert('Није могуће мењати вредност ЛБО.');
+    }
+  }
+
+  closeModalHandler = () => {
+    this.setState({
+        modalShowing: false
+    }); 
+  }
+
+  clickIzmena = (naziv, staraVr) => {
+    console.log(naziv);
+    this.setState({
+        modalShowing: true
+    });
+    this.setState({changedValue: naziv});
+
+    if(naziv === 'ime'){
+      this.setState({headerText: "Измена имена"});
+      this.setState({staraVrednost: this.state.patient.firstName});
+    }
+    else if(naziv === 'prezime'){
+      this.setState({headerText: "Измена презимена"});
+      this.setState({staraVrednost: this.state.patient.lastName});
+    }
+    else if(naziv === 'adresa'){
+      this.setState({headerText: "Измена адресе"});
+      this.setState({staraVrednost: this.state.patient.address});
+    }
+    else if(naziv === 'grad'){
+      this.setState({headerText: "Измена града"});
+      this.setState({staraVrednost: this.state.patient.city});
+    }
+    else if(naziv === 'drzava'){
+      this.setState({headerText: "Измена државе"});
+      this.setState({staraVrednost: this.state.patient.country});
+    }
+    else if(naziv === 'telefon'){
+      this.setState({headerText: "Измена телефона"});
+      this.setState({staraVrednost: this.state.patient.telephone});
+    }
+    else{
+      console.log('greska izmena');
+    }
+ }
+
+ sendModalHandler = (event) => {
+   //console.log('usao u sendovanje');
+   this.setState({
+      modalShowing: false
+  });
+  let newValue = document.getElementById("newValue_input").value;
+  let changedName = this.state.changedValue;
+  
+  // menjam stanje state-a cim se promeni na formi
+  const sve_ok = this.promenaState(changedName, newValue);
+  if(!sve_ok){
+    alert('Телефон се мора састојати искључиво од цифара.');
+    return;
+  }
+  
+  let email = this.state.patient.mail;
+  const url = 'http://localhost:8081/patient/changeAttribute/'+changedName+"/"+newValue+"/"+email;
+  const options = {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+  };
+
+  fetch(url, options)
+    .then(response => {
+      console.log(response.ok);
+      console.log(response)
+      if(response.ok === true){
+        alert("Успешно сте изменили поље '" + changedName+"'.");
+      }
+      else {
+        alert("Дошло је до грешке приликом измене поља '" + changedName + "'.");
+      }
+    });
+ }
+
+ promenaState = (nazivAtributa, novaVrednost) => {
+  if(nazivAtributa === 'telefon'){
+    if (!Number(novaVrednost)) {
+      return false;
+    }
+  }
+  
+  // kopija pacijenta
+  const patient = {       
+    ...this.state.patient
+  };
+  
+  if(nazivAtributa === 'ime'){
+    patient.firstName = novaVrednost;
+  }
+  else if(nazivAtributa === 'prezime'){
+    patient.lastName = novaVrednost;
+  }
+  else if(nazivAtributa === 'adresa'){
+    patient.address = novaVrednost;
+  }
+  else if(nazivAtributa === 'grad'){
+    patient.city = novaVrednost;
+  }
+  else if(nazivAtributa === 'drzava'){
+    patient.country = novaVrednost;
+  }
+  else if(nazivAtributa === 'telefon'){
+    patient.telephone = novaVrednost;
+  }
+
+  // update-uj state
+  this.setState({patient : patient});
+  return true;
+}
+
   render() {
+      let modalni = null;
+      if(this.state.modalShowing){
+        modalni = (
+          <Modal
+            className="modal"
+            show={this.state.modalShowing}
+            close={(event) => this.closeModalHandler(event)}
+            send={this.sendModalHandler}
+            header={this.state.headerText}
+            >
+              <form>
+                <p>Стара вредност:</p>
+                <input type="text"
+                  className="input_field" 
+                  value={this.state.staraVrednost}
+                  disabled></input>
+                <p>Нова вредност:</p>
+                <input type="text" 
+                  className="input_field"
+                  id="newValue_input"></input>
+              </form>
+          </Modal>);
+      }
+
+
       return (
         <div className="main_div">
-            <ul id="unordered_list" className="ul_list">
-              <li className="li_list"><a 
-              id="karton"
-              onClick={this.clickKarton}> Здравствени картон </a></li>
-              <li className="li_list"><a 
-              id="profil" 
-              onClick={this.clickProfil}> Профил корисника </a></li>
-              <li className="li_list"><a 
-              id="istorija" 
-              onClick={this.clickIstorija}> Историја </a></li>
-              <li className="li_list"><a 
-              id="klinike"
-              onClick={this.clickKlinike}> Листа клиника </a></li>
-            </ul>
+          <ul id="unordered_list" className="ul_list">
+            <li className="li_list"><a 
+            id="karton"
+            onClick={this.clickKarton}> Здравствени картон </a></li>
+            <li className="li_list"><a 
+            id="profil" 
+            onClick={this.clickProfil}> Профил корисника </a></li>
+            <li className="li_list"><a 
+            id="istorija" 
+            onClick={this.clickIstorija}> Историја </a></li>
+            <li className="li_list"><a 
+            id="klinike"
+            onClick={this.clickKlinike}> Листа клиника </a></li>
+          </ul>
+          
+          <ProfilePatient
+            pat={this.state.patient}
+            show = {this.state.isProfil}
+            clickIzmena={this.clickIzmena}
+            clickZabrana={this.clickZabrana}
+            > 
+          </ProfilePatient>
+
+          {modalni}     
         </div>
       );
     }

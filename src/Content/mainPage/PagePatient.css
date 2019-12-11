@@ -1,10 +1,13 @@
 ul.ul_list {
     list-style-type: none;
-    margin: 0;
+    position: fixed;
+    top: 70px;
+    left: 40;
     padding: 0;
     width: 280px;
     background-color: #e1f1f1;
     height: 650px;
+    float: left;
 }
 
 li.li_list {
@@ -17,9 +20,9 @@ li.li_list a {
     padding: 8px 16px;
     text-decoration: none;
     cursor: pointer;
-    font-size: 23px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    font-size: 19px;
+    padding-top: 27px;
+    padding-bottom: 27px;
 }
 
 li.li_list a:hover {
@@ -29,4 +32,27 @@ li.li_list a:hover {
 
 div.main_div {
     margin-left: 5%;
+}
+
+.divProfilePatient{
+    margin-left: 38%;
+    padding-top: 5%;
+    font-size: large;
+}
+
+table#tabProfilePatient {
+    border-collapse: collapse;
+    width: 60%;
+}
+
+table#tabProfilePatient th , table#tabProfilePatient td{
+    padding: 18px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+table#tabProfilePatient td:hover{
+    cursor: pointer;
+    background-color: #f1f1f1;
 }

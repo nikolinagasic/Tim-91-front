@@ -9,6 +9,8 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
+
+      activeUser: null,
       isShowing: false
     };
   }
@@ -80,10 +82,11 @@ class Login extends Component {
             // hocu da sakrijem onaj krst sa desne strane kad se ulogujem
             document.getElementById("logo_img").style.visibility = "hidden"; 
             if(response.role === "patient"){
+              this.setState({activeUser:response});
               this.props.history.push({
                 pathname: '/pagepatient',
-                state: { detail: response }
-              })
+                state: { detail: this.state.activeUser }
+              });
             }
             else if(response.role === "doctor"){
               this.props.history.push({
@@ -97,15 +100,15 @@ class Login extends Component {
                 state: { detail: response }
               })
             }
-            else if(response.role === "ccadmin"){
+            else if(response.role === "cadmin"){
               this.props.history.push({
-                pathname: '/putanja_do_pocetne_ccadmina',
+                pathname: '/pageadmin',
                 state: { detail: response }
               })
             }
-            else if(response.role === "cadmin"){
+            else if(response.role === "ccadmin"){
               this.props.history.push({
-                pathname: '/putanja_do_pocetne_cadmina',
+                pathname: '/pagecadmin',
                 state: { detail: response }
               })
             }
@@ -133,7 +136,6 @@ class Login extends Component {
   }
 
   sendModalHandler = () => {
-    console.log('usao u send');
     let mail = document.getElementById("zab_mail").value;
     let ime = document.getElementById("zab_ime").value;
     let prezime = document.getElementById("zab_prezime").value;
@@ -197,14 +199,15 @@ class Login extends Component {
             className="modal"
             show={this.state.isShowing}
             close={this.closeModalHandler}
-            send={this.sendModalHandler}>
+            send={this.sendModalHandler}
+            header="Слање лозинке на адресу е-поште">
                 <form>
                   <p>*Адреса Е-поште:</p>
-                  <input type="email" className="zab_lozinka" id="zab_mail"></input>
-                  <p>Име:</p>
-                  <input type="text" className="zab_lozinka" id="zab_ime"></input>
-                  <p>Презиме:</p>
-                  <input type="text" className="zab_lozinka" id="zab_prezime"></input>
+                  <input type="email" className="input_field" id="zab_mail"></input>
+                  <p>*Име:</p>
+                  <input type="text" className="input_field" id="zab_ime"></input>
+                  <p>*Презиме:</p>
+                  <input type="text" className="input_field" id="zab_prezime"></input>
                 </form>
                 <p id="pZab_greska"></p>
         </Modal>

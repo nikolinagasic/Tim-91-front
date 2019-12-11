@@ -1,52 +1,48 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class ProfilePatient extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      mail: this.props.location.state.detail.mail,
-      firstName: this.props.location.state.detail.firstName,
-      lastName: this.props.location.state.detail.lastName,
-      address: this.props.location.state.detail.address,
-      city: this.props.location.state.detail.city,
-      country: this.props.location.state.detail.country,
-      lbo: this.props.location.state.detail.lbo,
-      telephone: this.props.location.state.detail.telephone
-    };
-  }
-
-    render() {
-      return (
-        <div>
-            <table border="1">
-              <tr><td>Email</td>
-                <td>{this.state.mail}</td>
-              </tr>
-              <tr><td>Ime</td>
-                <td>{this.state.firstName}</td>
-              </tr>
-              <tr><td>Prezime</td>
-                <td>{this.state.lastName}</td>
-              </tr>
-              <tr><td>Adresa</td>
-                <td>{this.state.address}</td>
-              </tr>
-              <tr><td>Grad</td>
-                <td>{this.state.city}</td>
-              </tr>
-              <tr><td>Drzava</td>
-                <td>{this.state.country}</td>
-              </tr>
-              <tr><td>LBO</td>
-                <td>{this.state.lbo}</td>
-              </tr>
-              <tr><td>Telefon</td>
-                <td>{this.state.telephone}</td>
-              </tr>
-            </table>
+const ProfilePatient = (props) => {
+  return (
+    <div>
+      <div className="divProfilePatient" style={{
+            display: props.show ? 'block' : 'none'
+          }}> 
+          <table id="tabProfilePatient">
+            <tr>
+              <th>E-пошта</th>
+              <td onClick={props.clickZabrana.bind(this, 'mail')}>{props.pat.mail}</td>
+            </tr>
+            <tr>
+              <th>Име</th>
+              <td onClick={props.clickIzmena.bind(this, 'ime')}>{props.pat.firstName}</td>
+            </tr>
+            <tr>
+              <th>Презиме</th>
+              <td onClick={props.clickIzmena.bind(this, 'prezime')}>{props.pat.lastName}</td>
+            </tr>
+            <tr>
+              <th>Адреса</th>
+              <td onClick={props.clickIzmena.bind(this, 'adresa')}>{props.pat.address}</td>
+            </tr>
+            <tr>
+              <th>Град</th>
+              <td onClick={props.clickIzmena.bind(this, 'grad')}>{props.pat.city}</td>
+            </tr>
+            <tr>
+              <th>Држава</th>
+              <td onClick={props.clickIzmena.bind(this, 'drzava')}>{props.pat.country}</td>
+            </tr>
+            <tr>
+              <th>ЛБО</th>
+              <td onClick={props.clickZabrana.bind(this, 'lbo')}>{props.pat.lbo}</td>
+            </tr>
+            <tr>
+              <th>Телефон</th>
+              <td onClick={props.clickIzmena.bind(this, 'telefon')}>{props.pat.telephone}</td>
+            </tr>
+          </table>
         </div>
-      );
-    }
+    </div>
+  );
 }
 
 export default ProfilePatient;
