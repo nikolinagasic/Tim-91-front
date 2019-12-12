@@ -90,13 +90,13 @@ class Login extends Component {
             }
             else if(response.role === "doctor"){
               this.props.history.push({
-                pathname: '/putanja_do_pocetne_doctora',
+                pathname: '/pagedoctor',
                 state: { detail: response }
               })
             }
             else if(response.role === "nurse"){
               this.props.history.push({
-                pathname: '/putanja_do_pocetne_nurse',
+                pathname: '/pagenurse',
                 state: { detail: response }
               })
             }

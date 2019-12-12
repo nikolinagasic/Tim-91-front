@@ -10,17 +10,16 @@ class PageAdmin extends Component {
     let cadmin = this.props.location.state.detail;
     let nam = event.target.id;
     
-    if(nam === "doctor"){
-      console.log('click doctor');
+    if(nam === "medical"){
+        this.props.history.push({
+        pathname: '/medical'
+      })
     }
     else if(nam === "profil"){
       this.props.history.push({
         pathname: '/profileadmin',
         state: { detail: cadmin }
       })
-    }
-    else if(nam === "nurse"){
-      console.log('click nurse');
     }
     else{
       console.log('greska');
@@ -33,10 +32,8 @@ class PageAdmin extends Component {
             <ul className="ul_list">
               <li className="li_list"><p id="profil"
               onClick={this.myClickHandler}> Profil korisnika</p></li>
-              <li className="li_list"><p id="doctor" 
-              onClick={this.myClickHandler}> Registracija lekara </p></li>
-              <li className="li_list"><p id="nurse" 
-              onClick={this.myClickHandler}> Registracija medicinske sestre </p></li>
+              <li><p id="medical" 
+              onClick={this.myClickHandler}> Registracija medicinskog osoblja </p></li>
             </ul>
         </div>
       );
