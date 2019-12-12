@@ -39,6 +39,11 @@ const ProfilePatient = (props) => {
               <th>Телефон</th>
               <td onClick={props.clickIzmena.bind(this, 'telefon')}>{props.pat.telephone}</td>
             </tr>
+            <tr>
+              <td colspan="2" id="btnSifraPatientTd">
+                <button id="btnSifraPatient" onClick={props.clickSifra}> Промени лозинку </button>
+              </td>
+            </tr>
           </table>
         </div>
     </div>

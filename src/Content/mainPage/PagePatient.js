@@ -17,7 +17,8 @@ class PagePatient extends Component {
       modalShowing: false,
       headerText: '',
       staraVrednost: '',
-      changedValue: ''
+      changedValue: '',
+      modalPassword: false
     };
   }
 
@@ -59,12 +60,6 @@ class PagePatient extends Component {
     else if(polje === 'lbo'){
       alert('Није могуће мењати вредност ЛБО.');
     }
-  }
-
-  closeModalHandler = () => {
-    this.setState({
-        modalShowing: false
-    }); 
   }
 
   clickIzmena = (naziv, staraVr) => {
@@ -174,11 +169,59 @@ class PagePatient extends Component {
 
   // update-uj state
   this.setState({patient : patient});
-  return true;
-}
+    return true;
+  }
+
+  sendChangedPassword = () => {
+    let password = document.getElementById("newPassword_input").value;
+    
+    if(password.length < 8){
+      alert('Лозинка мора садржати барем 8 карактера.');
+      return;
+    }
+    
+    const url = 'http://localhost:8081/patient/changePassword/'+password;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+
+    fetch(url, options)
+      .then(response => {
+        if(response.ok === true){
+          alert("Успешно сте изменили лозинку.");
+        }
+        else {
+          alert("Дошло је до грешке приликом измене лозинке");
+        }
+      });
+
+      this.setState({
+        modalPassword: false
+      }); 
+  }
+
+  changePassword = () => {
+    this.setState({
+      modalPassword: true
+    });
+  }
+
+  closeModalHandler = () => {
+    this.setState({
+        modalShowing: false
+    });
+    this.setState({
+      modalPassword: false
+    }); 
+  }
 
   render() {
       let modalni = null;
+      let modalniSifra = null;
       if(this.state.modalShowing){
         modalni = (
           <Modal
@@ -200,6 +243,25 @@ class PagePatient extends Component {
                   id="newValue_input"></input>
               </form>
           </Modal>);
+      }
+
+      if(this.state.modalPassword){
+        modalniSifra = (
+          <Modal
+            className="modal"
+            show={this.state.modalPassword}
+            close={(event) => this.closeModalHandler(event)}
+            send={this.sendChangedPassword}
+            header={"Промени лозинку"}
+            >
+              <form>
+                <p>Унесите нову вредност лозинке:</p>
+                <input type="password" 
+                  className="input_field"
+                  id="newPassword_input"></input>
+              </form>
+          </Modal>
+        );
       }
 
 
@@ -225,10 +287,12 @@ class PagePatient extends Component {
             show = {this.state.isProfil}
             clickIzmena={this.clickIzmena}
             clickZabrana={this.clickZabrana}
+            clickSifra={this.changePassword}
             > 
           </ProfilePatient>
 
-          {modalni}     
+          {modalni} 
+          {modalniSifra}    
         </div>
       );
     }

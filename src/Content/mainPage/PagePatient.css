@@ -52,7 +52,23 @@ table#tabProfilePatient th , table#tabProfilePatient td{
     text-align: center;
 }
 
-table#tabProfilePatient td:hover{
+table#tabProfilePatient td:hover:not(#btnSifraPatientTd){
     cursor: pointer;
     background-color: #f1f1f1;
+}
+
+button#btnSifraPatient{
+    width: 170px;
+    height: 40px;
+    padding: 5px;
+    font-size: 17px;
+    padding-bottom: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+button#btnSifraPatient:hover{
+    background-color: #f1f1f1;
+    border: 1px solid black;
+    box-shadow: 3px 5px #e2e2e2;
 }
