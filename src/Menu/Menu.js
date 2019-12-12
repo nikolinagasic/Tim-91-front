@@ -8,6 +8,7 @@ const menu = () => {
             <a><NavLink to="/">ПОЧЕТНА</NavLink></a>
             <a><NavLink to="/register">РЕГИСТРУЈ СЕ</NavLink></a>
             <a><NavLink to="/login">ПРИЈАВИ СЕ</NavLink></a>
+            <a><NavLink to="/admin">Admin</NavLink></a>
         </div>
     )
 };

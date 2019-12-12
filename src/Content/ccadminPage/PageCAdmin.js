@@ -30,6 +30,31 @@ class PageCAdmin extends Component {
         state: { detail: ccadmin }
       })
     }
+    else if(nam === "request"){
+      //preuzimam iz baze listu svih zahteva za registraciju
+      console.log('click zahtevi');
+      const url = 'http://localhost:8081/ccadmin/requests';
+      const options = {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+      };
+
+      fetch(url, options)
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        //console.log('ODGOVOR');
+        //console.log(response);
+        //this.setState({ccadmin:this.props.location.state.response});
+        this.props.history.push({
+          pathname:'/request',
+          state: { detail: response}
+        })
+      });
+
+    }
     else{
       console.log('greska');
     }
@@ -45,6 +70,8 @@ class PageCAdmin extends Component {
               onClick={this.myClickHandler}> Registracija administratora </p></li>
               <li className="li_list"><p id="clinic" 
               onClick={this.myClickHandler}> Registracija klinike </p></li>
+              <li className="li_list"><p id="request" 
+              onClick={this.myClickHandler}> Zahtevi za registraciju </p></li>
             </ul>
         </div>
       );
