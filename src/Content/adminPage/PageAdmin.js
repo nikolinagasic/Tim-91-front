@@ -21,7 +21,9 @@ class PageAdmin extends Component {
           headerText: '',
           staraVrednost: '',
           changedValue: '',
-          modalPassword: false
+          modalPassword: false,
+          listDoctors: null,
+          isListDoctors: false
         };
       }
     
@@ -32,6 +34,9 @@ class PageAdmin extends Component {
     
       clickProfile = (event) => {
         document.getElementById("logo_img").style.visibility = "hidden"; 
+        this.setState({
+          isListDoctors: false
+        });
         this.setState({
           isAppointmentTypes: false
         });
@@ -51,6 +56,9 @@ class PageAdmin extends Component {
     
       clickRegister = (event) => {
         document.getElementById("logo_img").style.visibility = "hidden"; 
+        this.setState({
+          isListDoctors: false
+        });
         this.setState({
           isAppointmentTypes: false
         });
@@ -86,10 +94,13 @@ class PageAdmin extends Component {
         fetch(url, options)
         .then(responseWrapped => responseWrapped.json())
         .then(response => {
-          this.props.history.push({
-            pathname:'/doctorlist',
-            state: { detail: response}
-          })
+          this.setState({
+            listDoctors: response
+          });
+          this.setState({
+            isListDoctors: true
+          });
+
           this.setState({
             isAppointmentTypes: false
           });
@@ -108,10 +119,76 @@ class PageAdmin extends Component {
         }); 
       }
 
-  
+    generateTableData(){
+      let res=[];
+      let tableData = this.state.listDoctors;
+      for(var i =0; i < tableData.length; i++){
+          res.push(
+            <tr>
+          <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
+          <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
+          <td key={tableData[i].field}>{tableData[i].field}</td>
+          <td key={tableData[i].mail}>{tableData[i].mail}</td>
+          </tr>
+          )
+      }
+      return res;
+    } 
+
+  mySubmitHandler = (event) => {
+    event.preventDefault();
+    let ime = this.state.firstName;
+    let prezime = this.state.lastName;
+    let obj = {
+      "firstName" : this.state.firstName,
+      "lastName" : this.state.lastName
+    }
+    
+    const url = 'http://localhost:8081/clinicAdministrator/find/'+ime+"/"+prezime;
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+      body: JSON.stringify(obj)
+    };
+
+    fetch(url, options)
+    .then(responseWrapped => responseWrapped.json())
+    .then(response => {
+      
+      if (response.ok == false) {
+        alert("Тражени лекар не постоји.");
+      } else {
+        alert(ime+" "+prezime+" пронађен.");
+      }
+    })
+    
+  }
   
 
   render() {
+      let componentDoctors = null;
+      if(this.state.isListDoctors){
+        componentDoctors = (
+            <DoctorList
+              mySubmit={this.mySubmitHandler}
+              generateTableData = {this.generateTableData}
+            >
+            </DoctorList>
+        )
+      }
+
+      let registerIS = null;
+      if(this.state.isRegister){
+        registerIS = (
+          <RegisterMedical
+              pat={this.state.cadmin}> 
+          </RegisterMedical>
+        );
+        }
+
       return (
         <div className="main_div">
         <ul id="unordered_list" className="ul_list">
@@ -132,15 +209,15 @@ class PageAdmin extends Component {
           onClick={this.clickRooms}> Сале </a></li>
         </ul>
         
+
+        {registerIS}
         <ProfileAdmin
           pat={this.state.cadmin}
           show = {this.state.isProfile}> 
         </ProfileAdmin>
-        <RegisterMedical
-          pat={this.state.cadmin}
-          show = {this.state.isRegister}> 
-        </RegisterMedical>
-       
+        
+        
+        {componentDoctors}
         </div>
       );
     }
