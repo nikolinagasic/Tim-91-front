@@ -25,7 +25,7 @@ class RegisterAdmin extends Component {
 
   mySubmitHandler = (event) => {
     event.preventDefault();
-    let pass = this.state.password;
+    let pass = "12345678";
     let err = '';
 
     if (pass.length < 7) {
@@ -42,7 +42,7 @@ class RegisterAdmin extends Component {
       
       let obj = {
         "mail" : this.state.email,
-        "password" : this.state.password,
+        "password" : "12345678",
       }
       
       var url;
@@ -90,10 +90,10 @@ class RegisterAdmin extends Component {
               required></input>
           
           <p>Лозинка:</p>
-          <input type='password'
+          <input 
               name='password'
-              onChange={this.myChangeHandler}
-              required></input>
+              value='12345678'
+              disabled='true'></input>
           <p></p>
 
           <input id="clinic" type="radio" name="container"

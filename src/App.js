@@ -20,6 +20,8 @@ import PageDoctor from './Content/doctorPage/PageDoctor';
 import ProfileDoctor from './Content/doctorPage/ProfileDoctor';
 import PageNurse from './Content/nursePage/PageNurse';
 import ProfileNurse from './Content/nursePage/ProfileNurse';
+import DoctorList from './Content/adminPage/DoctorList';
+
 import ClinicSearch from './Content/searchAndFilter/ClinicSearch';
 import './App.css';
 
@@ -30,7 +32,7 @@ class App extends Component {
       <HashRouter>
         <div className="App">
           <header className="App-header">
-            <h1 className="App-title">Здравствено информациони систем Србије</h1>
+            <h1 className="App-title">Здравствено информациони систем</h1>
             <Menu className="App-menu"/>
           </header>
           <p className="App-intro">
@@ -55,7 +57,9 @@ class App extends Component {
             <Route path="/profiledoctor" component={ProfileDoctor}/>
             <Route path="/pagenurse" component={PageNurse}/>
             <Route path="/profilenurse" component={ProfileNurse}/>
+            <Route path="/doctorlist" component={DoctorList}/>
             <Route path="/clinicSearchSort" component={ClinicSearch}/>
+
           </div>
         </div>
       </HashRouter>

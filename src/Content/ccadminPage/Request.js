@@ -26,6 +26,7 @@ class Request extends Component {
         .then(response => {
           console.log(response.status);
           console.log(response)
+
           if(response.ok){
             alert("Pacijentu je odobren zahtev");
           }

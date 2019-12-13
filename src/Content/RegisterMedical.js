@@ -25,7 +25,7 @@ class RegisterMedical extends Component {
 
   mySubmitHandler = (event) => {
     event.preventDefault();
-    let pass = this.state.password;
+    let pass = "12345678";
     let err = '';
 
     if (pass.length < 7) {
@@ -42,7 +42,7 @@ class RegisterMedical extends Component {
       
       let obj = {
         "mail" : this.state.email,
-        "password" : this.state.password,
+        "password" : "12345678",
       }
       
       var url;
@@ -78,7 +78,7 @@ class RegisterMedical extends Component {
 
   render() {
     return (
-    <div className="Register">
+    <div className="Register" id="med">
       <form name="medicalRegForm" onSubmit={this.mySubmitHandler}>
         <table>
           <tr>
@@ -92,8 +92,8 @@ class RegisterMedical extends Component {
           <p>Лозинка:</p>
           <input
               name='password'
-              onChange={this.myChangeHandler}
-              required></input>
+              value='12345678'
+              disabled='true'></input>
           <p></p>
 
           <input id="doctor" type="radio" name="container"
