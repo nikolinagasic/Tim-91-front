@@ -13,6 +13,7 @@ import ProfilePatient from './Content/mainPage/ProfilePatient';
 import PageCAdmin from './Content/ccadminPage/PageCAdmin';
 import ProfileCAdmin from './Content/ccadminPage/ProfileCAdmin';
 import Request from './Content/ccadminPage/Request';
+import Diagnosis from './Content/ccadminPage/Diagnosis';
 import PageAdmin from './Content/adminPage/PageAdmin';
 import ProfileAdmin from './Content/adminPage/ProfileAdmin';
 import PageDoctor from './Content/doctorPage/PageDoctor';
@@ -21,6 +22,7 @@ import PageNurse from './Content/nursePage/PageNurse';
 import ProfileNurse from './Content/nursePage/ProfileNurse';
 import DoctorList from './Content/adminPage/DoctorList';
 
+import ClinicSearch from './Content/searchAndFilter/ClinicSearch';
 import './App.css';
 
 
@@ -48,6 +50,7 @@ class App extends Component {
             <Route path="/pagecadmin" component={PageCAdmin}/>
             <Route path="/profilecadmin" component={ProfileCAdmin}/>
             <Route path="/request" component={Request}/>
+            <Route path="/diagnosis" component={Diagnosis}/>
             <Route path="/pageadmin" component={PageAdmin}/>
             <Route path="/profileadmin" component={ProfileAdmin}/>
             <Route path="/pagedoctor" component={PageDoctor}/>
@@ -55,6 +58,8 @@ class App extends Component {
             <Route path="/pagenurse" component={PageNurse}/>
             <Route path="/profilenurse" component={ProfileNurse}/>
             <Route path="/doctorlist" component={DoctorList}/>
+            <Route path="/clinicSearchSort" component={ClinicSearch}/>
+
           </div>
         </div>
       </HashRouter>

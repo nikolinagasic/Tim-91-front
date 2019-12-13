@@ -54,6 +54,13 @@ class PageCAdmin extends Component {
       });
 
     }
+    else if(nam === "diagnosis"){
+      console.log('click dijagnoze');
+      this.props.history.push({
+        pathname:'/diagnosis',
+        state: { detail: ccadmin }
+      })
+    }
     else{
       console.log('greska');
     }
@@ -71,6 +78,8 @@ class PageCAdmin extends Component {
               onClick={this.myClickHandler}> Registracija klinike </p></li>
               <li className="li_list"><p id="request" 
               onClick={this.myClickHandler}> Zahtevi za registraciju </p></li>
+              <li className="li_list"><p id="diagnosis" 
+              onClick={this.myClickHandler}> Sifarnik lekova i dijagnoza</p></li>
             </ul>
         </div>
       );
