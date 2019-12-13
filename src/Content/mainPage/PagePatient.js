@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import "./PagePatient.css" 
 import ProfilePatient from './ProfilePatient'
-import Modal from "../Modal" 
+import Modal from "../Modal"
+import Radium from 'radium' 
 // import {Link} from 'react-router-dom';
 
 class PagePatient extends Component {
@@ -26,6 +27,17 @@ class PagePatient extends Component {
   clickKarton = (event) => {
     alert("Страница је у процесу израде");
   }
+  
+  clickIstorija = (event) => {
+    alert("Страница је у процесу израде");
+  }
+
+  clickKlinike = (event) => {
+    document.getElementById("logo_img").style.visibility = "hidden"; 
+    this.props.history.push({
+      pathname: '/clinicSearchSort'
+    });
+  }
 
   clickProfil = (event) => {
     console.log('kliknuo na profil');
@@ -42,14 +54,6 @@ class PagePatient extends Component {
     this.setState({
       isKlinike: false
     });
-  }
-
-  clickIstorija = (event) => {
-    alert("Страница је у процесу израде");
-  }
-
-  clickKlinike = (event) => {
-    alert("Страница је у процесу израде");
   }
 
   clickZabrana = (polje) => {
@@ -298,4 +302,4 @@ class PagePatient extends Component {
     }
 }
 
-export default PagePatient;
+export default Radium(PagePatient);

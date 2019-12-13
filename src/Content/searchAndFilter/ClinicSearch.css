@@ -1,0 +1,59 @@
+form.bodySearchClinic table {
+  margin-left: 15%;
+  border-collapse: collapse;
+  width: 60%;
+}
+
+form.bodySearchClinic{
+    margin-top: 80px;
+}
+
+form.bodySearchClinic th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+form.headerSearchClinic input, select{
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgba(221, 219, 219, 0.253);
+  border: 1px solid rgba(0, 0, 0, 0.247);
+  box-shadow: 3px 5px #e2e2e2;
+  width: 200px;
+  height: 40px;
+  font-size: 2ex;
+}
+
+form.headerSearchClinic div{
+    margin-left: 12%;
+    float: left;
+}
+
+form.headerSearchClinic div p{
+    text-align: center;
+}
+
+button#searchClinic, button#filterClinic{
+    border-radius: 5px;
+    width: 140px;
+    height: 40px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 2ex;
+}
+
+button#searchClinic:hover, button#filterClinic:hover{
+    border: 1px solid black;
+    box-shadow: 3px 5px #e2e2e2;
+}
+
+button#searchClinic{
+    margin-top: 54px;
+    margin-left: 100px;
+}
+
+button#filterClinic{
+    margin-left: 15%;
+    margin-bottom: 20px;
+}

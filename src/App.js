@@ -20,6 +20,7 @@ import PageDoctor from './Content/doctorPage/PageDoctor';
 import ProfileDoctor from './Content/doctorPage/ProfileDoctor';
 import PageNurse from './Content/nursePage/PageNurse';
 import ProfileNurse from './Content/nursePage/ProfileNurse';
+import ClinicSearch from './Content/searchAndFilter/ClinicSearch';
 import './App.css';
 
 
@@ -54,6 +55,7 @@ class App extends Component {
             <Route path="/profiledoctor" component={ProfileDoctor}/>
             <Route path="/pagenurse" component={PageNurse}/>
             <Route path="/profilenurse" component={ProfileNurse}/>
+            <Route path="/clinicSearchSort" component={ClinicSearch}/>
           </div>
         </div>
       </HashRouter>
