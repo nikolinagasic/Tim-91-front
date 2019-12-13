@@ -29,11 +29,12 @@ input[type="submit"]{
     margin: 65px;
 }
 p#zaboravljena_lozinka{
-    color: blue;
+    color: rgb(80, 100, 145);
+    margin-left: 60px;
 }
 p#zaboravljena_lozinka:hover{
     cursor: pointer;
-    color: rgba(0, 0, 255, 0.521);
+    color: rgba(14, 14, 212, 0.521);
     text-decoration: underline;
 }
 p#pZab_greska{

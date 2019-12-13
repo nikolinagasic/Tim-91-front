@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
 
-class ProfileAdmin extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      mail: this.props.location.state.detail.mail,
-    };
-  }
-
-  render() {
-    return (
-      <div>
-          <table border="1">
-            <tr><td>Email</td>
-              <td>{this.state.mail}</td>
-            </tr>
-          </table>
-      </div>
-    );
-  }
-
+const ProfileAdmin = (props) => {
+  return (
+    <div>
+  <div className="divProfileAdmin" style={{
+        display: props.show ? 'block' : 'none'
+      }}> 
+      <table id="tabProfileAdmin">
+        <tr>
+          <th>Адреса E-поште</th>
+          <td >{props.pat.mail}</td>
+        </tr>
+        <tr>
+          <th>Клиника</th>
+          <td>{props.pat.clinic}</td>
+        </tr>
+      </table>
+    </div>
+    </div>
+);
 }
 
 export default ProfileAdmin;

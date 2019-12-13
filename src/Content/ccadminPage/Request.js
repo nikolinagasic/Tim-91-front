@@ -26,7 +26,7 @@ class Request extends Component {
         .then(response => {
           console.log(response.status);
           console.log(response)
-          if(response.status==201){
+          if(response.status===201){
             alert("Pacijentu je odobren zahtev");
           }
           
@@ -48,7 +48,7 @@ class Request extends Component {
         .then(response => {
           console.log(response.status);
           console.log(response)
-          if(response.status==201){
+          if(response.status===201){
             alert("Pacijentu je odbijen zahtev");
           }
           

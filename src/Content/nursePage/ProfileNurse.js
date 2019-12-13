@@ -1,40 +1,38 @@
 import React, { Component } from 'react';
 
-class ProfileNurse extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      mail: this.props.location.state.detail.mail,
-      firstName: this.props.location.state.detail.firstName,
-      lastName: this.props.location.state.detail.lastName,
-      role: this.props.location.state.detail.role,
-      clinic: this.props.location.state.detail.clinic,
-    };
-  }
 
-    render() {
-      return (
-        <div>
-            <table border="1">
-              <tr><td>Email</td>
-                <td>{this.state.mail}</td>
-              </tr>
-              <tr><td>Ime</td>
-                <td>{this.state.firstName}</td>
-              </tr>
-              <tr><td>Prezime</td>
-                <td>{this.state.lastName}</td>
-              </tr>
-              <tr><td>Role</td>
-                <td>{this.state.role}</td>
-              </tr>
-              <tr><td>Clinic</td>
-                <td>{this.state.clinic}</td>
-              </tr>
-            </table>
-        </div>
-      );
-    }
+const ProfileNurse = (props) => {
+  return (
+    <div>
+  <div className="divProfileNurse" style={{
+        display: props.show ? 'block' : 'none'
+      }}> 
+      <table id="tabProfileNurse">
+        <tr>
+          <th>Адреса E-поште</th>
+          <td onClick={props.clickZabrana.bind(this, 'mail')}>{props.pat.mail}</td>
+        </tr>
+        <tr>
+          <th>Име</th>
+          <td onClick={props.clickIzmena.bind(this, 'ime')}>{props.pat.firstName}</td>
+        </tr>
+        <tr>
+          <th>Презиме</th>
+          <td onClick={props.clickIzmena.bind(this, 'prezime')}>{props.pat.lastName}</td>
+        </tr>
+        <tr>
+          <th>Клиника</th>
+          <td onClick={props.clickZabrana.bind(this, 'klinika')}>{props.pat.clinic}</td>
+        </tr>
+        <tr>
+          <td colspan="2" id="btnSifraNurseTd">
+            <button id="btnSifraNurse" onClick={props.clickSifra}> Промени лозинку </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+</div>
+);
 }
 
 export default ProfileNurse;
