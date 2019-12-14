@@ -3,6 +3,7 @@ import "./PagePatient.css"
 import ProfilePatient from './ProfilePatient'
 import Modal from "../Modal"
 import Radium from 'radium' 
+import ClinicSearch from '../searchAndFilter/ClinicSearch';
 // import {Link} from 'react-router-dom';
 
 class PagePatient extends Component {
@@ -10,6 +11,7 @@ class PagePatient extends Component {
     super(props);
     this.state = {
       patient: this.props.location.state.detail,   // ono sto sam poslao iz prijave
+      token: this.props.location.state.token,
       isKarton: false,
       isProfil: false,
       isIstorija: false,
@@ -34,8 +36,17 @@ class PagePatient extends Component {
 
   clickKlinike = (event) => {
     document.getElementById("logo_img").style.visibility = "hidden"; 
-    this.props.history.push({
-      pathname: '/clinicSearchSort'
+    this.setState({
+      isKarton: false
+    });
+    this.setState({
+      isProfil: false
+    });
+    this.setState({
+      isIstorija: false
+    });
+    this.setState({
+      isKlinike: true
     });
   }
 
@@ -177,30 +188,43 @@ class PagePatient extends Component {
   }
 
   sendChangedPassword = () => {
-    let password = document.getElementById("newPassword_input").value;
-    
+    let password = document.getElementById("newPassword_input1").value;
+    let password1 = document.getElementById("newPassword_input2").value;
+    if(password !== password1){
+      alert("Проверите да ли сте адекватно унели лозинку у оба поља.");
+      return;
+    }
+
+    console.log('pass: ' + password);
     if(password.length < 8){
       alert('Лозинка мора садржати барем 8 карактера.');
       return;
     }
     
-    const url = 'http://localhost:8081/patient/changePassword/'+password;
+    const url = 'http://localhost:8081/patient/changePassword';
     const options = {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
+        "Content-Type": "text/plain",
+        "Auth-Token": this.state.token
       },
+      body: password
     };
 
     fetch(url, options)
       .then(response => {
+        console.log(response);
         if(response.ok === true){
           alert("Успешно сте изменили лозинку.");
         }
         else {
-          alert("Дошло је до грешке приликом измене лозинке");
+          if(response.status === 401){
+            alert("Немате права за приступ датој опцији. (401 Unauthorized)");
+          }else{
+            alert("Дошло је до грешке приликом измене лозинке");
+          }
         }
+
       });
 
       this.setState({
@@ -262,9 +286,22 @@ class PagePatient extends Component {
                 <p>Унесите нову вредност лозинке:</p>
                 <input type="password" 
                   className="input_field"
-                  id="newPassword_input"></input>
+                  value=""
+                  id="newPassword_input1"></input>
+                  <p>Унесите лозинку поново:</p>
+                  <input type="password" 
+                    className="input_field"
+                    value=""
+                    id="newPassword_input2"></input>
               </form>
           </Modal>
+        );
+      }
+
+      let klinike = null;
+      if(this.state.isKlinike){
+        klinike = (
+          <ClinicSearch/>
         );
       }
 
@@ -296,7 +333,8 @@ class PagePatient extends Component {
           </ProfilePatient>
 
           {modalni} 
-          {modalniSifra}    
+          {modalniSifra}
+          {klinike}    
         </div>
       );
     }

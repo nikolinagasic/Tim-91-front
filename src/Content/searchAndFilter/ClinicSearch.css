@@ -1,5 +1,5 @@
 form.bodySearchClinic table {
-  margin-left: 15%;
+  margin-left: 28%;
   border-collapse: collapse;
   width: 60%;
 }
@@ -10,8 +10,12 @@ form.bodySearchClinic{
 
 form.bodySearchClinic th, td {
   padding: 8px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #ddd;
+}
+
+form.headerSearchClinic{
+    margin-top: 30px;
 }
 
 form.headerSearchClinic input, select{
@@ -20,27 +24,37 @@ form.headerSearchClinic input, select{
   background-color: rgba(221, 219, 219, 0.253);
   border: 1px solid rgba(0, 0, 0, 0.247);
   box-shadow: 3px 5px #e2e2e2;
-  width: 200px;
-  height: 40px;
-  font-size: 2ex;
+  width: 180px;
+  height: 35px;
+  font-size: 15px;
 }
 
-form.headerSearchClinic div{
-    margin-left: 12%;
+form.headerSearchClinic select option{
+    text-align: center;
+}
+
+form.headerSearchClinic div:first-child{
+    margin-left: 25%;
+    float: left;
+}
+
+form.headerSearchClinic div:not(:first-child){
+    margin-left: 7%;
     float: left;
 }
 
 form.headerSearchClinic div p{
     text-align: center;
+    font-size: 15px;
 }
 
 button#searchClinic, button#filterClinic{
     border-radius: 5px;
-    width: 140px;
-    height: 40px;
+    width: 130px;
+    height: 35px;
     text-align: center;
     cursor: pointer;
-    font-size: 2ex;
+    font-size: 17px;
 }
 
 button#searchClinic:hover, button#filterClinic:hover{
