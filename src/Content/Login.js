@@ -85,7 +85,8 @@ class Login extends Component {
               this.setState({activeUser:response});
               this.props.history.push({
                 pathname: '/pagepatient',
-                state: { detail: this.state.activeUser }
+                state: { detail: this.state.activeUser,
+                          token: token}
               });
             }
             else if(response.role === "doctor"){
