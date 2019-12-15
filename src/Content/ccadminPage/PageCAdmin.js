@@ -28,6 +28,7 @@ class PageCAdmin extends Component {
       headerText: '',
       listRequest: null,
       render_list: [],
+      post_list:[],
 
     };
   }
@@ -35,6 +36,9 @@ class PageCAdmin extends Component {
   clickProfile = (event) => {
     //console.log("Klik na profil");
     document.getElementById("logo_img").style.visibility = "hidden";
+    if(this.state.ispostDiagnosis==true){
+      this.postDiagnosis();
+    }
     this.setState({
       isRegisterAdmin: false
     });
@@ -285,8 +289,10 @@ class PageCAdmin extends Component {
     // kopija prethodne liste i dodavanje novog objekta 
     if(this.state.render_list!=null){
        this.setState({ render_list: this.state.render_list.concat(temp) });
+       this.setState({post_list: this.state.post_list.concat(temp)});
     }else{
       this.setState({ render_list: {temp} });
+      this.setState({post_list:{temp} });
       console.log(temp);
       console.log(this.state.render_list);
     }
@@ -300,13 +306,14 @@ class PageCAdmin extends Component {
         'Accept': 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      body: JSON.stringify(this.state.render_list)
+      body: JSON.stringify(this.state.post_list)
     };
     fetch(url, options)
         .then(response => {
           console.log(response.status);
           if(response.status==201){
             this.state.ispostDiagnosis=false;
+            this.setState({post_list:{}});
           }
         });
   }
