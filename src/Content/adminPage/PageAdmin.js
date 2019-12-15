@@ -3,6 +3,7 @@ import ProfileAdmin from './ProfileAdmin'
 import './PageAdmin.css'
 import RegisterMedical from "../RegisterMedical" 
 import DoctorList from "./DoctorList" 
+import AppointmentType from "./AppointmentType" 
 
 
 
@@ -23,13 +24,48 @@ class PageAdmin extends Component {
           changedValue: '',
           modalPassword: false,
           listDoctors: null,
-          isListDoctors: false
+          isListDoctors: false,
+          listTypes: null,
         };
       }
     
     
       clickAppointmentTypes = (event) => {
-        alert("Страница је у процесу израде");
+        document.getElementById("logo_img").style.visibility = "hidden"; 
+        const url = 'http://localhost:8081/type/getAll';
+        const options = {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8'
+          },
+        };
+  
+        fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+          this.setState({
+            listTypes: response
+          });
+          this.setState({
+            isListDoctors: false
+          });
+        this.setState({
+          isAppointmentTypes: true
+        });
+        this.setState({
+          isProfile: false
+        });
+        this.setState({
+          isDoctors: false
+        });
+        this.setState({
+            isRegister: false
+          });
+        this.setState({
+          isRooms: false
+        });      
+      }); 
       }
     
       clickProfile = (event) => {
@@ -134,6 +170,19 @@ class PageAdmin extends Component {
       }
       return res;
     } 
+    generateTableDataTypes(){
+      let res=[];
+      let tableData = this.state.listTypes;
+      for(var i =0; i < tableData.length; i++){
+          res.push(
+            <tr>
+          <td key={tableData[i].name}>{tableData[i].name}</td>
+          <td> <button onClick={this.deleteType}>Обриши</button></td>
+          </tr>
+          )
+      }
+      return res;
+    } 
 
   mySubmitHandler = (event) => {
     event.preventDefault();
@@ -167,6 +216,32 @@ class PageAdmin extends Component {
     
   }
   
+  addType() {
+    let name = document.getElementById("name");
+    const url = 'http://localhost:8081/type/save/'+name;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+
+    fetch(url, options)
+    .then(responseWrapped => responseWrapped.json())
+    .then(response => {
+      
+      if (response.ok == true) {
+        alert("Нови тип је додат.");
+      } else {
+        alert("Дошло је до грешке.");
+      }
+    });
+  }
+
+  deleteType() {
+
+  }
 
   render() {
       let componentDoctors = null;
@@ -177,6 +252,16 @@ class PageAdmin extends Component {
               generateTableData = {this.generateTableData}
             >
             </DoctorList>
+        )
+      }
+      let types = null;
+      if(this.state.isAppointmentTypes){
+        types = (
+            <AppointmentType
+              addType = {this.addType}
+              generateTableDataTypes = {this.generateTableDataTypes}
+            >
+            </AppointmentType>
         )
       }
 
@@ -197,7 +282,7 @@ class PageAdmin extends Component {
           onClick={this.clickProfile}> Профил корисника </a></li>
           <li className="li_list"><a 
           id="register"
-          onClick={this.clickRegister}> Регистрација мефицинског особља </a></li>
+          onClick={this.clickRegister}> Регистрација медицинског особља </a></li>
           <li className="li_list"><a 
           id="doctors" 
           onClick={this.clickDoctors}> Листа лекара </a></li>
@@ -218,6 +303,7 @@ class PageAdmin extends Component {
         
         
         {componentDoctors}
+        {types}
         </div>
       );
     }

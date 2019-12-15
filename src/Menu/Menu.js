@@ -12,7 +12,7 @@ const menu = () => {
             <a><NavLink to="/" onClick={showLogo}>ПОЧЕТНА</NavLink></a>
             <a><NavLink to="/register" onClick={showLogo}>РЕГИСТРУЈ СЕ</NavLink></a>
             <a><NavLink to="/login" onClick={showLogo}>ПРИЈАВИ СЕ</NavLink></a>
-            <a><NavLink to="/admin">Admin</NavLink></a>
+
         </div>
     )
 };

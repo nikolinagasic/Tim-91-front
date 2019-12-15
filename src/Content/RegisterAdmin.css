@@ -1,13 +1,45 @@
+
+.RegisterAdmin {
+    margin-left: 40%;
+    padding-top: 1%;
+}
+
+.RegisterAdmin td {
+    vertical-align: top;
+    padding-right: 50px;
+}
+.RegisterAdmin input {
+    width: 300px;
+    height: 30px;
+    font-size: 20px;
+}
+.RegisterAdmin p {
+    font-size: 17px;
+    margin-bottom: 3px;
+    margin-left: -54%;
+}
+.RegisterAdmin button {
+    width: 120px;
+    height: 30px;
+    font-size: 17px;
+    padding-bottom: 20px;
+}
+#id_submit{
+    width: 150px;
+    height: 35px;
+    margin-top: 20px;
+    margin-left: 150px;
+}
 #clinic {
     width: 20px;
     vertical-align: bottom;
+    margin-left: -32%;
 }
 #cliniccentre {
     width: 20px;
     vertical-align: bottom;
+    margin-left: -28px;
 }
-#text {
-    vertical-align: center;
-    font-family:"Times New Roman", Times, serif;  
-    font-size: 20px; 
+#pp {
+    margin-left: -75%;
 }

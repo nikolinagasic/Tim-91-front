@@ -14,10 +14,14 @@ class RegisterAdmin extends Component {
   }
 
   myChangeHandler = (event) => {
-    event.preventDefault();
     let nam = event.target.name;
     let val = event.target.value;
     let err = '';
+    if (document.getElementById("clinic").checked == true) {
+      document.getElementById("id_clinic").disabled = false;
+    } else {
+      document.getElementById("id_clinic").disabled = true;
+    }
     
     this.setState({errormessage: err});
     this.setState({[nam]: val});
@@ -78,7 +82,7 @@ class RegisterAdmin extends Component {
 
   render() {
     return (
-    <div className="Register">
+    <div className="RegisterAdmin">
       <form name="adminRegForm" onSubmit={this.mySubmitHandler}>
         <table>
           <tr>
@@ -89,7 +93,7 @@ class RegisterAdmin extends Component {
               onChange={this.myChangeHandler}
               required></input>
           
-          <p>Лозинка:</p>
+          <p id="pp">Лозинка:</p>
           <input 
               name='password'
               value='12345678'
@@ -103,7 +107,10 @@ class RegisterAdmin extends Component {
           <input id="cliniccentre" type="radio" name="container"
           onChange={this.myChangeHandler}></input>
           <label id="text">Администратор клиничког центра</label>
-          
+          <p id="pp">Клиника:</p>
+          <input 
+            id = 'id_clinic'
+            disabled = 'true'></input>
           <p></p>
           {this.state.errormessage}
           <p></p>
@@ -113,6 +120,7 @@ class RegisterAdmin extends Component {
         </table>
         </form>
       </div>
+
     );
   }
 }
