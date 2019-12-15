@@ -282,7 +282,7 @@ class PageAdmin extends Component {
           onClick={this.clickProfile}> Профил корисника </a></li>
           <li className="li_list"><a 
           id="register"
-          onClick={this.clickRegister}> Регистрација мефицинског особља </a></li>
+          onClick={this.clickRegister}> Регистрација медицинског особља </a></li>
           <li className="li_list"><a 
           id="doctors" 
           onClick={this.clickDoctors}> Листа лекара </a></li>

@@ -14,12 +14,13 @@ class RegisterAdmin extends Component {
   }
 
   myChangeHandler = (event) => {
-    event.preventDefault();
     let nam = event.target.name;
     let val = event.target.value;
     let err = '';
     if (document.getElementById("clinic").checked == true) {
       document.getElementById("id_clinic").disabled = false;
+    } else {
+      document.getElementById("id_clinic").disabled = true;
     }
     
     this.setState({errormessage: err});

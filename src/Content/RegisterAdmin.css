@@ -2,7 +2,6 @@
 .RegisterAdmin {
     margin-left: 40%;
     padding-top: 1%;
-   
 }
 
 .RegisterAdmin td {
@@ -34,12 +33,12 @@
 #clinic {
     width: 20px;
     vertical-align: bottom;
-    margin-left: -10.5%;
+    margin-left: -32%;
 }
 #cliniccentre {
     width: 20px;
     vertical-align: bottom;
-    margin-left: -12px;
+    margin-left: -28px;
 }
 #pp {
     margin-left: -75%;

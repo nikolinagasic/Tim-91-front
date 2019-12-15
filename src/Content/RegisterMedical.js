@@ -24,7 +24,6 @@ class RegisterMedical extends Component {
   }
 
   mySubmitHandler = (event) => {
-    event.preventDefault();
     let pass = "12345678";
     let err = '';
 
@@ -89,7 +88,7 @@ class RegisterMedical extends Component {
               onChange={this.myChangeHandler}
               required></input>
           
-          <p>Лозинка:</p>
+          <p id="lozinka">Лозинка:</p>
           <input
               name='password'
               value='12345678'
