@@ -2,13 +2,26 @@ import React, { Component } from 'react';
 
 const DoctorList = (props) => {
     return (
-      <div>
-      <form name="findForm" onSubmit={props.mySubmit}>
-        <p>Име:</p>
-        <input id="ime"></input>
-        <p>Презиме:</p>
-        <input id="prezime"></input>
+      <div className="divProfileAdmin">
+      <form className="formSearch" name="findForm" onSubmit={props.mySubmit}>
+        <table>
+          <tr>
+            <td>
+              <p>Име:</p>    
+            </td>
+            <td>      
+              <input id="ime"></input>
+            </td>
+            <td>
+              <p>Презиме:</p>
+            </td>
+            <td>
+              <input id="prezime"></input>
+            </td>
+          </tr>
+        </table>     
         <input type="submit" id="id_submit" value="Пронађи"></input>
+        <p/>
       </form>
         <table border="1">
           <thead>

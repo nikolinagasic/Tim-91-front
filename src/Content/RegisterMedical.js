@@ -78,7 +78,7 @@ class RegisterMedical extends Component {
 
   render() {
     return (
-    <div className="Register" id="med">
+    <div className="RegisterMedical" id="med">
       <form name="medicalRegForm" onSubmit={this.mySubmitHandler}>
         <table>
           <tr>

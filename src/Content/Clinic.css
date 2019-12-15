@@ -1,7 +1,26 @@
-#text {
-    vertical-align: center;
-    font-family:"Times New Roman", Times, serif;  
-    font-size: 20px;   
+.Clinic {
+    margin-left: 40%;
+    padding-top: 1%;
+}
+.Clinic td {
+    vertical-align: top;
+    padding-right: 50px;
+}
+.Clinic input {
+    width: 300px;
+    height: 30px;
+    font-size: 20px;
+}
+.Clinic p {
+    font-size: 17px;
+    margin-bottom: 3px;
+   
+}
+.Clinic button {
+    width: 120px;
+    height: 30px;
+    font-size: 17px;
+    padding-bottom: 20px;
 }
 
 #textarea  
@@ -9,4 +28,13 @@
    font-family:"Times New Roman", Times, serif;  
    font-size: 24px;   
    width: 300px;
+}
+#opis {
+    margin-left: -84%;
+}
+#naziv {
+    margin-left: -82%;
+}
+#adresa{
+    margin-left:-78%;
 }

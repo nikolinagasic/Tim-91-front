@@ -1,14 +1,50 @@
+.RegisterMedical{
+    margin-left: 40%;
+    padding-top: 1%;
+   
+}
+
+
+.RegisterMedical td {
+    vertical-align: top;
+    padding-right: 50px;
+}
+.RegisterMedical input {
+    width: 300px;
+    height: 30px;
+    font-size: 20px;
+}
+.RegisterMedical p {
+    font-size: 17px;
+    margin-bottom: 3px;
+    margin-left:-56%;
+}
+.RegisterMedical button {
+    width: 120px;
+    height: 30px;
+    font-size: 17px;
+    padding-bottom: 20px;
+}
+
+
+
 #doctor {
     width: 20px;
     vertical-align: bottom;
+    margin-left: -70.5%;
 }
 #nurse {
     width: 20px;
     vertical-align: bottom;
+    margin-left: -36.5%;
+
 }
 #text {
-    vertical-align: center;
+    vertical-align: left;
+    margin-left: 1%;
+
 }
 #med {
-    margin-left: 30%;
+    margin-left: 42%;
+    padding-top: 3%;
 }
