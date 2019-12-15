@@ -1,8 +1,11 @@
-.Register {
-    padding-left: 100px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+
+.Register{
+    margin-left: 38%;
+    padding-top: 1%;
+   
 }
+
+
 .Register td {
     vertical-align: top;
     padding-right: 50px;

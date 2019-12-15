@@ -55,3 +55,39 @@ table#tabProfileAdmin th , table#tabProfileAdmin td{
     margin-left: 38%;
     padding-top: 5%;
 }
+
+table#tabRequest{
+    border-collapse: collapse;
+    width: 60%;
+    margin-left: 25%;
+    margin-top: 5%;
+}
+
+table#tabRequest th, table#tabRewuest td{
+    text-align: left;
+    padding: 8px;
+}
+
+table#tabRequest th{
+    background-color: #9bc4a9;
+    color: black;
+}
+
+.last_column{
+    width: 20px;
+}
+
+table#tabRequest button{
+    background-color:#9bc4a9;
+    border-radius: 4px;
+    align-self: center;
+    margin-left: 15%;
+    font-size: 15px;
+    padding: 10px 10px;
+}
+
+#btnAdd{
+    align-self: center;
+    margin-left: 55%;
+
+}
