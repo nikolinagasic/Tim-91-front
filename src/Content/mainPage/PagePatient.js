@@ -301,7 +301,8 @@ class PagePatient extends Component {
       let klinike = null;
       if(this.state.isKlinike){
         klinike = (
-          <ClinicSearch/>
+          <ClinicSearch
+           token = {this.state.token} />
         );
       }
 
