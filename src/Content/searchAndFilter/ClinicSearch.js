@@ -17,14 +17,37 @@ const ClinicSearch = (props) => {
         if(!datum){
             alert('Обавезан је унос датума прегледа.');
         }
-        
+
+
+        const url = 'http://localhost:8081/clinic/searchClinic/'+datum+"/"+tip+"/"+ocena;
+        const options = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": props.token
+            },
+        };
+
+        fetch(url, options)
+        .then(response => {
+            console.log(response);
+            if(response.ok === true){
+                console.log("dobro si vratio sa back-a");
+            }
+            else {
+                if(response.status === 401){
+                    alert("Немате права за приступ датој опцији. (401 Unauthorized)");
+                }else{
+                    alert("Дошло је до грешке приликом излиставања клиника.");
+                }
+            }
+        });
     }
     
     let klinike = (
         <SearchComponent
-            search={searchClinic} 
-        >
-        </SearchComponent>
+            search={searchClinic} />
     );
 
     return(
