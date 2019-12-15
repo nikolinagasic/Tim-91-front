@@ -51,10 +51,6 @@ table#tabProfileAdmin th , table#tabProfileAdmin td{
     border-bottom: 1px solid #ddd;
     text-align: center;
 }
-.reg {
-    margin-left: 38%;
-    padding-top: 5%;
-}
 
 table#tabRequest{
     border-collapse: collapse;
@@ -89,5 +85,14 @@ table#tabRequest button{
 #btnAdd{
     align-self: center;
     margin-left: 55%;
+}
 
+#name {
+    margin-left: -10%;
+    height: 25px;
+}
+#add {
+    margin-left: 6%;
+    width: 120px;
+    height: 25px;
 }

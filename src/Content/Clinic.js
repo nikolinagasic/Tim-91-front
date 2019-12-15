@@ -60,24 +60,24 @@ class Clinic extends Component {
 
   render() {
     return (
-    <div className="Register">
+    <div className="Clinic">
       <form name="clinicRegForm" onSubmit={this.mySubmitHandler}>
         <table>
           <tr>
         <td>          
-          <p>Назив:</p>
+          <p id="naziv">Назив:</p>
           <input id="id_name" type='text'
               name='name'
               onChange={this.myChangeHandler}
               required></input>
           
-          <p>Адреса:</p>
+          <p id="adresa">Адреса:</p>
           <input type='text'
               name='address'
               onChange={this.myChangeHandler}
               required></input>
 
-          <p>Опис:</p>
+          <p id="opis">Опис:</p>
             <textarea
                 id="textarea"
                 name='description'
