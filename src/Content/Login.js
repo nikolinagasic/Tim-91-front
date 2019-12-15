@@ -77,7 +77,7 @@ class Login extends Component {
           console.log(response)
           if(response !== null){
             console.log(response.role);
-            alert('Добродошли ' + response.firstName + " " + response.lastName + ".");
+            alert('Добродошли ');
             
             // hocu da sakrijem onaj krst sa desne strane kad se ulogujem
             document.getElementById("logo_img").style.visibility = "hidden"; 

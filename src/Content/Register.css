@@ -1,6 +1,6 @@
 
 .Register{
-    margin-left: 1%;
+    margin-left: 5%;
     padding-top: 1%;
    
 }
@@ -17,6 +17,7 @@
 .Register p {
     font-size: 17px;
     margin-bottom: 3px;
+    text-align: left;
 }
 .Register button {
     width: 120px;
