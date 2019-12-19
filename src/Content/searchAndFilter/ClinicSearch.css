@@ -34,12 +34,12 @@ form.headerSearchClinic select option{
 }
 
 form.headerSearchClinic div:first-child{
-    margin-left: 25%;
+    margin-left: 26%;
     float: left;
 }
 
 form.headerSearchClinic div:not(:first-child){
-    margin-left: 7%;
+    margin-left: 5%;
     float: left;
 }
 

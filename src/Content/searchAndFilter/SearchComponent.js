@@ -22,7 +22,7 @@ const SearchComponent = (props) => {
 
                 <div className="headerSearchOcena">
                     <p>Оцена</p>
-                    <input type="number" min="1" max="5" placeholder="1 - 5"
+                    <input type="number" min="1" max="10" placeholder="1 - 10"
                         id="headerSearchClinicOcena"></input>
                 </div>
 
@@ -38,7 +38,7 @@ const SearchComponent = (props) => {
                         <th>Цена прегледа</th>    
                     </thead>        
                     <tbody>
-                        {props.children}
+                        {props.generateTable}
                     </tbody>
                 </table>
             </form>
