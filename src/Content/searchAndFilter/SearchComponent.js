@@ -15,8 +15,7 @@ const SearchComponent = (props) => {
                 <div className="headerSearchSelect">
                     <p>Тип прегледа:</p>
                     <select id="headerSearchClinicTip">
-                        <option>Сви типови</option>
-                        <option>Стоматологија</option>
+                        {props.generateOption}
                     </select>
                 </div>
 

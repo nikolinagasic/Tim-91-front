@@ -22,7 +22,8 @@ class PagePatient extends Component {
       staraVrednost: '',
       changedValue: '',
       modalPassword: false, 
-      lista_klinika: null
+      lista_klinika: null, 
+      lista_tipova: null
     };
   }
 
@@ -41,26 +42,40 @@ class PagePatient extends Component {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'},
-    })
-    .then(responseWrapped => responseWrapped.json())
-    .then(response => {
-      console.log(response);
-      this.setState({
-        lista_klinika: response
-      });
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Auth-Token": this.state.token},
+      })
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        this.setState({
+          lista_klinika: response
+        });
 
-      this.setState({
-        isKarton: false
-      });
-      this.setState({
-        isProfil: false
-      });
-      this.setState({
-        isIstorija: false
-      });
-      this.setState({
-        isKlinike: true
+    fetch('http://localhost:8081/type/getAll', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+          "Auth-Token": this.state.token}
+      })
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        this.setState({
+          lista_tipova: response
+        });
+        
+        this.setState({
+          isKarton: false
+        });
+        this.setState({
+          isProfil: false
+        });
+        this.setState({
+          isIstorija: false
+        });
+        this.setState({
+          isKlinike: true
+        });
       });
     });
   }
@@ -318,7 +333,9 @@ class PagePatient extends Component {
         klinike = (
           <ClinicSearch
            token = {this.state.token} 
-           lista_klinika = {this.state.lista_klinika}/>
+           lista_klinika = {this.state.lista_klinika}
+           lista_tipova = {this.state.lista_tipova}
+           />
         );
       }
 

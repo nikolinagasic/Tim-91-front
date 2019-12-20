@@ -1,21 +1,36 @@
-form.bodySearchClinic table {
+form.bodySearchClinic table, form.bodySearchDoctor table{
   margin-left: 28%;
   border-collapse: collapse;
   width: 60%;
 }
 
-form.bodySearchClinic{
+form.bodySearchClinic {
     margin-top: 80px;
 }
 
-form.bodySearchClinic th, td {
+form.bodySearchDoctor{
+    margin-top: 150px;
+}
+
+form.bodySearchClinic th, td{
   padding: 8px;
   text-align: center;
   border-bottom: 1px solid #ddd;
 }
 
+form.bodySearchDoctor th, td{
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  width: 25%;
+}
+
 form.headerSearchClinic{
     margin-top: 30px;
+}
+
+form.headerSearchDoctor{
+    margin-top: 10px;
 }
 
 form.headerSearchClinic input, select{
@@ -29,6 +44,17 @@ form.headerSearchClinic input, select{
   font-size: 15px;
 }
 
+form.headerSearchDoctor input, select{
+    text-align: center;
+    border-radius: 5px;
+    background-color: rgba(221, 219, 219, 0.253);
+    border: 1px solid rgba(0, 0, 0, 0.247);
+    box-shadow: 3px 5px #e2e2e2;
+    width: 180px;
+    height: 35px;
+    font-size: 15px;
+  }
+
 form.headerSearchClinic select option{
     text-align: center;
 }
@@ -38,12 +64,17 @@ form.headerSearchClinic div:first-child{
     float: left;
 }
 
-form.headerSearchClinic div:not(:first-child){
+form.headerSearchDoctor div:first-child{
+    margin-left: 35%;
+    float: left;
+}
+
+form.headerSearchClinic div:not(:first-child), form.headerSearchDoctor div:not(:first-child){
     margin-left: 5%;
     float: left;
 }
 
-form.headerSearchClinic div p{
+form.headerSearchClinic div p, form.headerSearchDoctor div p{
     text-align: center;
     font-size: 15px;
 }
@@ -70,4 +101,43 @@ button#searchClinic{
 button#filterClinic{
     margin-left: 15%;
     margin-bottom: 20px;
+}
+
+tr.tr_clinic_search:hover{
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+button.pogledaj_search_doctor{
+    background-color: transparent;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    box-shadow: 1px 2px #e2e2e2;
+    font-family: 'Sofia';
+    font-size: 15px;
+    width: 80px;
+    height: 30px;
+    cursor: pointer;
+}
+
+button.pogledaj_search_doctor:hover{
+    background-color: #f1f1f1;
+    box-shadow: 1px 2px #cdcdcd;
+    width: 90px;
+    height: 35px;
+    font-size: 17px;
+}
+
+p#back_to_clinics{
+    margin-top: 40px;
+    margin-left: 28%;
+    color: blue;
+    font-size: 14px;
+    cursor: pointer;
+    border-bottom: 0.5px solid #e2e2e2;
+}
+
+p#back_to_clinics:hover{
+    color: rgba(0, 0, 255, 0.7);
+    text-decoration: underline;
 }
