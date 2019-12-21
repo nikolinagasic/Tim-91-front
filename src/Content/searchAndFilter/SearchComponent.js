@@ -9,7 +9,6 @@ const SearchComponent = (props) => {
     let showFilter = false;
 
     let filter_click = () => {
-        console.log('kliknuo na filtriranje');
         if(showFilter == true){
             showFilter = false;
             document.getElementById("filter_options_clinic").style.visibility = "hidden";

@@ -73,6 +73,37 @@ class DoctorSearch extends Component {
         });        
     }
 
+    changeFilter = () => {
+        let ocenaOd = document.getElementById("filter_doctor_ocenaOd").value;
+        let ocenaDo = document.getElementById("filter_doctor_ocenaDo").value;
+        console.log(ocenaOd + "-" + ocenaDo);
+
+        if(!ocenaOd){
+            ocenaOd = "min";
+        }if(!ocenaDo){
+            ocenaDo = "max";
+        }
+
+        const url = 'http://localhost:8081/doctor/getFilterDoctor/'+ocenaOd+"/"+ocenaDo;
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.state.token
+            },
+            body: JSON.stringify(this.state.lista_lekara_original)
+        };
+
+        fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            this.setState({
+                lista_lekara: response
+            });
+        });
+    }
+
     render(){
         return(
             <div>
@@ -80,6 +111,7 @@ class DoctorSearch extends Component {
                     generateTable={this.generateTableData(this.state.lista_lekara)}
                     back={this.props.backToClinics}
                     change={this.change}
+                    changeFilter={this.changeFilter}
                 />
             </div>
         );

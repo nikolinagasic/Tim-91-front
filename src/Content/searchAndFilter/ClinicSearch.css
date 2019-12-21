@@ -142,14 +142,22 @@ p#back_to_clinics:hover{
     text-decoration: underline;
 }
 
-div#div_filter_clinic{
+div#div_filter_clinic, div#div_filter_doctor{
     border: 1px solid #e1e1e1;
     border-radius: 8px;
     margin-top: 15px;
     margin-bottom: 10px;
     margin-right: 40px;
     margin-left: 22%;
-    
+}
+
+div#div_filter_doctor{
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    margin-top: 110px;
+    margin-bottom: 10px;
+    margin-right: 15%;
+    margin-left: 31%;
 }
 
 img.filter_clinic_img, img.filter_doctor_img{
@@ -160,7 +168,7 @@ img.filter_clinic_img, img.filter_doctor_img{
     height: 30px;
 }
 
-form#filter_options_clinic input{ 
+form#filter_options_clinic input, form#filter_options_doctor input{ 
   text-align: center;
   border-radius: 5px;
   background-color: rgba(221, 219, 219, 0.253);
@@ -178,4 +186,9 @@ form#filter_options_clinic input{
 form#filter_options_clinic{
     margin-left: 8%;
     margin-bottom: 20px;
+}
+
+form#filter_options_doctor{
+    margin-left: 28%;
+    margin-bottom: 10px;
 }
