@@ -1,8 +1,7 @@
 
 .Register{
-    margin-left: 5%;
-    padding-top: 1%;
-   
+    margin-left: 7%;
+    padding-top: 1%;  
 }
 
 .Register td {
@@ -10,14 +9,19 @@
     padding-right: 50px;
 }
 .Register input {
-    width: 300px;
+    width: 260px;
     height: 30px;
-    font-size: 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    padding-left: 5px;
+    margin-top: 4px;
 }
 .Register p {
-    font-size: 17px;
+    font-size: 18px;
     margin-bottom: 3px;
     text-align: left;
+    font-family: Sofia;
+    margin-top: 24px;
 }
 .Register button {
     width: 120px;
@@ -26,9 +30,8 @@
     padding-bottom: 20px;
 }
 #id_submit{
-    width: 150px;
+    width: 130px;
     height: 35px;
     margin-top: 20px;
-    margin-left: 150px;
+    margin-left: 50px;
 }
-

@@ -152,7 +152,7 @@ class Register extends Component {
               onChange={this.myChangeHandler}
               required></input>
         </td>
-        <td>          
+        <td className="drugi_red_register">          
           <p>Адреса е-поште:</p>
           <input id="id_mejlReg" type='email'
               name='email'

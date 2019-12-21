@@ -89,8 +89,6 @@ class ClinicSearch extends React.Component {
     }
 
     generateTableData(listClinics) {
-        console.log("CRTAM");
-        console.log(listClinics);
         let res = [];
         if (listClinics != null) {
             let tableData = listClinics;
@@ -112,8 +110,6 @@ class ClinicSearch extends React.Component {
     }
 
     generateOption(listOptions) {
-        console.log("CRTAM optione");
-        console.log(listOptions);
         let res = [];
         if (listOptions != null) {
             let tableData = listOptions;
