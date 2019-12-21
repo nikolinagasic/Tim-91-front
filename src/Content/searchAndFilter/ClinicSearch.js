@@ -7,6 +7,7 @@ class ClinicSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            lista_klinika_original: props.lista_klinika,
             lista_klinika: props.lista_klinika,
             token: props.token,
             lista_tipova: props.lista_tipova,
@@ -123,6 +124,48 @@ class ClinicSearch extends React.Component {
         return res;
     }
 
+    changedInput = () => {
+        let cenaOd = document.getElementById("filter_clinic_cenaOd").value;
+        let cenaDo = document.getElementById("filter_clinic_cenaDo").value;
+        let ocenaOd = document.getElementById("filter_clinic_ocenaOd").value;
+        let ocenaDo = document.getElementById("filter_clinic_ocenaDo").value;
+        let naziv = document.getElementById("filter_clinic_naziv").value;
+        
+        if(!cenaOd){
+            cenaOd = "min";
+        }if(!ocenaOd){
+            ocenaOd = "min";
+        }if(!cenaDo){
+            cenaDo = "max";
+        }if(!ocenaDo){
+            ocenaDo = "max";
+        }if(!naziv){
+            naziv = "~";
+        }
+        //console.log(cenaOd + " " +cenaDo + " " +ocenaOd + " " +ocenaDo + " " +naziv);
+
+        const url = 'http://localhost:8081/clinic/getFilterClinic/'+cenaOd+"/"+cenaDo+"/"+ocenaOd+"/"+ocenaDo+"/"
+                     + naziv;
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.state.token
+            },
+            body: JSON.stringify(this.state.lista_klinika_original)
+        };
+
+        fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            this.setState({
+                lista_klinika: response
+            });
+        });
+       
+    }
+
     back = () => {
         this.setState({
             showDoctors: false,
@@ -138,6 +181,7 @@ class ClinicSearch extends React.Component {
                     search={this.searchClinic}
                     generateTable={this.generateTableData(this.state.lista_klinika)}
                     generateOption = {this.generateOption(this.state.lista_tipova)}
+                    change={this.changedInput}
                 />
             );
         }

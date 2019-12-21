@@ -5,11 +5,11 @@ form.bodySearchClinic table, form.bodySearchDoctor table{
 }
 
 form.bodySearchClinic {
-    margin-top: 80px;
+    margin-top: 30px;
 }
 
 form.bodySearchDoctor{
-    margin-top: 150px;
+    margin-top: 30px;
 }
 
 form.bodySearchClinic th, form.bodySearchClinic td{
@@ -33,7 +33,7 @@ form.headerSearchDoctor{
     margin-top: 10px;
 }
 
-form.headerSearchClinic input, form.headerSearchClinic select{
+form.headerSearchClinic input, form.headerSearchClinic select {
   text-align: center;
   border-radius: 5px;
   background-color: rgba(221, 219, 219, 0.253);
@@ -44,7 +44,7 @@ form.headerSearchClinic input, form.headerSearchClinic select{
   font-size: 15px;
 }
 
-form.headerSearchDoctor input, select{
+form.headerSearchDoctor input,form.headerSearchDoctor select{
     text-align: center;
     border-radius: 5px;
     background-color: rgba(221, 219, 219, 0.253);
@@ -140,4 +140,42 @@ p#back_to_clinics{
 p#back_to_clinics:hover{
     color: rgba(0, 0, 255, 0.7);
     text-decoration: underline;
+}
+
+div#div_filter_clinic{
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    margin-right: 40px;
+    margin-left: 22%;
+    
+}
+
+img.filter_clinic_img, img.filter_doctor_img{
+    cursor: pointer;
+    margin-left: 20px;
+    margin-top: 15px;
+    width: 30px;
+    height: 30px;
+}
+
+form#filter_options_clinic input{ 
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgba(221, 219, 219, 0.253);
+  border: 1px solid rgba(0, 0, 0, 0.247);
+  box-shadow: 3px 5px #e2e2e2;
+  width: 130px;
+  height: 25px;
+  font-size: 13px;
+}
+
+#filter_clinic_cenaDo, #filter_clinic_ocenaDo{
+    margin-right: 50px;
+}
+
+form#filter_options_clinic{
+    margin-left: 8%;
+    margin-bottom: 20px;
 }

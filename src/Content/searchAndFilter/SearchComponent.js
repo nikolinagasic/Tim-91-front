@@ -1,8 +1,25 @@
 import React from 'react';
-import Radium from 'radium' 
-import './ClinicSearch.css' 
+import Radium from 'radium';
+import './ClinicSearch.css';
+import filter from '../Images/filter.png';
+import filtered from '../Images/filtered.png'; 
+import filterG from '../Images/filterG.png'; 
 
 const SearchComponent = (props) => {
+    let showFilter = false;
+
+    let filter_click = () => {
+        console.log('kliknuo na filtriranje');
+        if(showFilter == true){
+            showFilter = false;
+            document.getElementById("filter_options_clinic").style.visibility = "hidden";
+        }
+        else{
+            showFilter = true;
+            document.getElementById("filter_options_clinic").style.visibility = "visible";
+        }
+    }
+
     return(
         <div>
             <form className="headerSearchClinic">
@@ -27,8 +44,36 @@ const SearchComponent = (props) => {
 
                 <button id="searchClinic" onClick={props.search}>Претражи</button>
             </form>
+            <div id="div_filter_clinic">
+                <img src={filterG} alt="Филтер" className="filter_clinic_img" onClick={filter_click}/>
+            
+                <form id="filter_options_clinic">
+                <div>
+                    Цена : 
+                    <input type="number" placeholder="Од -"
+                        id="filter_clinic_cenaOd"
+                        onChange={props.change}></input>
+                    <input type="number" placeholder="- До"
+                        id="filter_clinic_cenaDo"
+                        onChange={props.change}></input>
+                
+                    Оцена : 
+                    <input type="number" placeholder="Од -"
+                        id="filter_clinic_ocenaOd"
+                        onChange={props.change}></input>
+                    <input type="number" placeholder="- До"
+                        id="filter_clinic_ocenaDo"
+                        onChange={props.change}></input>
+
+                    Назив : 
+                    <input type="text" placeholder="Унесите..."
+                        id="filter_clinic_naziv"
+                        onChange={props.change}></input>
+                </div>
+            </form>
+
+            </div>
             <form className="bodySearchClinic">
-                <button id="filterClinic" hidden>Филтрирај</button>
                 <table>
                     <thead>
                         <th>Назив клинике</th>

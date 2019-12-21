@@ -1,5 +1,8 @@
 import React from 'react'
 import DoctorSearch from './DoctorSearch';
+import filter from '../Images/filter.png';
+import filtered from '../Images/filtered.png'; 
+import filterG from '../Images/filterG.png'; 
 
 const DoctorComponent = (props) => {
     return(
@@ -31,6 +34,9 @@ const DoctorComponent = (props) => {
                         id="headerSearchDoctorOcena"></input>
                 </div>
             </form>
+            <div>
+                <img src={filterG} alt="Филтер" className="filter_doctor_img"/>
+            </div>
             <form className="bodySearchDoctor">
                 <button id="filterClinic" hidden>Филтрирај</button>
                 <table>

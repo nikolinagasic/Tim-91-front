@@ -195,7 +195,7 @@ class Login extends Component {
           <input type="submit" value="Пријави се"></input>
           <p id="zaboravljena_lozinka" onClick={this.openModalHandler}>Заборављена лозинка</p>
         </form>
-
+        
         { this.state.isShowing ? <div onClick={this.closeModalHandler} 
                 className="back-drop"></div> : null }
         <Modal
