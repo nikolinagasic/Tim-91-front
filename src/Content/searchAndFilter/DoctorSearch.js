@@ -6,7 +6,9 @@ class DoctorSearch extends Component {
         super(props);
         this.state = {
             lista_lekara_original: props.lista_doktora,
-            lista_lekara: props.lista_doktora
+            lista_lekara: props.lista_doktora,
+            lista_termina: null,
+            isTermini: false
         }
     }
 
@@ -15,18 +17,43 @@ class DoctorSearch extends Component {
         if (listDoctors != null) {
             let tableData = listDoctors;
             for (var i = 0; i < tableData.length; i++) {
-                let name = tableData[i].name;
+                let name = tableData[i].firstName;
+                let l_name = tableData[i].lastName;
                 res.push(
                     <tr>
                         <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
                         <td key={tableData[i].lastName}>{tableData[i].lastName}</td>
                         <td key={tableData[i].rating}>{tableData[i].rating}</td>
-                        <td><button className="pogledaj_search_doctor">Погледај</button></td>
+                        <td><button className="pogledaj_search_doctor" 
+                            onClick={this.clickPogledaj.bind(this, name, l_name)}>Погледај</button></td>
                     </tr>
                 )
             }
         }
         return res;
+    }
+
+    clickPogledaj = (ime, prezime) => {
+        //console.log(ime + " " + prezime);
+        
+        const url = 'http://localhost:8081/doctor/getTermini/'+ime+"/"+prezime;
+        const options = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.state.token
+            },
+        };
+
+        fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            this.setState({
+                lista_termina: response,
+                isTermini: true
+            });
+        });      
     }
 
     change = () => {

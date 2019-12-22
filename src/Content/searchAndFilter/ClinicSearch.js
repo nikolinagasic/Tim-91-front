@@ -102,7 +102,7 @@ class ClinicSearch extends React.Component {
                         <td key={tableData[i].name}>{tableData[i].name}</td>
                         <td key={tableData[i].rating}>{tableData[i].rating}</td>
                         <td key={tableData[i].address}>{tableData[i].address}</td>
-                        <td key={tableData[i].price}>{tableData[i].price}</td>
+                        <td key={tableData[i].price}>{tableData[i].price} rsd</td>
                     </tr>
                 )
             }
