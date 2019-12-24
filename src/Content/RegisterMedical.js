@@ -14,7 +14,7 @@ class RegisterMedical extends Component {
   }
 
   myChangeHandler = (event) => {
-    event.preventDefault();
+    
     let nam = event.target.name;
     let val = event.target.value;
     let err = '';
@@ -24,6 +24,7 @@ class RegisterMedical extends Component {
   }
 
   mySubmitHandler = (event) => {
+    event.preventDefault();
     let pass = "12345678";
     let err = '';
 

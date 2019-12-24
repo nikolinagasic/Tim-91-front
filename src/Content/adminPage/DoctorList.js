@@ -23,7 +23,7 @@ const DoctorList = (props) => {
         <input type="submit" id="id_submit" value="Пронађи"></input>
         <p/>
       </form>
-        <table border="1">
+        <table className="New">
           <thead>
             <tr>
               <th>ИМЕ</th>

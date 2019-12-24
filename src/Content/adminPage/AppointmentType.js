@@ -13,7 +13,7 @@ const AppointmentType = (props) => {
       </td>
     </table>
     <p/>
-    <table border="1">
+    <table className="tip">
       <thead>
         <tr>
           <th>ТИП ПРЕГЛЕДА</th>

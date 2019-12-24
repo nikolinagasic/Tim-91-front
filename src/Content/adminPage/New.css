@@ -1,0 +1,11 @@
+.New{
+    width: 480px;
+    border-collapse: collapse;
+    background-color: rgb(149,177,149);
+}
+
+.tip{
+    width: 300px;
+    border-collapse: collapse;
+    background-color: rgb(149,177,149);
+}
