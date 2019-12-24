@@ -21,7 +21,9 @@ class PagePatient extends Component {
       headerText: '',
       staraVrednost: '',
       changedValue: '',
-      modalPassword: false
+      modalPassword: false, 
+      lista_klinika: null, 
+      lista_tipova: null
     };
   }
 
@@ -36,17 +38,45 @@ class PagePatient extends Component {
 
   clickKlinike = (event) => {
     document.getElementById("logo_img").style.visibility = "hidden"; 
-    this.setState({
-      isKarton: false
-    });
-    this.setState({
-      isProfil: false
-    });
-    this.setState({
-      isIstorija: false
-    });
-    this.setState({
-      isKlinike: true
+    fetch('http://localhost:8081/clinic/getAll', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Auth-Token": this.state.token},
+      })
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        this.setState({
+          lista_klinika: response
+        });
+
+    fetch('http://localhost:8081/type/getAll', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+          "Auth-Token": this.state.token}
+      })
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        this.setState({
+          lista_tipova: response
+        });
+        
+        this.setState({
+          isKarton: false
+        });
+        this.setState({
+          isProfil: false
+        });
+        this.setState({
+          isIstorija: false
+        });
+        this.setState({
+          isKlinike: true
+        });
+      });
     });
   }
 
@@ -302,7 +332,10 @@ class PagePatient extends Component {
       if(this.state.isKlinike){
         klinike = (
           <ClinicSearch
-           token = {this.state.token} />
+           token = {this.state.token} 
+           lista_klinika = {this.state.lista_klinika}
+           lista_tipova = {this.state.lista_tipova}
+           />
         );
       }
 

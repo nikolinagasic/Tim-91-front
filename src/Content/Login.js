@@ -1,7 +1,9 @@
 import React, { Component } from "react"
+import ReactDOM from 'react-dom'
 import "./Login.css" 
 import "./Content.css" 
 import Modal from "./Modal" 
+import menu from "../Menu/Menu"
 
 class Login extends Component {
   constructor(props) {
@@ -61,7 +63,7 @@ class Login extends Component {
   // f-ja koja na osnovu tokena vraca koji je korisnik prijavljen
   preuzmi_korisnika = (data) => {
     let token = data.accessToken;
-    
+
     const url = 'http://localhost:8081/auth/getByToken/'+token;
       const options = {
         method: 'GET',
@@ -193,7 +195,7 @@ class Login extends Component {
           <input type="submit" value="Пријави се"></input>
           <p id="zaboravljena_lozinka" onClick={this.openModalHandler}>Заборављена лозинка</p>
         </form>
-
+        
         { this.state.isShowing ? <div onClick={this.closeModalHandler} 
                 className="back-drop"></div> : null }
         <Modal
