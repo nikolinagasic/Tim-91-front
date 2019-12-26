@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import Radium from 'radium'
 import SearchComponent from './SearchComponent'
 import DoctorSearch from './DoctorSearch'
+import {UserContext} from '../../UserProvider'
 
 class ClinicSearch extends React.Component {
+    static contextType = UserContext;
+
     constructor(props) {
         super(props);
         this.state = {
             lista_klinika_original: props.lista_klinika,
             lista_klinika: props.lista_klinika,
-            token: props.token,
             lista_tipova: props.lista_tipova,
             showClinics: true,
             showDoctors: false,
@@ -40,7 +42,7 @@ class ClinicSearch extends React.Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json;charset=UTF-8',
-                "Auth-Token": this.state.token
+                "Auth-Token": this.context.token
             },
         };
 
@@ -73,7 +75,7 @@ class ClinicSearch extends React.Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json;charset=UTF-8',
-                "Auth-Token": this.state.token
+                "Auth-Token": this.context.token
             },
         };
 
@@ -151,7 +153,7 @@ class ClinicSearch extends React.Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json;charset=UTF-8',
-                "Auth-Token": this.state.token
+                "Auth-Token": this.context.token
             },
             body: JSON.stringify(this.state.lista_klinika_original)
         };

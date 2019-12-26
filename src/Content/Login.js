@@ -3,16 +3,17 @@ import ReactDOM from 'react-dom'
 import "./Login.css" 
 import "./Content.css" 
 import Modal from "./Modal" 
-import menu from "../Menu/Menu"
+import {UserContext} from '../UserProvider'
 
 class Login extends Component {
+  static contextType = UserContext;     // instanciram context
+
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       password: '',
-
-      activeUser: null,
+      
       isShowing: false
     };
   }
@@ -25,9 +26,10 @@ class Login extends Component {
     this.setState({[nam]: val});
   }
 
+
   mySubmitHandler = (event) => {
     event.preventDefault();
-  
+
     let obj = {
       "username" : this.state.email,
       "password" : this.state.password
@@ -78,17 +80,19 @@ class Login extends Component {
         .then(response => {
           console.log(response)
           if(response !== null){
-            console.log(response.role);
-            alert('Добродошли ');
             
+            //////////// update context ////////////////
+            this.context.token = token;
+            this.context.user = response;
+            ///////////////////////////////////////////
+            
+            alert('Добродошли ');
+
             // hocu da sakrijem onaj krst sa desne strane kad se ulogujem
             document.getElementById("logo_img").style.visibility = "hidden"; 
             if(response.role === "patient"){
-              this.setState({activeUser:response});
               this.props.history.push({
-                pathname: '/pagepatient',
-                state: { detail: this.state.activeUser,
-                          token: token}
+                pathname: '/pagepatient'
               });
             }
             else if(response.role === "doctor"){
@@ -194,6 +198,7 @@ class Login extends Component {
           <p></p>
           <input type="submit" value="Пријави се"></input>
           <p id="zaboravljena_lozinka" onClick={this.openModalHandler}>Заборављена лозинка</p>
+          
         </form>
         
         { this.state.isShowing ? <div onClick={this.closeModalHandler} 

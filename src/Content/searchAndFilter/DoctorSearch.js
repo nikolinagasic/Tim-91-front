@@ -42,7 +42,7 @@ class DoctorSearch extends Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json;charset=UTF-8',
-                "Auth-Token": this.state.token
+                "Auth-Token": this.context.token
             },
         };
 
@@ -86,7 +86,7 @@ class DoctorSearch extends Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json;charset=UTF-8',
-                "Auth-Token": this.state.token
+                "Auth-Token": this.context.token
             },
             body: JSON.stringify(this.state.lista_lekara_original)
         };
@@ -117,7 +117,7 @@ class DoctorSearch extends Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json;charset=UTF-8',
-                "Auth-Token": this.state.token
+                "Auth-Token": this.context.token
             },
             body: JSON.stringify(this.state.lista_lekara_original)
         };

@@ -10,11 +10,11 @@ const DoctorComponent = (props) => {
     let filter_click = () => {
         if(showFilter == true){
             showFilter = false;
-            document.getElementById("filter_options_doctor").style.visibility = "hidden";
+            document.getElementById("div_filter_doctor").style.display = 'none';
         }
         else{
             showFilter = true;
-            document.getElementById("filter_options_doctor").style.visibility = "visible";
+            document.getElementById("div_filter_doctor").style.display = 'block';
         }
     }
 
@@ -46,10 +46,12 @@ const DoctorComponent = (props) => {
                         min="1" max="10" placeholder="1 - 10"
                         id="headerSearchDoctorOcena"></input>
                 </div>
+                <img src={filterG} alt="Филтер" 
+                    className="filter_doctor_img" 
+                    onClick={filter_click}/>
             </form>
             <div id="div_filter_doctor">
-                <img src={filterG} alt="Филтер" className="filter_doctor_img" onClick={filter_click}/>
-            
+                <h4 className="h4_filter_clinic_doctor">Филтрирање доктора:</h4>
                 <form id="filter_options_doctor">
                     <div>
                     Оцена : 
