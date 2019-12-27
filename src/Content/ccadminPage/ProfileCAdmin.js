@@ -11,7 +11,15 @@ const ProfileCAdmin = (props) => {
          <tbody>
          <tr>
              <th> Адреса E-поште</th>
-             <td>{props.pat.mail}</td>
+             <td onClick={props.clickZabrana.bind(this, 'mail')}>{props.pat.mail}</td>
+         </tr>
+         <tr>
+             <th> Име </th>
+             <td onClick={props.clickIzmena.bind(this, 'ime')}>{props.pat.firstName}</td>
+         </tr>
+         <tr>
+             <th> Презиме </th>
+             <td onClick={props.clickIzmena.bind(this, 'prezime')}>{props.pat.lastName}</td>
          </tr>
          </tbody>
         </table>
