@@ -1,8 +1,6 @@
 import React from 'react';
 import Radium from 'radium';
 import './ClinicSearch.css';
-import filter from '../Images/filter.png';
-import filtered from '../Images/filtered.png'; 
 import filterG from '../Images/filterG.png'; 
 
 const SearchComponent = (props) => {
@@ -11,11 +9,11 @@ const SearchComponent = (props) => {
     let filter_click = () => {
         if(showFilter == true){
             showFilter = false;
-            document.getElementById("filter_options_clinic").style.visibility = "hidden";
+            document.getElementById("div_filter_clinic").style.display = 'none';
         }
         else{
             showFilter = true;
-            document.getElementById("filter_options_clinic").style.visibility = "visible";
+            document.getElementById("div_filter_clinic").style.display = 'block';
         }
     }
 
@@ -42,10 +40,12 @@ const SearchComponent = (props) => {
                 </div>
 
                 <button id="searchClinic" onClick={props.search}>Претражи</button>
+            <img src={filterG} alt="Филтер" 
+                className="filter_clinic_img" 
+                onClick={filter_click}/>
             </form>
             <div id="div_filter_clinic">
-                <img src={filterG} alt="Филтер" className="filter_clinic_img" onClick={filter_click}/>
-            
+                <h4 className="h4_filter_clinic_doctor">Филтрирање клиника:</h4>
                 <form id="filter_options_clinic">
                 <div>
                     Цена : 

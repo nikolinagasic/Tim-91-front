@@ -22,7 +22,6 @@ class PageDoctor extends Component {
         };
       }
     
-    
       clickAppointment = (event) => {
         alert("Страница је у процесу израде");
       }

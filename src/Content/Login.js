@@ -2,18 +2,21 @@ import React, { Component } from "react"
 import ReactDOM from 'react-dom'
 import "./Login.css" 
 import "./Content.css" 
-import Modal from "./Modal" 
-import menu from "../Menu/Menu"
+import Modal from "./Modal"
+import ModalChangePassword from "./ModalChangePassword/ModalChangePassword"
+import {UserContext} from '../UserProvider'
 
 class Login extends Component {
+  static contextType = UserContext;     // instanciram context
+
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       password: '',
-
-      activeUser: null,
-      isShowing: false
+      
+      isShowing: false,
+      modalChangePassword: false
     };
   }
 
@@ -25,9 +28,10 @@ class Login extends Component {
     this.setState({[nam]: val});
   }
 
+
   mySubmitHandler = (event) => {
     event.preventDefault();
-  
+
     let obj = {
       "username" : this.state.email,
       "password" : this.state.password
@@ -55,7 +59,6 @@ class Login extends Component {
           alert("Lozinka ili e-mail adresa nisu validni.");
         }
       }).catch((error) => {
-        console.log(error);
         alert("Lozinka ili e-mail adresa nisu validni.");
       })
     }
@@ -78,52 +81,70 @@ class Login extends Component {
         .then(response => {
           console.log(response)
           if(response !== null){
-            console.log(response.role);
-            alert('Добродошли ');
+            //////////// update context ////////////////
+            this.context.token = token;
+            this.context.user = response;
+            ///////////////////////////////////////////
             
-            // hocu da sakrijem onaj krst sa desne strane kad se ulogujem
-            document.getElementById("logo_img").style.visibility = "hidden"; 
-            if(response.role === "patient"){
-              this.setState({activeUser:response});
-              this.props.history.push({
-                pathname: '/pagepatient',
-                state: { detail: this.state.activeUser,
-                          token: token}
-              });
-            }
-            else if(response.role === "doctor"){
-              this.props.history.push({
-                pathname: '/pagedoctor',
-                state: { detail: response }
-              })
-            }
-            else if(response.role === "nurse"){
-              this.props.history.push({
-                pathname: '/pagenurse',
-                state: { detail: response }
-              })
-            }
-            else if(response.role === "cadmin"){
-              this.props.history.push({
-                pathname: '/pageadmin',
-                state: { detail: response }
-              })
-            }
-            else if(response.role === "ccadmin"){
-              this.props.history.push({
-                pathname: '/pagecadmin',
-                state: { detail: response }
+            let isChangePass = false;
+            // ako se prvi put loguje nek promeni sifru
+            if(response.firstLogin && response.role !== 'patient' && response.role !== 'ccadmin'){
+              isChangePass = true;
+              this.setState({
+                modalChangePassword: true
               })
             }
             else{
-              console.log('Greska [role]');  
+              alert(' Добродошли! ');
             }
+            
+            if(!isChangePass){
+              // hocu da sakrijem onaj krst sa desne strane kad se ulogujem
+              this.pocetnaStrana(response.role, response);
+           }
           }
           else {
             console.log('Nesto nije u redu');
             this.setState({korisnik: null});
           }
         });
+  }
+
+  // redirekcija na pocetne strane od User-a
+  pocetnaStrana = (role, user) => {
+    document.getElementById("logo_img").style.visibility = "hidden"; 
+    if(role === "patient"){
+      this.props.history.push({
+        pathname: '/pagepatient'
+      });
+    }
+    else if(role === "doctor"){
+      this.props.history.push({
+        pathname: '/pagedoctor',
+        state: { detail: user }
+      })
+    }
+    else if(role === "nurse"){
+      this.props.history.push({
+        pathname: '/pagenurse',
+        state: { detail: user }
+      })
+    }
+    else if(role === "cadmin"){
+      this.props.history.push({
+        pathname: '/pageadmin',
+        state: { detail: user }
+      })
+    }
+    else if(role === "ccadmin"){
+      this.props.history.push({
+        pathname: '/pagecadmin',
+        state: { detail: user }
+      })
+    }
+    else{
+      console.log('Greska [role]');  
+    }
   }
 
   openModalHandler = (event) => {
@@ -175,8 +196,54 @@ class Login extends Component {
       });
     }
   }
+  
+  sendPasswordHandler = () => {
+    let pass1 = document.getElementById('firstPassword_input1').value;
+    let pass2 = document.getElementById('firstPassword_input2').value;
+    
+    if(pass1.length < 8 || pass2.length < 8){
+      alert('Лозинка мора садржати минимално 8 карактера.');
+      return;
+    }
+    if(pass1 !== pass2){
+      alert('Поновите исту лозинку у оба поља.');
+      return;
+    }
+
+    const url = 'http://localhost:8081/patient/changePassword';
+    const options = {
+      method: 'POST',
+      headers: {
+        "Content-Type": "text/plain",
+        "Auth-Token": this.context.token
+      },
+      body: pass1
+    };
+
+    fetch(url, options)
+      .then(response => {
+        console.log(response);
+        this.pocetnaStrana(this.context.user.role, this.context.user);
+
+        this.setState({
+          modalChangePassword: false
+        })
+      });
+
+  }
 
   render() {
+    let changePassword = null;
+    if(this.state.modalChangePassword){
+      changePassword = (
+        <ModalChangePassword
+          className="modal"
+          show={this.state.modalChangePassword}
+          send={this.sendPasswordHandler}
+          header="Прва промена лозинке"/>
+      );
+    }
+
     return (
       <div className="Login">
         <form id="patientLogForm" onSubmit={this.mySubmitHandler}>
@@ -194,6 +261,7 @@ class Login extends Component {
           <p></p>
           <input type="submit" value="Пријави се"></input>
           <p id="zaboravljena_lozinka" onClick={this.openModalHandler}>Заборављена лозинка</p>
+          
         </form>
         
         { this.state.isShowing ? <div onClick={this.closeModalHandler} 
@@ -214,6 +282,8 @@ class Login extends Component {
                 </form>
                 <p id="pZab_greska"></p>
         </Modal>
+
+        {changePassword}
       </div>
     );
   }

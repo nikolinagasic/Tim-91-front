@@ -9,7 +9,7 @@ form.bodySearchClinic {
 }
 
 form.bodySearchDoctor{
-    margin-top: 30px;
+    margin-top: 70px;
 }
 
 form.bodySearchClinic th, form.bodySearchClinic td{
@@ -27,6 +27,7 @@ form.bodySearchDoctor th, form.bodySearchDoctor td{
 
 form.headerSearchClinic{
     margin-top: 30px;
+    margin-bottom: 50px;
 }
 
 form.headerSearchDoctor{
@@ -79,7 +80,7 @@ form.headerSearchClinic div p, form.headerSearchDoctor div p{
     font-size: 15px;
 }
 
-button#searchClinic, button#filterClinic{
+button#searchClinic{
     border-radius: 5px;
     width: 130px;
     height: 35px;
@@ -142,7 +143,7 @@ p#back_to_clinics:hover{
     text-decoration: underline;
 }
 
-div#div_filter_clinic, div#div_filter_doctor{
+div#div_filter_clinic{
     border: 1px solid #e1e1e1;
     border-radius: 8px;
     margin-top: 15px;
@@ -154,16 +155,23 @@ div#div_filter_clinic, div#div_filter_doctor{
 div#div_filter_doctor{
     border: 1px solid #e1e1e1;
     border-radius: 8px;
-    margin-top: 110px;
+    margin-top: 30px;
     margin-bottom: 10px;
     margin-right: 15%;
     margin-left: 31%;
 }
 
-img.filter_clinic_img, img.filter_doctor_img{
+img.filter_clinic_img{
     cursor: pointer;
-    margin-left: 20px;
-    margin-top: 15px;
+    margin-left: 50px;
+    width: 30px;
+    height: 30px;
+}
+
+img.filter_doctor_img{
+    cursor: pointer;
+    margin-left: 100px;
+    margin-top: 50px;
     width: 30px;
     height: 30px;
 }
@@ -184,11 +192,17 @@ form#filter_options_clinic input, form#filter_options_doctor input{
 }
 
 form#filter_options_clinic{
+    margin: 30px;
     margin-left: 8%;
-    margin-bottom: 20px;
 }
 
 form#filter_options_doctor{
+    margin: 30px;
     margin-left: 28%;
-    margin-bottom: 10px;
+}
+
+.h4_filter_clinic_doctor{
+    margin-left: 5%;
+    margin-bottom: 30px;
+    text-decoration: underline;
 }

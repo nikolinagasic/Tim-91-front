@@ -1,25 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {NavLink} from 'react-router-dom';
 import './Menu.css';
+import {UserContext} from '../UserProvider'
 
-const menu = (props) => {
-    console.log('usao u logout');
-    const showLogo = () => {
+class Menu extends Component {
+    static contextType = UserContext;
+    
+    showLogo = () => {
         document.getElementById("logo_img").style.visibility = "visible";
     }
-
-    const logout = () => {
-
+    
+    render(){
+        return (
+            <div className="Menu">           
+                <a><NavLink to="/" onClick={this.showLogo}>ПОЧЕТНА</NavLink></a>
+                <a className="logReg_click"><NavLink to="/register" onClick={this.showLogo}>РЕГИСТРУЈ СЕ</NavLink></a>
+                <a className="logReg_click"><NavLink to="/login" onClick={this.showLogo}>ПРИЈАВИ СЕ</NavLink></a>
+            </div>
+        )
     }
-
-    return (
-        <div className="Menu">           
-            <a><NavLink to="/" onClick={showLogo}>ПОЧЕТНА</NavLink></a>
-            <a className="logReg_click"><NavLink to="/register" onClick={showLogo}>РЕГИСТРУЈ СЕ</NavLink></a>
-            <a className="logReg_click"><NavLink to="/login" onClick={showLogo}>ПРИЈАВИ СЕ</NavLink></a>
-            <a id="click_logout"><NavLink to="/login" onClick={logout}>ОДЈАВИ СЕ</NavLink></a>
-        </div>
-    )
 };
 
-export default menu;
+export default Menu;

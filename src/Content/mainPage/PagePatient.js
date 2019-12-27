@@ -4,14 +4,16 @@ import ProfilePatient from './ProfilePatient'
 import Modal from "../Modal"
 import Radium from 'radium' 
 import ClinicSearch from '../searchAndFilter/ClinicSearch';
-// import {Link} from 'react-router-dom';
+import {UserContext} from '../../UserProvider'
 
 class PagePatient extends Component {
+  static contextType = UserContext;
+
   constructor(props) {
     super(props);
     this.state = {
-      patient: this.props.location.state.detail,   // ono sto sam poslao iz prijave
-      token: this.props.location.state.token,
+      //patient: this.context.user,   // ono sto sam poslao iz prijave
+      //token: this.props.location.state.token,
       isKarton: false,
       isProfil: false,
       isIstorija: false,
@@ -27,8 +29,16 @@ class PagePatient extends Component {
     };
   }
 
+  clickLogout = () => {
+    // obrisi token i korisnika
+    this.context.token = null;
+    this.context.user = null;
+    this.props.history.push({
+      pathname: '/login'
+    });
+  }
 
-  clickKarton = (event) => {
+  clickKarton = (event) => {    
     alert("Страница је у процесу израде");
   }
   
@@ -43,7 +53,7 @@ class PagePatient extends Component {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json;charset=UTF-8',
-        "Auth-Token": this.state.token},
+        "Auth-Token": this.context.token},
       })
       .then(responseWrapped => responseWrapped.json())
       .then(response => {
@@ -56,24 +66,15 @@ class PagePatient extends Component {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json;charset=UTF-8',
-          "Auth-Token": this.state.token}
+          "Auth-Token": this.context.token}
       })
       .then(responseWrapped => responseWrapped.json())
       .then(response => {
         this.setState({
-          lista_tipova: response
-        });
-        
-        this.setState({
-          isKarton: false
-        });
-        this.setState({
-          isProfil: false
-        });
-        this.setState({
-          isIstorija: false
-        });
-        this.setState({
+          lista_tipova: response,
+          isKarton: false,
+          isProfil: false,
+          isIstorija: false,
           isKlinike: true
         });
       });
@@ -83,18 +84,30 @@ class PagePatient extends Component {
   clickProfil = (event) => {
     console.log('kliknuo na profil');
     document.getElementById("logo_img").style.visibility = "hidden"; 
-    this.setState({
-      isKarton: false
-    });
-    this.setState({
-      isProfil: true
-    });
-    this.setState({
-      isIstorija: false
-    });
-    this.setState({
-      isKlinike: false
-    });
+
+    const url = 'http://localhost:8081/patient/getPat';
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Auth-Token': this.context.token
+      },
+    };
+
+    fetch(url, options)
+    .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        console.log('patient first name: ' + response.firstName);
+        
+        this.setState({
+          //patient: response,
+          isKarton: false,
+          isProfil: true,
+          isIstorija: false,
+          isKlinike: false
+        });
+      });
   }
 
   clickZabrana = (polje) => {
@@ -116,27 +129,27 @@ class PagePatient extends Component {
 
     if(naziv === 'ime'){
       this.setState({headerText: "Измена имена"});
-      this.setState({staraVrednost: this.state.patient.firstName});
+      this.setState({staraVrednost: this.context.user.firstName});
     }
     else if(naziv === 'prezime'){
       this.setState({headerText: "Измена презимена"});
-      this.setState({staraVrednost: this.state.patient.lastName});
+      this.setState({staraVrednost: this.context.user.lastName});
     }
     else if(naziv === 'adresa'){
       this.setState({headerText: "Измена адресе"});
-      this.setState({staraVrednost: this.state.patient.address});
+      this.setState({staraVrednost: this.context.user.address});
     }
     else if(naziv === 'grad'){
       this.setState({headerText: "Измена града"});
-      this.setState({staraVrednost: this.state.patient.city});
+      this.setState({staraVrednost: this.context.user.city});
     }
     else if(naziv === 'drzava'){
       this.setState({headerText: "Измена државе"});
-      this.setState({staraVrednost: this.state.patient.country});
+      this.setState({staraVrednost: this.context.user.country});
     }
     else if(naziv === 'telefon'){
       this.setState({headerText: "Измена телефона"});
-      this.setState({staraVrednost: this.state.patient.telephone});
+      this.setState({staraVrednost: this.context.user.telephone});
     }
     else{
       console.log('greska izmena');
@@ -158,7 +171,7 @@ class PagePatient extends Component {
     return;
   }
   
-  let email = this.state.patient.mail;
+  let email = this.context.user.mail;
   const url = 'http://localhost:8081/patient/changeAttribute/'+changedName+"/"+newValue+"/"+email;
   const options = {
     method: 'POST',
@@ -182,40 +195,35 @@ class PagePatient extends Component {
  }
 
  promenaState = (nazivAtributa, novaVrednost) => {
+  //console.log(nazivAtributa + " : " + novaVrednost)
+
   if(nazivAtributa === 'telefon'){
     if (!Number(novaVrednost)) {
       return false;
     }
   }
   
-  // kopija pacijenta
-  const patient = {       
-    ...this.state.patient
-  };
-  
   if(nazivAtributa === 'ime'){
-    patient.firstName = novaVrednost;
+    this.context.user.firstName = novaVrednost;
   }
   else if(nazivAtributa === 'prezime'){
-    patient.lastName = novaVrednost;
+    this.context.user.lastName = novaVrednost;
   }
   else if(nazivAtributa === 'adresa'){
-    patient.address = novaVrednost;
+    this.context.user.address = novaVrednost;
   }
   else if(nazivAtributa === 'grad'){
-    patient.city = novaVrednost;
+    this.context.user.city = novaVrednost;
   }
   else if(nazivAtributa === 'drzava'){
-    patient.country = novaVrednost;
+    this.context.user.country = novaVrednost;
   }
   else if(nazivAtributa === 'telefon'){
-    patient.telephone = novaVrednost;
+    this.context.user.telephone = novaVrednost;
   }
 
-  // update-uj state
-  this.setState({patient : patient});
-    return true;
-  }
+  return true;
+}
 
   sendChangedPassword = () => {
     let password = document.getElementById("newPassword_input1").value;
@@ -236,7 +244,7 @@ class PagePatient extends Component {
       method: 'POST',
       headers: {
         "Content-Type": "text/plain",
-        "Auth-Token": this.state.token
+        "Auth-Token": this.context.token
       },
       body: password
     };
@@ -279,7 +287,6 @@ class PagePatient extends Component {
 
   render() {
       let modalni = null;
-      let modalniSifra = null;
       if(this.state.modalShowing){
         modalni = (
           <Modal
@@ -303,6 +310,7 @@ class PagePatient extends Component {
           </Modal>);
       }
 
+      let modalniSifra = null;
       if(this.state.modalPassword){
         modalniSifra = (
           <Modal
@@ -316,12 +324,10 @@ class PagePatient extends Component {
                 <p>Унесите нову вредност лозинке:</p>
                 <input type="password" 
                   className="input_field"
-                  value=""
                   id="newPassword_input1"></input>
                   <p>Унесите лозинку поново:</p>
                   <input type="password" 
                     className="input_field"
-                    value=""
                     id="newPassword_input2"></input>
               </form>
           </Modal>
@@ -332,7 +338,7 @@ class PagePatient extends Component {
       if(this.state.isKlinike){
         klinike = (
           <ClinicSearch
-           token = {this.state.token} 
+           token = {this.context.token} 
            lista_klinika = {this.state.lista_klinika}
            lista_tipova = {this.state.lista_tipova}
            />
@@ -355,10 +361,13 @@ class PagePatient extends Component {
             <li className="li_list"><a 
             id="klinike"
             onClick={this.clickKlinike}> Листа клиника </a></li>
+            <li className="li_list"><a 
+            id="logout_patient"
+            onClick={this.clickLogout}> Одјави се </a></li>
           </ul>
           
           <ProfilePatient
-            pat={this.state.patient}
+            pat={this.context.user}
             show = {this.state.isProfil}
             clickIzmena={this.clickIzmena}
             clickZabrana={this.clickZabrana}
