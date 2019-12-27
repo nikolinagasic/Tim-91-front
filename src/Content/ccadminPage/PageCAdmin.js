@@ -23,9 +23,13 @@ class PageCAdmin extends Component {
       
 
       modalShowing: false,
+      modalIzmena: false,
+      modalDeny: false,
       staraVrednost: '',
       changedValue: '',
       headerText: '',
+      rejectionReason: '',
+      email: '',
       listRequest: null,
       render_list: [],
       post_list:[],
@@ -56,7 +60,7 @@ class PageCAdmin extends Component {
     });
   }
 
-  /*  clickZabrana = (polje) => {
+    clickZabrana = (polje) => {
       console.log(polje);
       if(polje === 'mail'){
         alert('Није могуће мењати вредност поља е-поште.');
@@ -66,7 +70,7 @@ class PageCAdmin extends Component {
     clickIzmena = (naziv, staraVr) => {
       console.log(naziv);
       this.setState({
-          modalShowing: true
+          modalIzmena: true
       });
       this.setState({changedValue: naziv});
   
@@ -81,7 +85,7 @@ class PageCAdmin extends Component {
       else{
         console.log('greska izmena');
       }
-   }*/
+   }
 
   clickRegisterAdmin = (event) => {
     document.getElementById("logo_img").style.visibility = "hidden";
@@ -167,7 +171,7 @@ class PageCAdmin extends Component {
   //kada se klikne na dugme odobri zahtev za registraciju
   clickHandler1 = (mail) => {
     console.log("KLIK NA DUGME")
-    const url = 'http://localhost:8081/ccadmin/accept/' + mail + '/1';
+    const url = 'http://localhost:8081/ccadmin/accept/' + mail + '/1' +"/nista";
     const options = {
       method: 'GET',
       headers: {
@@ -206,9 +210,30 @@ class PageCAdmin extends Component {
       });
   }
 
+  //preuzima iz modalnog razlog odbijanja
+  sendRejectionReason = () => {
+    this.setState({
+      modalDeny: false
+    });
+    let reason = document.getElementById("reasonValue_input").value;
+    this.requestDenied(reason);
+  }
+
   //kada se klikne na odbij zahtev
   clickHandler2 = (mail) => {
-    const url = 'http://localhost:8081/ccadmin/accept/' + mail + '/2';
+    this.setState({
+      modalDeny: true
+    });
+    this.setState({
+      email:mail
+    });
+  }
+ 
+  requestDenied = (reason) => {
+    console.log("usao u denied");
+    console.log(reason);
+    const mail = this.state.email;
+    const url = 'http://localhost:8081/ccadmin/accept/' + mail + '/2' +'/' +reason;
     const options = {
       method: 'GET',
       headers: {
@@ -322,6 +347,64 @@ class PageCAdmin extends Component {
     this.setState({
       modalShowing: false
     });
+    this.setState({
+      modalIzmena: false
+    });
+    this.setState({
+      modalDeny: false
+    });
+  }
+
+  sendChangeHandler = () => { //izmena info na profilu
+    this.setState({
+      modalIzmena: false
+    });
+    let newValue = document.getElementById("newValue_input").value;
+    let changedName = this.state.changedValue;
+
+    const sve_ok = this.promenaState(changedName, newValue);
+    if(!sve_ok){
+      return;
+    }
+
+    let email = this.state.ccadmin.mail;
+    //saljemo azuriranog admina na back da te promene sacuvamo u bazi
+    const url = 'http://localhost:8081/ccadmin/changeAttribute/'+changedName+"/"+newValue+"/"+email;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+    fetch(url, options)
+    .then(response => {
+      console.log(response.ok);
+      console.log(response)
+      if(response.ok === true){
+        alert("Успешно сте изменили поље '" + changedName+"'.");
+      }
+      else {
+        alert("Дошло је до грешке приликом измене поља '" + changedName + "'.");
+      }
+    });
+
+  }
+
+  promenaState = (nazivAtributa, novaVrednost) => {
+    console.log("promena stanja");
+     //kopija admina
+     const ccadmin = {
+       ...this.state.ccadmin
+     };
+     if(nazivAtributa === 'ime'){
+      ccadmin.firstName = novaVrednost;
+    }else if(nazivAtributa === "prezime"){
+      ccadmin.lastName = novaVrednost;
+    }
+     // update-uj state
+    this.setState({ccadmin : ccadmin});
+    return true;
   }
 
   //generisanje tabele za sifarnik
@@ -389,13 +472,16 @@ class PageCAdmin extends Component {
 
   render() {
     let modalni = null;
-    if (this.state.modalShowing) {
+    let modalniIzmena = null;
+    let modalniDeny = null;
+    if (this.state.modalShowing) {  //modalni dijalog za kreiranje kombinacije dijagnoze i leka
       modalni = (
         <Modal
           className="modal"
           show={this.state.modalShowing}
           close={(event) => this.closeModalHandler(event)}
-          send={this.sendModalHandler} //posalji         
+          send={this.sendModalHandler} //posalji    
+          header={"Sifarnik dijagnoza i lekova"}     
         >
           <form>
             <p>Sifra leka:</p>
@@ -417,6 +503,50 @@ class PageCAdmin extends Component {
           </form>
         </Modal>);
     }
+    if (this.state.modalIzmena) {  //modalni dijalog za izmenu info o ccadminu 
+      modalniIzmena = (
+        <Modal
+          className="modal"
+          show={this.state.modalIzmena}
+          close={(event) => this.closeModalHandler(event)}
+          send={this.sendChangeHandler}
+          header={this.state.headerText}
+        >
+          <form>
+            <p>Стара вредност:</p>
+            <input type="text"
+              className="input_field"
+              value={this.state.staraVrednost}
+              disabled></input>
+            <p>Нова вредност:</p>
+            <input type="text"
+              className="input_field"
+              id="newValue_input"></input>
+          </form>
+        </Modal>);
+
+    }
+
+    if(this.state.modalDeny) { //modalni dijalog za unos informacija o odbijanju zahteva za registraciju
+      modalniDeny = (
+        <Modal
+           className="modal"
+           show={this.state.modalDeny}
+           close={(event) => this.closeModalHandler(event)}
+           send={this.sendRejectionReason}
+           header="Razlog odbijanja zahteva"
+        >
+        <form>
+          <p>Unesi razlog:</p>
+          <input type="text"
+             className="input_field"
+             id="reasonValue_input"></input>
+        </form>
+        </Modal>
+      );
+
+    }
+
 
     let componentRequest = null;
     if (this.state.isRequest) {
@@ -488,7 +618,9 @@ class PageCAdmin extends Component {
 
         <ProfileCAdmin
           pat={this.state.ccadmin}
-          show={this.state.isProfile}>
+          show={this.state.isProfile}
+          clickIzmena={this.clickIzmena}
+          clickZabrana={this.clickZabrana}>
         </ProfileCAdmin>
 
         {registerAdmin}
@@ -496,6 +628,8 @@ class PageCAdmin extends Component {
         {componentRequest}
         {componentDiagnosis}
         {modalni}
+        {modalniIzmena}
+        {modalniDeny}
       </div>
     );
   }
