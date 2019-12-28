@@ -72,3 +72,16 @@ button#btnSifraDoctor:hover{
     border: 1px solid black;
     box-shadow: 3px 5px #e2e2e2;
 }
+#logout_d{
+    margin-top: 70.5%;
+    border-bottom: 1px solid #d1d1d1;
+    border-top: 1px solid #d1d1d1;
+    border-radius: 10px;
+    height: 15px;
+    text-align: center;
+}
+
+#logout_d:hover{
+    background-color: crimson;
+    color: white;
+}

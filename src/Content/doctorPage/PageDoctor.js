@@ -247,6 +247,9 @@ class PageDoctor extends Component {
                 <li className="li_list"><a 
                 id="vacation"
                 onClick={this.clickVacation}> Годишњи одмор </a></li>
+                <li className="li_list"><a 
+                id="logout_d"
+                onClick={this.clickLogout}> Одјави се </a></li>
               </ul>
               
               <ProfileDoctor
