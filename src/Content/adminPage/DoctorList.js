@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './New.css'
 
 const DoctorList = (props) => {
     return (
@@ -28,7 +29,7 @@ const DoctorList = (props) => {
             <tr>
               <th>ИМЕ</th>
               <th>ПРЕЗИМЕ</th>
-              <th>ОБЛАСТ</th>
+              <th>ТИП ПРЕГЛЕДА</th>
               <th>АДРЕСА Е-ПОШТЕ</th>
             </tr>
           </thead>

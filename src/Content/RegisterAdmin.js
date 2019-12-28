@@ -8,6 +8,7 @@ class RegisterAdmin extends Component {
     this.state = {
       email: '',
       password: '',
+      clinic: '',
       
       errormessage: ''
     };
@@ -40,22 +41,31 @@ class RegisterAdmin extends Component {
         err = <strong>Морате изабрати тип администратора за регистрацију.</strong>;
         this.setState({errormessage:err});
       }
+    else if (document.getElementById("clinic").checked && document.getElementById("id_clinic").value.length == 0) {
+        err = <strong>Морате изабрати клинику за администратора клинике.</strong>;
+        this.setState({errormessage:err});
+    }
     else{
       this.setState({errormessage:''});
       console.log('sve ok, salji objekat');
       
-      let obj = {
-        "mail" : this.state.email,
-        "password" : "12345678",
-      }
-      
+      let obj;      
       var url;
 
       if ( document.getElementById("clinic").checked === true) {
         url = 'http://localhost:8081/ccadmin/register_admin';
+          obj = { 
+            "mail" : this.state.email,
+            "password" : "12345678",
+            "clinic" : this.state.clinic
+          }
       }
       else {
         url = 'http://localhost:8081/ccadmin/register_ccadmin';
+        obj = { 
+          "mail" : this.state.email,
+          "password" : "12345678",
+        }
       }
       const options = {
         method: 'POST',
@@ -110,7 +120,9 @@ class RegisterAdmin extends Component {
           <p id="pp">Клиника:</p>
           <input 
             id = 'id_clinic'
-            disabled = 'true'></input>
+            name='clinic'
+            disabled = 'true'
+            onChange={this.myChangeHandler}></input>
           <p></p>
           {this.state.errormessage}
           <p></p>

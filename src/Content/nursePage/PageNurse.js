@@ -14,7 +14,7 @@ class PageNurse extends Component {
       isCalendar: false,
       isVacation: false,
 
-      modalShowing: false,
+      modalIzmena: false,
       headerText: '',
       staraVrednost: '',
       changedValue: '',
@@ -31,18 +31,10 @@ class PageNurse extends Component {
     console.log('kliknuo na profil');
     document.getElementById("logo_img").style.visibility = "hidden"; 
     this.setState({
-      isPrescription: false
-    });
-    this.setState({
-      isProfile: true
-    });
-    this.setState({
-      isPatients: false
-    });
-    this.setState({
-        isCalendar: false
-      });
-    this.setState({
+      isPrescription: false,
+      isProfile: true,
+      isPatients: false,
+      isCalendar: false,
       isVacation: false
     });
   }
@@ -70,7 +62,7 @@ class PageNurse extends Component {
 
   clickIzmena = (naziv, staraVr) => {
     this.setState({
-        modalShowing: true
+        modalIzmena: true
     });
     this.setState({changedValue: naziv});
 
@@ -87,13 +79,17 @@ class PageNurse extends Component {
     }
  }
 
- sendModalHandler = (event) => {
+
+ sendChangeHandler = () => {
    this.setState({
-      modalShowing: false
+      modalIzmena: false
   });
   let newValue = document.getElementById("newValue_input").value;
   let changedName = this.state.changedValue;
-  
+  const sve_ok = this.promenaState(changedName, newValue);
+      if(!sve_ok){
+        return;
+      }
   let email = this.state.nurse.mail;
   const url = 'http://localhost:8081/nurse/changeAttribute/'+changedName+"/"+newValue+"/"+email;
   const options = {
@@ -173,7 +169,7 @@ class PageNurse extends Component {
 
   closeModalHandler = () => {
     this.setState({
-        modalShowing: false
+        modalIzmena: false
     });
     this.setState({
       modalPassword: false
@@ -181,15 +177,15 @@ class PageNurse extends Component {
   }
 
   render() {
-      let modalni = null;
+      let modalniIzmena = null;
       let modalniSifra = null;
-      if(this.state.modalShowing){
-        modalni = (
+      if(this.state.modalIzmena){
+        modalniIzmena = (
           <Modal
             className="modal"
-            show={this.state.modalShowing}
+            show={this.state.modalIzmena}
             close={(event) => this.closeModalHandler(event)}
-            send={this.sendModalHandler}
+            send={this.sendChangeHandler}
             header={this.state.headerText}
             >
               <form>
@@ -255,7 +251,7 @@ class PageNurse extends Component {
             > 
           </ProfileNurse>
 
-          {modalni} 
+          {modalniIzmena} 
           {modalniSifra}    
         </div>
       );

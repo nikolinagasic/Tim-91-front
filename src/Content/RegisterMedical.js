@@ -8,6 +8,7 @@ class RegisterMedical extends Component {
     this.state = {
       email: '',
       password: '',
+      tip: '',
       
       errormessage: ''
     };
@@ -18,7 +19,11 @@ class RegisterMedical extends Component {
     let nam = event.target.name;
     let val = event.target.value;
     let err = '';
-    
+    if (document.getElementById("doctor").checked == true) {
+      document.getElementById("id_tip").disabled = false;
+    } else {
+      document.getElementById("id_tip").disabled = true;
+    }
     this.setState({errormessage: err});
     this.setState({[nam]: val});
   }
@@ -36,22 +41,33 @@ class RegisterMedical extends Component {
         err = <strong>Морате изабрати тип медицинског особља за регистрацију.</strong>;
         this.setState({errormessage:err});
       }
+      else if (document.getElementById("doctor").checked && document.getElementById("id_tip").value.length == 0) {
+        err = <strong>Морате изабрати тип прегледа за доктора.</strong>;
+        this.setState({errormessage:err});
+    }
     else{
       this.setState({errormessage:''});
       console.log('sve ok, salji objekat');
       
-      let obj = {
-        "mail" : this.state.email,
-        "password" : "12345678",
-      }
-      
+      let obj;
       var url;
 
       if ( document.getElementById("doctor").checked === true) {
         url = 'http://localhost:8081/clinicAdministrator/registerDoctor';
+        obj = {
+          "mail" : this.state.email,
+          "password" : "12345678",
+          "clinic" : this.props.pat.clinic,
+          "tip" : this.state.tip
+        }
       }
       else {
         url = 'http://localhost:8081/clinicAdministrator/registerNurse';
+        obj = {
+          "mail" : this.state.email,
+          "password" : "12345678",
+          "clinic" : this.props.pat.clinic
+        }
       }
       const options = {
         method: 'POST',
@@ -103,7 +119,12 @@ class RegisterMedical extends Component {
           <input id="nurse" type="radio" name="container"
           onChange={this.myChangeHandler}></input>
           <label id="text">Медицинска сестра</label>
-          
+          <p id="pp">Тип прегледа:</p>
+          <input 
+            id = 'id_tip'
+            name='tip'
+            disabled = 'true'
+            onChange={this.myChangeHandler}></input>
           <p></p>
           {this.state.errormessage}
           <p></p>
