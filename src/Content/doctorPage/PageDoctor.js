@@ -14,7 +14,7 @@ class PageDoctor extends Component {
           isCalendar: false,
           isVacation: false,
     
-          modalShowing: false,
+          modalIzmena: false,
           headerText: '',
           staraVrednost: '',
           changedValue: '',
@@ -30,18 +30,10 @@ class PageDoctor extends Component {
         console.log('kliknuo na profil');
         document.getElementById("logo_img").style.visibility = "hidden"; 
         this.setState({
-          isAppointment: false
-        });
-        this.setState({
-          isProfile: true
-        });
-        this.setState({
-          isPatients: false
-        });
-        this.setState({
-            isCalendar: false
-          });
-        this.setState({
+          isAppointment: false,
+          isProfile: true,
+          isPatients: false,
+          isCalendar: false,
           isVacation: false
         });
       }
@@ -64,12 +56,15 @@ class PageDoctor extends Component {
         }
         else if (polje === 'klinika') {
           alert('Није могуће мењати вредност поља клинике.');  
+        }   
+        else if (polje === 'tip') {
+          alert('Није могуће мењати вредност типа прегледа.');  
         }      
       }
     
       clickIzmena = (naziv, staraVr) => {
         this.setState({
-            modalShowing: true
+            modalIzmena: true
         });
         this.setState({changedValue: naziv});
     
@@ -81,22 +76,26 @@ class PageDoctor extends Component {
           this.setState({headerText: "Измена презимена"});
           this.setState({staraVrednost: this.state.doctor.lastName});
         }
-        else if(naziv === 'oblast'){
-          this.setState({headerText: "Измена области"});
-          this.setState({staraVrednost: this.state.doctor.field});
-        }
         else{
           console.log('greska izmena');
         }
      }
     
-     sendModalHandler = (event) => {
+     closeModalHandler = () => {
+      this.setState({
+        modalIzmena: false
+      });
+    }
+     sendChangeHandler = () => {
        this.setState({
-          modalShowing: false
+          modalIzmena: false
       });
       let newValue = document.getElementById("newValue_input").value;
       let changedName = this.state.changedValue;
-      
+      const sve_ok = this.promenaState(changedName, newValue);
+      if(!sve_ok){
+        return;
+      }
       let email = this.state.doctor.mail;
       const url = 'http://localhost:8081/doctor/changeAttribute/'+changedName+"/"+newValue+"/"+email;
       const options = {
@@ -131,9 +130,6 @@ class PageDoctor extends Component {
       }
       else if(nazivAtributa === 'prezime'){
         doctor.lastName = novaVrednost;
-      }
-      else if(nazivAtributa === 'oblast'){
-        doctor.field = novaVrednost;
       }
     
       this.setState({doctor : doctor});
@@ -180,7 +176,7 @@ class PageDoctor extends Component {
     
       closeModalHandler = () => {
         this.setState({
-            modalShowing: false
+            modalIzmena: false
         });
         this.setState({
           modalPassword: false
@@ -188,15 +184,15 @@ class PageDoctor extends Component {
       }
     
       render() {
-          let modalni = null;
+          let modalniIzmena = null;
           let modalniSifra = null;
-          if(this.state.modalShowing){
-            modalni = (
+          if(this.state.modalIzmena){
+            modalniIzmena = (
               <Modal
                 className="modal"
-                show={this.state.modalShowing}
+                show={this.state.modalIzmena}
                 close={(event) => this.closeModalHandler(event)}
-                send={this.sendModalHandler}
+                send={this.sendChangeHandler}
                 header={this.state.headerText}
                 >
                   <form>
@@ -262,7 +258,7 @@ class PageDoctor extends Component {
                 > 
               </ProfileDoctor>
     
-              {modalni} 
+              {modalniIzmena} 
               {modalniSifra}    
             </div>
           );
