@@ -4,20 +4,22 @@ const AppointmentType = (props) => {
   
     return(
     <div className="divProfileAdmin">
-    <table id="notTable">
+    <table id="notTable"> 
+    
       <td>
         <p>Назив типа:</p>    
       </td>
       <td>
-      <input type="text"></input>
+      <input type="text" name="name_type" onChange={props.changeTypeHandler}></input>
       </td>
       <td>
       <button id="btnTip">Пронађи</button>
       </td>
       <td>
-      <button id="btnTip">Додај нови тип</button>
+      <button onClick={props.addType} id="btnTip">Додај нови тип</button>
       </td>
     </table>
+
     <p/>
     <table className="tip">
       <thead>

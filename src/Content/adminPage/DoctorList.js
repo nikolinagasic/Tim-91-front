@@ -40,6 +40,9 @@ const DoctorList = (props) => {
             {props.generateTableData}
           </tbody>
         </table>
+        <p/>
+        <p/>
+      <button id="btnReg" onClick={props.clickRegister}>Региструј медицинско особље</button>
       </div>
     );
 }

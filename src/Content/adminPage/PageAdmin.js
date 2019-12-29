@@ -28,6 +28,7 @@ class PageAdmin extends Component {
           modalPassword: false,
           listDoctors: null,
           listTypes: null,
+          name_type: null
         };
       }
     
@@ -319,7 +320,9 @@ class PageAdmin extends Component {
     
       clickDoctors = (event) => {
         document.getElementById("logo_img").style.visibility = "hidden";
-        const url = 'http://localhost:8081/doctor/getAll';
+        let clinic = this.state.cadmin.clinic;
+        console.log(clinic);
+        const url = 'http://localhost:8081/doctor/getDoctors/'+clinic;
         const options = {
           method: 'GET',
           headers: {
@@ -341,7 +344,7 @@ class PageAdmin extends Component {
             isClinic: false
         }); 
       });
-      }
+    }
 
     generateTableData(listDoctors){
       let res=[];
@@ -406,28 +409,49 @@ class PageAdmin extends Component {
     })
     
   }
-  
-  addType() {
-    let name = document.getElementById("name");
-    const url = 'http://localhost:8081/type/save/'+name;
+  changeTypeHandler = (event) => {
+    
+    let nam = event.target.name;
+    let val = event.target.value;
+    let err = '';
+    console.log("promenna"+this.state.name_type);
+    this.setState({errormessage: err});
+    this.setState({[nam]: val});
+  }
+
+   addType  = (n) => (event) => {
+    event.preventDefault;
+    let name = n;
+    console.log("usao u dodavanje: "+name);
+    const url = 'http://localhost:8081/type/save';
+    let obj = {
+      "name" : name
+    }
     const options = {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
+      body: JSON.stringify(obj)
+
     };
 
-    fetch(url, options)
-    .then(responseWrapped => responseWrapped.json())
+    fetch(url, options) 
     .then(response => {
-      
+      console.log(response.status);
       if (response.ok == true) {
         alert("Нови тип је додат.");
+        if(this.state.listTypes!=null){
+          this.setState({ listTypes: this.state.listTypes.concat(obj) });
+        }else{
+          this.setState({ listTypes: {obj} });
+        } 
       } else {
         alert("Дошло је до грешке.");
       }
     });
+
   }
 
   deleteType() {
@@ -496,6 +520,7 @@ class PageAdmin extends Component {
             <DoctorList
               mySubmit={this.mySubmitHandler}
               generateTableData = {this.generateTableData(this.state.listDoctors)}
+              clickRegister = {this.clickRegister}
             >
             </DoctorList>
         )
@@ -504,7 +529,8 @@ class PageAdmin extends Component {
       if(this.state.isAppointmentTypes){
         types = (
             <AppointmentType
-              addType = {this.addType}
+              addType = {this.addType(this.state.name_type)}
+              changeTypeHandler = {this.changeTypeHandler}
               generateTableDataTypes = {this.generateTableDataTypes(this.state.listTypes)}
             >
             </AppointmentType>
@@ -515,7 +541,7 @@ class PageAdmin extends Component {
       if(this.state.isRegister){
         registerIS = (
           <RegisterMedical
-              pat={this.state.cadmin}> 
+              pat={this.state.cadmin}>            
           </RegisterMedical>
         );
         }
@@ -530,9 +556,6 @@ class PageAdmin extends Component {
           id="profile_clinic"
           onClick={this.clickClinic}> Профил клинике </a></li>
           <li className="li_list"><a 
-          id="register"
-          onClick={this.clickRegister}> Регистрација медицинског особља </a></li>
-          <li className="li_list"><a 
           id="doctors" 
           onClick={this.clickDoctors}> Листа лекара </a></li>
           <li className="li_list"><a 
@@ -543,7 +566,10 @@ class PageAdmin extends Component {
           onClick={this.clickRooms}> Сале </a></li>
           <li className="li_list"><a 
           id="termini"
-          onClick={this.clickRooms}> Слободни термини </a></li>        
+          onClick={this.clickRooms}> Слободни термини </a></li> 
+          <li className="li_list"><a 
+          id="profile" 
+          onClick={this.clickRooms}> Захтеви за одсуство </a></li>       
           <li className="li_list"><a 
             id="logout"
             onClick={this.clickLogout}> Одјави се </a></li>
