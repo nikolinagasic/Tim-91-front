@@ -119,7 +119,7 @@ class RegisterMedical extends Component {
           <input id="nurse" type="radio" name="container"
           onChange={this.myChangeHandler}></input>
           <label id="text">Медицинска сестра</label>
-          <p id="pp">Тип прегледа:</p>
+          <p>Тип прегледа:</p>
           <input 
             id = 'id_tip'
             name='tip'

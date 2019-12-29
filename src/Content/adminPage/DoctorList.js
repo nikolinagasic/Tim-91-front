@@ -19,9 +19,11 @@ const DoctorList = (props) => {
             <td>
               <input id="prezime"></input>
             </td>
+            <td>
+            <input type="submit" id="btnSearch" value="Пронађи"></input>
+            </td>
           </tr>
         </table>     
-        <input type="submit" id="id_submit" value="Пронађи"></input>
         <p/>
       </form>
         <table className="New">
@@ -30,13 +32,17 @@ const DoctorList = (props) => {
               <th>ИМЕ</th>
               <th>ПРЕЗИМЕ</th>
               <th>ТИП ПРЕГЛЕДА</th>
-              <th>АДРЕСА Е-ПОШТЕ</th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {props.generateTableData}
           </tbody>
         </table>
+        <p/>
+        <p/>
+      <button id="btnReg" onClick={props.clickRegister}>Региструј медицинско особље</button>
       </div>
     );
 }

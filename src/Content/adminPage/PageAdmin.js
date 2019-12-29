@@ -4,6 +4,7 @@ import './PageAdmin.css'
 import RegisterMedical from "../RegisterMedical" 
 import DoctorList from "./DoctorList" 
 import AppointmentType from "./AppointmentType" 
+import ClinicProfile from "./ClinicProfile" 
 import Modal from '../Modal'
 
 class PageAdmin extends Component {
@@ -11,29 +12,36 @@ class PageAdmin extends Component {
         super(props);
         this.state = {
           cadmin: this.props.location.state.detail, 
+          clinic: this.props.location.state.detail,
           isProfile: false,
           isRegister: false,
           isAppointmentTypes: false,
           isRooms: false,
           isListDoctors: false,
+          isClinic: false,
     
           modalIzmena: false,
+          modalIzmenaKlinike: false,
           headerText: '',
           staraVrednost: '',
           changedValue: '',
           modalPassword: false,
           listDoctors: null,
           listTypes: null,
+          name_type: null
         };
       }
     
       clickZabrana = (polje) => {
         console.log(polje);
         if(polje === 'mail'){
-          alert('Није могуће мењати вредност поља е-поште.');
+          alert('Није могуће мењати адресу е-поште.');
         }
         else if(polje === 'klinika'){
-          alert('Није могуће мењати вредност поља клинике.');
+          alert('Није могуће мењати назив клинике.');
+        }
+        else if(polje === 'ocena'){
+          alert('Није могуће мењати оцену клинике.');
         }
       }
     
@@ -72,10 +80,30 @@ class PageAdmin extends Component {
           console.log('greska izmena');
         }
      }
+     clickIzmenaKlinike = (naziv,staraVr) => {
+      console.log(naziv);
+      this.setState({
+          modalIzmenaKlinike: true
+      });
+      this.setState({changedValue: naziv});
+  
+      if(naziv === 'adresa'){
+        this.setState({headerText: "Измена адресе"});
+        this.setState({staraVrednost: this.state.clinic.address});
+      }
+      else if(naziv === 'opis'){
+        this.setState({headerText: "Измена описа"});
+        this.setState({staraVrednost: this.state.clinic.description});
+      }
+      else{
+        console.log('greska izmena');
+      }
+     }
 
      closeModalHandler = () => {
       this.setState({
-        modalIzmena: false
+        modalIzmena: false,
+        modalIzmenaKlinike: false
       });
     }
   
@@ -142,20 +170,99 @@ class PageAdmin extends Component {
       return true;
     }
   
-
+    sendChangeClinicHandler = () => { //izmena profila klinike
+      this.setState({
+        modalIzmenaKlinike: false
+      });
+      let newValue = document.getElementById("newValue_input").value;
+      let changedName = this.state.changedValue;
+  
+      const sve_ok = this.promenaState(changedName, newValue);
+      if(!sve_ok){
+        return;
+      }
+  
+      let name = this.state.clinic.name;
+      //saljemo azuriranog admina na back da te promene sacuvamo u bazi
+      const url = 'http://localhost:8081/clinicAdministrator/changeAttribute/'+changedName+"/"+newValue+"/"+name;
+      const options = {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+      };
+      fetch(url, options)
+      .then(response => {
+        console.log(response.ok);
+        console.log(response)
+        if(response.ok === true){
+          alert("Успешно сте изменили поље '" + changedName+"'.");
+        }
+        else {
+          alert("Дошло је до грешке приликом измене поља '" + changedName + "'.");
+        }
+      });
+  
+    }
+  
+    promenaState = (nazivAtributa, novaVrednost) => {
+      console.log("promena stanja");
+       //kopija klinike
+       const clinic = {
+         ...this.state.clinic
+       };
+       if(nazivAtributa === "adresa"){
+        clinic.address = novaVrednost;
+      }
+      else if(nazivAtributa === "opis"){
+        clinic.description = novaVrednost;
+      }
+      
+       // update-uj state
+      this.setState({clinic : clinic});
+      return true;
+    }
      
    
      clickProfile = (event) => {
       document.getElementById("logo_img").style.visibility = "hidden";
-      
           this.setState({
             isListDoctors: false,
             isAppointmentTypes: false,
             isProfile: true,
             isRegister: false,
-            isRooms: false
+            isRooms: false,
+            isClinic: false
           });
         
+    }
+    clickClinic = (event) => {
+      document.getElementById("logo_img").style.visibility = "hidden"; 
+      let name = this.state.cadmin.clinic;
+      console.log(name);
+      const url = 'http://localhost:8081/clinic/getOne/'+name;
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+
+    fetch(url, options)
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        this.setState({
+          clinic: response,
+          isListDoctors: false,
+          isAppointmentTypes: false,
+          isProfile: false,
+          isRegister: false,
+          isRooms: false,
+          isClinic: true
+      });
+    });
     }
 
       clickLogout = () => {
@@ -186,7 +293,9 @@ class PageAdmin extends Component {
             isAppointmentTypes: true,
             isProfile: false,
             isRegister: false,
-            isRooms: false
+            isRooms: false,
+            isClinic: false            
+
           }); 
       }); 
       }
@@ -200,7 +309,8 @@ class PageAdmin extends Component {
             isAppointmentTypes: false,
             isProfile: false,
             isRegister: true,
-            isRooms: false
+            isRooms: false,
+            isClinic: false
         });
       }
     
@@ -210,7 +320,9 @@ class PageAdmin extends Component {
     
       clickDoctors = (event) => {
         document.getElementById("logo_img").style.visibility = "hidden";
-        const url = 'http://localhost:8081/doctor/getAll';
+        let clinic = this.state.cadmin.clinic;
+        console.log(clinic);
+        const url = 'http://localhost:8081/doctor/getDoctors/'+clinic;
         const options = {
           method: 'GET',
           headers: {
@@ -218,7 +330,7 @@ class PageAdmin extends Component {
             'Content-Type': 'application/json;charset=UTF-8'
           },
         };
-  
+        
         fetch(url, options)
         .then(responseWrapped => responseWrapped.json())
         .then(response => {
@@ -228,34 +340,38 @@ class PageAdmin extends Component {
             isAppointmentTypes: false,
             isProfile: false,
             isRegister: false,
-            isRooms: false
+            isRooms: false,
+            isClinic: false
         }); 
       });
-      }
+    }
 
-    generateTableData(){
+    generateTableData(listDoctors){
       let res=[];
-      let tableData = this.state.listDoctors;
+      let tableData = listDoctors;
       for(var i =0; i < tableData.length; i++){
           res.push(
             <tr>
           <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
           <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
           <td key={tableData[i].tip}>{tableData[i].tip}</td>
-          <td key={tableData[i].mail}>{tableData[i].mail}</td>
+          <td > <button>Измени</button></td>
+          <td > <button>Обриши</button></td>
           </tr>
           )
       }
       return res;
     } 
-    generateTableDataTypes(){
+    generateTableDataTypes(listTypes){
       let res=[];
-      let tableData = this.state.listTypes;
+      let tableData = listTypes;
+      console.log("br tipova: "+tableData.length);
       for(var i =0; i < tableData.length; i++){
           res.push(
             <tr>
           <td key={tableData[i].name}>{tableData[i].name}</td>
-          <td> <button onClick={this.deleteType}>Обриши</button></td>
+          <td> <button>Измени</button></td>
+          <td> <button>Обриши</button></td>
           </tr>
           )
       }
@@ -293,28 +409,49 @@ class PageAdmin extends Component {
     })
     
   }
-  
-  addType() {
-    let name = document.getElementById("name");
-    const url = 'http://localhost:8081/type/save/'+name;
+  changeTypeHandler = (event) => {
+    
+    let nam = event.target.name;
+    let val = event.target.value;
+    let err = '';
+    console.log("promenna"+this.state.name_type);
+    this.setState({errormessage: err});
+    this.setState({[nam]: val});
+  }
+
+   addType  = (n) => (event) => {
+    event.preventDefault;
+    let name = n;
+    console.log("usao u dodavanje: "+name);
+    const url = 'http://localhost:8081/type/save';
+    let obj = {
+      "name" : name
+    }
     const options = {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
+      body: JSON.stringify(obj)
+
     };
 
-    fetch(url, options)
-    .then(responseWrapped => responseWrapped.json())
+    fetch(url, options) 
     .then(response => {
-      
+      console.log(response.status);
       if (response.ok == true) {
         alert("Нови тип је додат.");
+        if(this.state.listTypes!=null){
+          this.setState({ listTypes: this.state.listTypes.concat(obj) });
+        }else{
+          this.setState({ listTypes: {obj} });
+        } 
       } else {
         alert("Дошло је до грешке.");
       }
     });
+
   }
 
   deleteType() {
@@ -347,16 +484,43 @@ class PageAdmin extends Component {
         </Modal>);
 
     }
+    let modalniIzmenaKlinike = null;
+   
+    if (this.state.modalIzmenaKlinike) {  //modalni dijalog za izmenu profila klinike
+      modalniIzmenaKlinike = (
+        <Modal
+          className="modal"
+          show={this.state.modalIzmenaKlinike}
+          close={(event) => this.closeModalHandler(event)}
+          send={this.sendChangeClinicHandler}
+          header={this.state.headerText}
+        >
+          <form>
+            <p>Стара вредност:</p>
+            <input type="text"
+              className="input_field"
+              value={this.state.staraVrednost}
+              disabled></input>
+            <p>Нова вредност:</p>
+            <input type="text"
+              className="input_field"
+              id="newValue_input"></input>
+          </form>
+        </Modal>);
+
+    }
 
    
 
     
       let componentDoctors = null;
       if(this.state.isListDoctors){
+        console.log("usao u doktore");
         componentDoctors = (
             <DoctorList
               mySubmit={this.mySubmitHandler}
-              generateTableData = {this.generateTableData}
+              generateTableData = {this.generateTableData(this.state.listDoctors)}
+              clickRegister = {this.clickRegister}
             >
             </DoctorList>
         )
@@ -365,8 +529,9 @@ class PageAdmin extends Component {
       if(this.state.isAppointmentTypes){
         types = (
             <AppointmentType
-              addType = {this.addType}
-              generateTableDataTypes = {this.generateTableDataTypes}
+              addType = {this.addType(this.state.name_type)}
+              changeTypeHandler = {this.changeTypeHandler}
+              generateTableDataTypes = {this.generateTableDataTypes(this.state.listTypes)}
             >
             </AppointmentType>
         )
@@ -376,7 +541,7 @@ class PageAdmin extends Component {
       if(this.state.isRegister){
         registerIS = (
           <RegisterMedical
-              pat={this.state.cadmin}> 
+              pat={this.state.cadmin}>            
           </RegisterMedical>
         );
         }
@@ -388,8 +553,8 @@ class PageAdmin extends Component {
           id="profile" 
           onClick={this.clickProfile}> Профил корисника </a></li>
           <li className="li_list"><a 
-          id="register"
-          onClick={this.clickRegister}> Регистрација медицинског особља </a></li>
+          id="profile_clinic"
+          onClick={this.clickClinic}> Профил клинике </a></li>
           <li className="li_list"><a 
           id="doctors" 
           onClick={this.clickDoctors}> Листа лекара </a></li>
@@ -399,6 +564,12 @@ class PageAdmin extends Component {
           <li className="li_list"><a 
           id="rooms"
           onClick={this.clickRooms}> Сале </a></li>
+          <li className="li_list"><a 
+          id="termini"
+          onClick={this.clickRooms}> Слободни термини </a></li> 
+          <li className="li_list"><a 
+          id="profile" 
+          onClick={this.clickRooms}> Захтеви за одсуство </a></li>       
           <li className="li_list"><a 
             id="logout"
             onClick={this.clickLogout}> Одјави се </a></li>
@@ -413,8 +584,15 @@ class PageAdmin extends Component {
           clickZabrana={this.clickZabrana}
           >
         </ProfileAdmin>
-        
+        <ClinicProfile
+          clinic={this.state.clinic}
+          show = {this.state.isClinic} 
+          clickIzmena={this.clickIzmenaKlinike}
+          clickZabrana={this.clickZabrana}
+          >
+        </ClinicProfile>
         {modalniIzmena}
+        {modalniIzmenaKlinike}
         {componentDoctors}
         {types}
 

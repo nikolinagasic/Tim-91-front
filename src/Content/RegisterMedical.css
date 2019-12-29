@@ -1,13 +1,9 @@
 .RegisterMedical{
     margin-left: 40%;
-    padding-top: 1%;
+    padding-top: 3%;
    
 }
 
-.RegisterMedical td {
-    vertical-align: top;
-    padding-right: 50px;
-}
 .RegisterMedical input {
     width: 300px;
     height: 30px;
@@ -16,30 +12,19 @@
 .RegisterMedical p {
     font-size: 17px;
     margin-bottom: 3px;
-    margin-left:-56%;
 }
-.RegisterMedical button {
-    width: 120px;
-    height: 30px;
-    font-size: 17px;
-    padding-bottom: 20px;
-}
+
 
 #doctor {
     width: 20px;
     vertical-align: bottom;
-    margin-left: -75%;
 }
 #nurse {
     width: 20px;
     vertical-align: bottom;
-    margin-left: -44%;
 
 }
 #text {
     vertical-align: left;
     margin-left: 1%;
-}
-#lozinka {
-    margin-left: -77%;
 }
