@@ -40,6 +40,12 @@ div.main_div {
     font-size: large;
 }
 
+.divDiagnosis{
+    margin-left: 30%;
+    padding-top: 5%;
+    font-size: medium;
+}
+
 .RegisterAdmin{
     margin-left: 38%;
     padding-top: 5%;
@@ -50,9 +56,23 @@ table#tabProfileCAdmin {
     width: 60%;
 }
 
+table#tabRequest {
+    border-collapse: collapse;
+    width: 70%;
+}
+
 table#tabProfileCAdmin th , table#tabProfileCAdmin td{
     padding: 18px;
     text-align: left;
     border-bottom: 1px solid #ddd;
     text-align: center;
 }
+
+table#tabRequest th {
+    background-color: #88bfae;
+    color: black;
+    text-align: center;
+    padding: 15px;
+}
+
+
