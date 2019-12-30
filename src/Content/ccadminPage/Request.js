@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 
 const Request = (props) => {
     return (
+      <div className="divDiagnosis">
       <table  id="tabRequest">
         <thead>
           <tr>
@@ -17,7 +18,7 @@ const Request = (props) => {
            {props.generateTableData}
         </tbody>
       </table>
-      
+      </div>
     );
 }
 

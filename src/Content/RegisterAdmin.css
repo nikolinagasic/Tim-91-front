@@ -16,7 +16,7 @@
 .RegisterAdmin p {
     font-size: 17px;
     margin-bottom: 3px;
-    margin-left: -54%;
+    margin-left: -28%;
 }
 .RegisterAdmin button {
     width: 120px;
@@ -33,7 +33,7 @@
 #clinic {
     width: 20px;
     vertical-align: bottom;
-    margin-left: -32%;
+    margin-left: -10%;
 }
 #cliniccentre {
     width: 20px;
@@ -41,5 +41,5 @@
     margin-left: -28px;
 }
 #pp {
-    margin-left: -75%;
+    margin-left: -28%;
 }

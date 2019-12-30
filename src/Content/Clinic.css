@@ -1,10 +1,11 @@
 .Clinic {
-    margin-left: 40%;
+    margin-left: 50%;
     padding-top: 1%;
 }
 .Clinic td {
     vertical-align: top;
-    padding-right: 50px;
+    padding-right: 60px;
+    
 }
 .Clinic input {
     width: 300px;
@@ -18,7 +19,7 @@
 }
 .Clinic button {
     width: 120px;
-    height: 30px;
+    height:40px;
     font-size: 17px;
     padding-bottom: 20px;
 }
@@ -28,13 +29,15 @@
    font-family:"Times New Roman", Times, serif;  
    font-size: 24px;   
    width: 300px;
+   
 }
 #opis {
-    margin-left: -84%;
+    margin-left: -30%;
+    
 }
 #naziv {
-    margin-left: -82%;
+    margin-left: -30%;
 }
 #adresa{
-    margin-left:-78%;
+    margin-left:-30%;
 }
