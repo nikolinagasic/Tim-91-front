@@ -98,3 +98,12 @@ button:hover {
     font-size: 90%;
     background-color: rgb(238, 237, 237);
 }
+#btnReport {
+    margin-top: 15%;
+    margin-left: 18%;
+    height: 40px;
+    width: 25%;
+    font-size: 16px;
+    background-color: rgb(238, 237, 237);
+
+}
