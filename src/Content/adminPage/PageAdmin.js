@@ -207,7 +207,7 @@ class PageAdmin extends Component {
     .then(responseWrapped => responseWrapped.json())
     .then(response => {
       
-      if (response.ok == false) {
+      if (!response.ok) {
         alert("Тражени лекар не постоји.");
       } else {
         alert(ime+" "+prezime+" пронађен.");
@@ -231,7 +231,7 @@ class PageAdmin extends Component {
     .then(responseWrapped => responseWrapped.json())
     .then(response => {
       
-      if (response.ok == true) {
+      if (response.ok) {
         alert("Нови тип је додат.");
       } else {
         alert("Дошло је до грешке.");

@@ -1,0 +1,98 @@
+.headerModal_terms{
+    background: coral;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 25px;
+}
+
+.headerModal_terms h3{
+    margin-top: -5px;
+}
+
+.headerModal_terms h4{
+    margin-top: -25px;
+}
+
+/* BODY */
+.bodyModal_terms{
+    padding: 10px 15px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.bodyModal_terms table{
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.bodyModal_terms table th, .bodyModal_terms table td {
+    text-align: center;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    font-family: 'Sofia';
+    font-size: 17px;
+}
+
+.bodyModal_terms table td{
+    font-size: 15px;
+}
+
+.bodyModal_terms table td button{
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 5px;
+    height: 25px;
+}
+
+.bodyModal_terms table td button:hover{
+    background: #c5c4c4;
+    color: black;
+    border: 1px solid black;
+    box-shadow: 2px 3px rgba(0, 0, 0, 0.02);
+    font-weight: bold;
+    font-family: 'Sofia';
+}
+
+.bodyModal_terms table tr:hover:not(#theadModal_terms) {
+    background: #e1e1e1;
+}
+
+/* FOOTER */
+.footerModal_terms {
+    background: coral;
+    height: 40px;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 95.7%;
+}
+
+.closeModal_terms, .reserveModal_terms{
+    background: #e2e2e2;
+    border-radius: 8px;
+    border: 1px solid green;
+    box-shadow: 2px 3px rgba(0,0,0,0.2);
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+    outline: none;
+    padding: 7px;
+    font-family: 'Sofia';
+}
+
+.closeModal_terms:hover, .reserveModal_terms:hover{
+    background: #c5c4c4;
+    color: black;
+    box-shadow: 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.closeModal_terms{
+    float: left;
+}
+
+.reserveModal_terms{
+    float: right;
+}

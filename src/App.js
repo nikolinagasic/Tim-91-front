@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.png';
-import {HashRouter, Route, Switch} from 'react-router-dom';
+import {HashRouter, Route} from 'react-router-dom';
 import Home from "./Content/Home";
 import Register from "./Content/Register";
 import Login from "./Content/Login";
