@@ -59,6 +59,9 @@ class PageDoctor extends Component {
         }   
         else if (polje === 'tip') {
           alert('Није могуће мењати вредност типа прегледа.');  
+        }  
+        else if (polje === 'ocena') {
+          alert('Није могуће мењати оцену.');  
         }      
       }
     
