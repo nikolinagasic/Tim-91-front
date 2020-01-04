@@ -1,3 +1,4 @@
+/* I MODAL - lista termina za zakazivanje */
 .headerModal_terms{
     background: coral;
     height: 40px;
@@ -95,4 +96,78 @@
 
 .reserveModal_terms{
     float: right;
+}
+
+/* II MODAL - detalji termina za zakazivanje */
+/* HEADER */
+.headerDetailModal_terms{
+    background: rgba(80, 112, 255, 0.5);
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+
+.headerDetailModal_terms h3{
+    margin-top: -5px;
+}
+
+/* FOOTER */
+
+.footerDetailModal_terms {
+    background: rgba(80, 112, 255, 0.5);
+    height: 35px;
+    padding: 15px;
+}
+
+.detailModal_btn-continue, .detailModal_btn-cancel{
+    background: coral;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    outline: none;
+    padding: 10px;
+    border-radius: 7px;
+    border: 1px solid #d0cccc;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,0.2);
+}
+
+.detailModal_btn-continue:hover, .detailModal_btn-cancel:hover{
+    border: 1px solid #e2e2e2;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,0.6);
+    color: black;
+}
+
+.detailModal_btn-continue{
+    background-color: coral;
+    float: right;
+}
+
+.detailModal_btn-cancel{
+    background-color: coral;
+    float: left;
+}
+
+/* BODY */
+
+.bodyDetailModal_terms{
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-family: 'Sofia';
+}
+
+.inlinePrice_h3_tag {
+    display: inline;
+    margin-right: 40px;
+}
+
+#cena_popust_reserveTerm {
+    margin-top: 50px;
+}
+
+#datum_vreme_reserveTerm{
+    margin-top: 40px;
 }

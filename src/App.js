@@ -22,6 +22,7 @@ import PageNurse from './Content/nursePage/PageNurse';
 import ProfileNurse from './Content/nursePage/ProfileNurse';
 import DoctorList from './Content/adminPage/DoctorList';
 import ClinicSearch from './Content/searchAndFilter/ClinicSearch';
+import ReserveTerm from './Content/searchAndFilter/ReserveTerm';
 import './App.css';
 
 class App extends Component {

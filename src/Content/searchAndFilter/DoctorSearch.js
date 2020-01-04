@@ -2,18 +2,24 @@ import React, { Component } from 'react'
 import DoctorComponent from './DoctorComponent'
 import Modal from 'react-awesome-modal'
 import './DoctorModal.css'
+import {UserContext} from '../../UserProvider'
 
 class DoctorSearch extends Component {
+    static contextType = UserContext; 
+
     constructor(props){
         super(props);
         this.state = {
             lista_lekara_original: props.lista_doktora,
             lista_lekara: props.lista_doktora,
             lista_termina: null,
-            isTermini: false,
             date: this.props.date,           // datum pregleda
             choosedDoctor: null, 
-            idChoosedDoctor: null
+            idChoosedDoctor: null,
+            reservationDetail:null,     // objekat koji ima sve detalje rezervacije     
+            
+            isTermini: false,           // prikaz modalnog sa svim slobodnim terminima
+            isDetailTerm: false         // prikaz detalja o terminu   
         }
     }
 
@@ -57,8 +63,8 @@ class DoctorSearch extends Component {
                         <td key={start}>{start_end}</td>
                         <td key={end}>
                         <button 
-                        onClick={this.reserveTerm.bind(this, this.state.idChoosedDoctor, date, start)}>
-                        Резервиши</button></td>
+                        onClick={this.reserveTerm.bind(this, this.state.idChoosedDoctor, date, start)}
+                        > Одабери </button></td>
                     </tr>
                 )
             }
@@ -68,10 +74,30 @@ class DoctorSearch extends Component {
 
     reserveTerm = (id_doctor, date, start_term) => {
         console.log(id_doctor + " " + date + " " + start_term);
-        alert('Termin uspesno rezervisan');
+        console.log('token: ' + this.context.token);
+        
+        const url = 'http://localhost:8081/doctor/detailTermin/'+
+                            id_doctor+"/"+date+"/"+start_term;
+        const options = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.context.token
+            },
+        };
 
-
-        this.closeIsTermini();
+        fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            console.log(response);
+            this.closeIsTermini();
+            this.setState({
+                reservationDetail: response,
+                isTermini: false,
+                isDetailTerm: true
+            });
+        });
     }
 
     clickPogledaj = (ime, prezime, id) => {
@@ -181,6 +207,26 @@ class DoctorSearch extends Component {
         });
     }
 
+    closeIsDetailTerm = () => {
+        this.setState({
+            isTermini: true,
+            isDetailTerm: false
+        });
+    }
+
+    closeAllTermsDialog = () => {
+        this.setState({
+            isTermini: false,
+            isDetailTerm: false
+        });
+    }
+
+    sendReserveTerm = () => {
+        console.log('usao u rezervaciju termina');
+        alert('Uspesno ste rezervisali termin.');
+        this.closeAllTermsDialog();
+    }
+
     render(){
         let showTerm = null;
         let d = new Date(this.state.date);
@@ -195,8 +241,8 @@ class DoctorSearch extends Component {
                     onClickAway={() => this.closeIsTermini()}
                 >
                     <div className="headerModal_terms">
-                        <h3>Доктор: {this.state.choosedDoctor}</h3> 
-                        <h4>Датум: {datum}</h4>
+                        <h3><u>Доктор:</u> {this.state.choosedDoctor}</h3> 
+                        <h4><u>Датум:</u> {datum}</h4>
                     </div>
                     <div className="bodyModal_terms">
                         <table>
@@ -215,6 +261,57 @@ class DoctorSearch extends Component {
             );
         }
 
+        let showDetailTerm = null;
+        if(this.state.isDetailTerm){
+            let doctorFirstLastName = 'др ' + this.state.reservationDetail.firstNameDoctor + ' ' +
+               this.state.reservationDetail.lastNameDoctor;
+            
+            let d = new Date(this.state.reservationDetail.date);
+            let dateReservedTerm = d.toDateString();
+            
+            let satnica = this.state.reservationDetail.start_term + " - " + 
+                    this.state.reservationDetail.end_term;
+
+            showDetailTerm = (
+                <Modal
+                    visible={this.state.isDetailTerm}
+                    width="400"
+                    height="407"
+                    effect="fadeInDown"
+                    onClickAway={() => this.closeIsDetailTerm()}
+                >
+                <div className="headerDetailModal_terms">
+                    <h3>Потврда резервације</h3>
+                </div>
+                
+                <div className="bodyDetailModal_terms">
+                    <h2>{doctorFirstLastName}</h2>
+                    <h3>-{this.state.reservationDetail.type}-</h3>
+                    
+                    <div id="datum_vreme_reserveTerm">
+                        <h3><u>Датум:</u> {dateReservedTerm}</h3>
+                        <h3><u>Време:</u> {satnica}</h3>
+                    </div>
+                    <div id="cena_popust_reserveTerm">
+                        <h3 className="inlinePrice_h3_tag">
+                            <u>Цена:</u> {this.state.reservationDetail.price} рсд</h3>
+                        <h3 className="inlinePrice_h3_tag">
+                            <u>Попуст:</u> {this.state.reservationDetail.discount}%</h3>
+                    </div>
+                </div>
+
+                <div className="footerDetailModal_terms">
+                    <button className="detailModal_btn-cancel" 
+                        onClick={this.closeIsDetailTerm}
+                        >Одустани</button>
+                    <button className="detailModal_btn-continue" 
+                        onClick={this.sendReserveTerm}
+                        >Резервиши</button>
+                </div>
+                </Modal>
+            );
+        }
+        
         return(
             <div>
                 <DoctorComponent
@@ -224,6 +321,7 @@ class DoctorSearch extends Component {
                     changeFilter={this.changeFilter}
                 />
                 {showTerm}
+                {showDetailTerm}
             </div>
         );
     }
