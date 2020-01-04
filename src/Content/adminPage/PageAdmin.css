@@ -71,6 +71,7 @@ tbody tr:hover {
     margin-left: 20%;
     border-radius: 10px;
     font-size: 80%;
+    background-color:rgb(238, 237, 237);
 }
 #btnSearch:hover {
     background-color: rgb(238, 237, 237);
@@ -90,6 +91,12 @@ button:hover {
 #btnTip {
     background-color: rgb(238, 237, 237);
     border-radius: 10px;
+    margin-left: 20px;
+}
+#btnRoom {
+    background-color: rgb(238, 237, 237);
+    border-radius: 10px;
+    margin-left: 4px;
 }
 #btnReg {
     margin-top: 5%;

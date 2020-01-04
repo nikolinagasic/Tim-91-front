@@ -4,25 +4,25 @@ const RoomList = (props) => {
   
     return(
     <div className="divProfileAdmin">
-    <table id="notTable"> 
+    <table id="formSearch"> 
     
-      <td>
-        <p>Број сале:</p>    
-      </td>
-      <td>
-      <input type="text" name="num_room"></input>
-      </td>
       <td>
         <p>Назив сале:</p>    
       </td>
       <td>
-      <input type="text" name="name_room"></input>
+      <input type="text" name="name_room" onChange={props.changeHandler}></input>
       </td>
       <td>
-      <button id="btnTip">Пронађи</button>
+        <p>Број сале:</p>    
       </td>
       <td>
-      <button id="btnTip">Додај нову салу</button>
+      <input type="text" name="number_room" onChange={props.changeHandler}></input>
+      </td>
+      <td>
+      <button id="btnRoom">Пронађи</button>
+      </td>
+      <td>
+      <button onClick={props.addRoom} id="btnRoom">Додај</button>
       </td>
     </table>
 
@@ -30,8 +30,8 @@ const RoomList = (props) => {
     <table className="New">
       <thead>
         <tr>
-          <th>БРОЈ</th>
           <th>НАЗИВ</th>
+          <th>БРОЈ</th>
           <th></th>
           <th></th>
         </tr>
