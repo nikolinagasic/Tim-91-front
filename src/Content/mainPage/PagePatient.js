@@ -5,6 +5,7 @@ import Modal from "../Modal"
 import Radium from 'radium' 
 import ClinicSearch from '../searchAndFilter/ClinicSearch';
 import {UserContext} from '../../UserProvider'
+import PatientMedicalRecord from './PatientMedicalRecord';
 
 class PagePatient extends Component {
   static contextType = UserContext;
@@ -25,7 +26,8 @@ class PagePatient extends Component {
       changedValue: '',
       modalPassword: false, 
       lista_klinika: null, 
-      lista_tipova: null
+      lista_tipova: null,
+      medical_record: null
     };
   }
 
@@ -38,8 +40,32 @@ class PagePatient extends Component {
     });
   }
 
-  clickKarton = (event) => {    
-    alert("Страница је у процесу израде");
+  clickKarton = (event) => {  
+    document.getElementById("logo_img").style.visibility = "hidden"; 
+    let mail = this.context.user.mail;
+    const url = 'http://localhost:8081/medicalrecord/getRecord/' + mail;
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+    fetch(url, options)
+    .then(responseWrapped => responseWrapped.json())
+    .then(response => {
+       console.log("RESPONSE");
+       console.log(response);
+       this.setState({
+         medical_record: response,
+         isKarton: true,
+         isProfil: false,
+         isIstorija: false,
+         isKlinike: false
+       });
+       console.log(this.state.medical_record);
+    });
+
   }
   
   clickIstorija = (event) => {
@@ -345,6 +371,17 @@ class PagePatient extends Component {
         );
       }
 
+      let karton = null;
+      if(this.state.isKarton){
+        karton = (
+          <PatientMedicalRecord
+             pat = {this.state.medical_record}
+             show = {this.state.isKarton}
+          >
+         </PatientMedicalRecord>
+        );
+      }
+
 
       return (
         <div className="main_div">
@@ -374,13 +411,25 @@ class PagePatient extends Component {
             clickSifra={this.changePassword}
             > 
           </ProfilePatient>
+          
+         
 
           {modalni} 
           {modalniSifra}
-          {klinike}    
+          {klinike}   
+          {karton} 
         </div>
       );
     }
+    /*
+<PatientMedicalRecord
+             pat = {this.state.medical_record}
+             show = {this.state.isKarton}
+             >
+          </PatientMedicalRecord>
+
+
+    */
 }
 
 export default Radium(PagePatient);
