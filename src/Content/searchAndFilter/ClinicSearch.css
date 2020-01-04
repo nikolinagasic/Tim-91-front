@@ -1,0 +1,208 @@
+form.bodySearchClinic table, form.bodySearchDoctor table{
+  margin-left: 28%;
+  border-collapse: collapse;
+  width: 60%;
+}
+
+form.bodySearchClinic {
+    margin-top: 30px;
+}
+
+form.bodySearchDoctor{
+    margin-top: 70px;
+}
+
+form.bodySearchClinic th, form.bodySearchClinic td{
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+form.bodySearchDoctor th, form.bodySearchDoctor td{
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  width: 25%;
+}
+
+form.headerSearchClinic{
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+form.headerSearchDoctor{
+    margin-top: 10px;
+}
+
+form.headerSearchClinic input, form.headerSearchClinic select {
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgba(221, 219, 219, 0.253);
+  border: 1px solid rgba(0, 0, 0, 0.247);
+  box-shadow: 3px 5px #e2e2e2;
+  width: 180px;
+  height: 35px;
+  font-size: 15px;
+}
+
+form.headerSearchDoctor input,form.headerSearchDoctor select{
+    text-align: center;
+    border-radius: 5px;
+    background-color: rgba(221, 219, 219, 0.253);
+    border: 1px solid rgba(0, 0, 0, 0.247);
+    box-shadow: 3px 5px #e2e2e2;
+    width: 180px;
+    height: 35px;
+    font-size: 15px;
+  }
+
+form.headerSearchClinic select option{
+    text-align: center;
+}
+
+form.headerSearchClinic div:first-child{
+    margin-left: 26%;
+    float: left;
+}
+
+form.headerSearchDoctor div:first-child{
+    margin-left: 35%;
+    float: left;
+}
+
+form.headerSearchClinic div:not(:first-child), form.headerSearchDoctor div:not(:first-child){
+    margin-left: 5%;
+    float: left;
+}
+
+form.headerSearchClinic div p, form.headerSearchDoctor div p{
+    text-align: center;
+    font-size: 15px;
+}
+
+button#searchClinic{
+    border-radius: 5px;
+    width: 130px;
+    height: 35px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+button#searchClinic:hover, button#filterClinic:hover{
+    border: 1px solid black;
+    box-shadow: 3px 5px #e2e2e2;
+}
+
+button#searchClinic{
+    margin-top: 54px;
+    margin-left: 100px;
+}
+
+button#filterClinic{
+    margin-left: 15%;
+    margin-bottom: 20px;
+}
+
+tr.tr_clinic_search:hover{
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+button.pogledaj_search_doctor{
+    background-color: transparent;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    box-shadow: 1px 2px #e2e2e2;
+    font-family: 'Sofia';
+    font-size: 15px;
+    width: 80px;
+    height: 30px;
+    cursor: pointer;
+}
+
+button.pogledaj_search_doctor:hover{
+    background-color: #f1f1f1;
+    box-shadow: 1px 2px #cdcdcd;
+    width: 90px;
+    height: 35px;
+    font-size: 17px;
+}
+
+p#back_to_clinics{
+    margin-top: 40px;
+    margin-left: 28%;
+    color: blue;
+    font-size: 14px;
+    cursor: pointer;
+    border-bottom: 0.5px solid #e2e2e2;
+}
+
+p#back_to_clinics:hover{
+    color: rgba(0, 0, 255, 0.7);
+    text-decoration: underline;
+}
+
+div#div_filter_clinic{
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    margin-right: 40px;
+    margin-left: 22%;
+}
+
+div#div_filter_doctor{
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    margin-right: 15%;
+    margin-left: 31%;
+}
+
+img.filter_clinic_img{
+    cursor: pointer;
+    margin-left: 50px;
+    width: 30px;
+    height: 30px;
+}
+
+img.filter_doctor_img{
+    cursor: pointer;
+    margin-left: 100px;
+    margin-top: 50px;
+    width: 30px;
+    height: 30px;
+}
+
+form#filter_options_clinic input, form#filter_options_doctor input{ 
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgba(221, 219, 219, 0.253);
+  border: 1px solid rgba(0, 0, 0, 0.247);
+  box-shadow: 3px 5px #e2e2e2;
+  width: 130px;
+  height: 25px;
+  font-size: 13px;
+}
+
+#filter_clinic_cenaDo, #filter_clinic_ocenaDo{
+    margin-right: 50px;
+}
+
+form#filter_options_clinic{
+    margin: 30px;
+    margin-left: 8%;
+}
+
+form#filter_options_doctor{
+    margin: 30px;
+    margin-left: 28%;
+}
+
+.h4_filter_clinic_doctor{
+    margin-left: 5%;
+    margin-bottom: 30px;
+    text-decoration: underline;
+}

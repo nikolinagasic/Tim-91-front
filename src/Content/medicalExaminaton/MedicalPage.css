@@ -1,0 +1,53 @@
+ul.ul_list {
+    list-style-type: none;
+    position: fixed;
+    top: 70px;
+    left: 40;
+    padding: 0;
+    width: 280px;
+    background-color: #e1f1f1;
+    height: 650px;
+    float: left;
+}
+
+li.li_list {
+    text-align: center;
+}
+
+li.li_list a {
+    display: block;
+    color: rgb(19, 43, 68);
+    padding: 8px 16px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 19px;
+    padding-top: 27px;
+    padding-bottom: 27px;
+}
+
+li.li_list a:hover {
+    background-color: #5D6D7E;
+    color: white;
+}
+
+div.main_div {
+    margin-left: 5%;
+}
+
+.divMedicalRecord{
+    margin-left: 38%;
+    padding-top: 5%;
+    font-size: large;
+}
+
+table#tabMedicalRecord {
+    border-collapse: collapse;
+    width: 60%;
+}
+
+table#tabMedicalRecord th , table#tabMedicalRecord td{
+    padding: 18px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}

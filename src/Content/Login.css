@@ -1,19 +1,48 @@
 .Login {
-    padding-left: 100px;
-    padding-top: 20px;
+    padding-left: 160px;
+    padding-top: 40px;
     padding-bottom: 50px;
 }
 .Login input {
-    width: 300px;
+    width: 280px;
     height: 30px;
-    font-size: 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    padding-left: 5px;
 }
 .Login p {
     font-size: 17px;
     margin-bottom: 3px;
+    font-family: Sofia;
+    font-size: 18px;
+    margin-top: 24px;
 }
-.Login button {
+input[type="submit"]{
     width: 120px;
     height: 30px;
-    font-size: 17px;
+    text-align: center;
+    margin-left: 90px;
+}
+.input_field{
+    width: 60%;
+    height: 30px;
+    text-align: center;
+    border-radius: 12px;
+}
+#zaboravljena_lozinka{
+    cursor: pointer;
+    margin: 65px;
+}
+p#zaboravljena_lozinka{
+    color: rgb(80, 100, 145);
+    margin-left: 60px;
+}
+p#zaboravljena_lozinka:hover{
+    cursor: pointer;
+    color: rgba(14, 14, 212, 0.521);
+    text-decoration: underline;
+}
+p#pZab_greska{
+    color: red;
+    font-size: 15px;
 }
