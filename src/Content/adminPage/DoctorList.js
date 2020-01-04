@@ -4,27 +4,27 @@ import './New.css'
 const DoctorList = (props) => {
     return (
       <div className="divProfileAdmin">
-      <form className="formSearch" name="findForm" onSubmit={props.mySubmit}>
-        <table>
+        <table className="formSearch" name="findForm">
           <tr>
             <td>
               <p>Име:</p>    
             </td>
             <td>      
-              <input id="ime"></input>
+              <input id="firstName" name="ime" onChange={props.changeHandler}></input>
             </td>
             <td>
               <p>Презиме:</p>
             </td>
             <td>
-              <input id="prezime"></input>
+              <input id="lastName" name="prezime" onChange={props.changeHandler}></input>
             </td>
             <td>
-            <input type="submit" id="btnSearch" value="Пронађи"></input>
+            <button onClick={props.findDoctor} id="btnSearch">Пронађи</button>
             </td>
           </tr>
         </table>     
         <p/>
+
       </form>
         <table className="New_room_list">
           <thead>

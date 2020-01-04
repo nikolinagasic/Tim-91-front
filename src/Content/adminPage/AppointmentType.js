@@ -10,10 +10,10 @@ const AppointmentType = (props) => {
         <p>Назив типа:</p>    
       </td>
       <td>
-      <input type="text" name="name_type" onChange={props.changeTypeHandler}></input>
+      <input type="text" name="name_type" onChange={props.changeHandler}></input>
       </td>
       <td>
-      <button id="btnTip">Пронађи</button>
+      <button id="btnTip"onClick={props.findType} >Пронађи</button>
       </td>
       <td>
       <button onClick={props.addType} id="btnTip">Додај нови тип</button>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./RegisterMedical.css"
+import SelectBox from "./SelectBox.js"
 
 
 class RegisterMedical extends Component {
@@ -9,9 +10,12 @@ class RegisterMedical extends Component {
       email: '',
       password: '',
       tip: '',
-      
+      display: false,
+      list_box: [],
+      list_types: [],
       errormessage: ''
     };
+    this.getTypes();
   }
 
   myChangeHandler = (event) => {
@@ -19,10 +23,15 @@ class RegisterMedical extends Component {
     let nam = event.target.name;
     let val = event.target.value;
     let err = '';
+    
     if (document.getElementById("doctor").checked == true) {
-      document.getElementById("id_tip").disabled = false;
+      this.setState(
+        {display:true}
+      );   
     } else {
-      document.getElementById("id_tip").disabled = true;
+      this.setState(
+        {display:false}
+      );
     }
     this.setState({errormessage: err});
     this.setState({[nam]: val});
@@ -32,7 +41,7 @@ class RegisterMedical extends Component {
     event.preventDefault();
     let pass = "12345678";
     let err = '';
-
+    let name_type = document.getElementById("hidden_id").value;
     if (pass.length < 7) {
       err = <strong>Лозинка мора садржати минимално 7 карактера.</strong>;
       this.setState({errormessage:err});
@@ -41,24 +50,20 @@ class RegisterMedical extends Component {
         err = <strong>Морате изабрати тип медицинског особља за регистрацију.</strong>;
         this.setState({errormessage:err});
       }
-      else if (document.getElementById("doctor").checked && document.getElementById("id_tip").value.length == 0) {
-        err = <strong>Морате изабрати тип прегледа за доктора.</strong>;
-        this.setState({errormessage:err});
-    }
     else{
       this.setState({errormessage:''});
       console.log('sve ok, salji objekat');
       
       let obj;
       var url;
-
+console.log("ime tipa:"+name_type);
       if ( document.getElementById("doctor").checked === true) {
         url = 'http://localhost:8081/clinicAdministrator/registerDoctor';
         obj = {
           "mail" : this.state.email,
           "password" : "12345678",
           "clinic" : this.props.pat.clinic,
-          "tip" : this.state.tip
+          "tip" : name_type
         }
       }
       else {
@@ -92,7 +97,54 @@ class RegisterMedical extends Component {
      }
   }
 
+  getTypes = () => {
+    const url = 'http://localhost:8081/type/getAll';
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+    fetch(url, options)
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        if(response!=null){
+          this.setState({
+            list_types: response   
+          });
+        }
+
+      
+
+      let res = [];
+      let listData = this.state.list_types; //listu iz state preuzmi
+      if (listData != null) {
+        for (var i = 0; i < listData.length; i++) {
+          var name = listData[i].name;
+          var ident = listData[i].id;
+           res.push(
+             {value:name,id:ident}
+           )
+        }
+      }
+      this.setState(
+        {list_box:res}
+      );
+      });
+    
+  }
+
   render() {
+    let listComponent=null;
+    if(this.state.display){
+       listComponent=(
+          <SelectBox
+              name="hidden_id"
+              items={this.state.list_box}>
+          </SelectBox>
+       );
+    }
     return (
     <div className="RegisterMedical" id="med">
       <form name="medicalRegForm" onSubmit={this.mySubmitHandler}>
@@ -120,11 +172,13 @@ class RegisterMedical extends Component {
           onChange={this.myChangeHandler}></input>
           <label id="text">Медицинска сестра</label>
           <p>Тип прегледа:</p>
-          <input 
+         <div 
             id = 'id_tip'
             name='tip'
             disabled = 'true'
-            onChange={this.myChangeHandler}></input>
+            onChange={this.myChangeHandler}>
+            {listComponent}
+            </div>
           <p></p>
           {this.state.errormessage}
           <p></p>
