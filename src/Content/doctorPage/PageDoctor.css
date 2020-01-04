@@ -39,10 +39,7 @@ button#btnSifraDoctor:hover{
 }
 #logout_d{
     margin-top: 70.5%;
-    border-bottom: 1px solid #d1d1d1;
-    border-top: 1px solid #d1d1d1;
     border-radius: 10px;
-    height: 15px;
     text-align: center;
 }
 

@@ -42,10 +42,7 @@ table#tabProfileAdmin td:hover:not(#btnSifraAdminTd){
 }
 #logout{
     margin-top: 16%;
-    border-bottom: 1px solid #d1d1d1;
-    border-top: 1px solid #d1d1d1;
     border-radius: 10px;
-    height: 15px;
     text-align: center;
 }
 

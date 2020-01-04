@@ -25,7 +25,6 @@ const DoctorList = (props) => {
         </table>     
         <p/>
 
-      </form>
         <table className="New_room_list">
           <thead>
             <tr>
