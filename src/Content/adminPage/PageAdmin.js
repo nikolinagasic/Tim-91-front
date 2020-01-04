@@ -775,8 +775,9 @@ class PageAdmin extends Component {
           <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
           <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
           <td key={tableData[i].tip}>{tableData[i].tip}</td>
-          <td > <button onClick={this.clickProfileDoctor(tableData[i].mail)}>Измени</button></td>
-          <td > <button onClick={this.deleteDoctor(tableData[i].mail,tableData[i].firstName,tableData[i].lastName)}>Обриши</button></td>
+          <td > <button className="btn_pageAdmin_n" 
+            onClick={this.clickProfileDoctor(tableData[i].mail)}>Измени</button></td>
+          <td > <button className="btn_pageAdmin_n" onClick={this.deleteDoctor(tableData[i].mail,tableData[i].firstName,tableData[i].lastName)}>Обриши</button></td>
           </tr>
           )
       }
@@ -790,8 +791,8 @@ class PageAdmin extends Component {
           res.push(
             <tr>
           <td key={tableData[i].name}>{tableData[i].name}</td>
-          <td> <button onClick={this.clickIzmenaTipa(tableData[i].name)}>Измени</button></td>
-          <td> <button onClick={this.deleteType(tableData[i].name)}>Обриши</button></td>
+          <td> <button className="btn_pageAdmin_n" onClick={this.clickIzmenaTipa(tableData[i].name)}>Измени</button></td>
+          <td> <button className="btn_pageAdmin_n" onClick={this.deleteType(tableData[i].name)}>Обриши</button></td>
           </tr>
           )
       }
@@ -805,8 +806,9 @@ class PageAdmin extends Component {
             <tr>
           <td key={tableData[i].name}>{tableData[i].name}</td>          
           <td key= {tableData[i].number}>{tableData[i].number}</td>
-          <td > <button onClick={this.clickIzmenaSale(tableData[i].name)}>Измени</button></td>
-          <td > <button onClick={this.deleteRoom(tableData[i].name)}>Обриши</button></td>
+
+          <td > <button className="btn_pageAdmin_n" onClick={this.clickIzmenaSale(tableData[i].name)}>Измени</button></td>
+          <td > <button className="btn_pageAdmin_n" onClick={this.deleteRoom(tableData[i].name)}>Обриши</button></td>
           </tr>
           )
       }

@@ -27,7 +27,7 @@ const RoomList = (props) => {
     </table>
 
     <p/>
-    <table className="New">
+    <table className="New_room_list">
       <thead>
         <tr>
           <th>НАЗИВ</th>
@@ -36,7 +36,7 @@ const RoomList = (props) => {
           <th></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="tbody_pageAdmin_n">
         {props.generateTableDataRooms}
       </tbody>
     </table>

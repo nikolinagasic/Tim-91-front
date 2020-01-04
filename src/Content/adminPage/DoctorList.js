@@ -24,7 +24,9 @@ const DoctorList = (props) => {
           </tr>
         </table>     
         <p/>
-        <table className="New">
+
+      </form>
+        <table className="New_room_list">
           <thead>
             <tr>
               <th>ИМЕ</th>
@@ -34,7 +36,7 @@ const DoctorList = (props) => {
               <th></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="tbody_pageAdmin_n">
             {props.generateTableData}
           </tbody>
         </table>

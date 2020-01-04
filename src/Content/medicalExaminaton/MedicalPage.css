@@ -34,52 +34,20 @@ div.main_div {
     margin-left: 5%;
 }
 
-.divProfilePatient{
+.divMedicalRecord{
     margin-left: 38%;
     padding-top: 5%;
     font-size: large;
 }
 
-table#tabProfilePatient {
+table#tabMedicalRecord {
     border-collapse: collapse;
     width: 60%;
 }
 
-table#tabProfilePatient th , table#tabProfilePatient td{
+table#tabMedicalRecord th , table#tabMedicalRecord td{
     padding: 18px;
     text-align: left;
     border-bottom: 1px solid #ddd;
     text-align: center;
-}
-
-table#tabProfilePatient td:hover:not(#btnSifraPatientTd){
-    cursor: pointer;
-    background-color: #f1f1f1;
-}
-
-button#btnSifraPatient{
-    width: 170px;
-    height: 40px;
-    padding: 5px;
-    font-size: 17px;
-    padding-bottom: 20px;
-    cursor: pointer;
-    border-radius: 10px;
-}
-
-button#btnSifraPatient:hover{
-    background-color: #f1f1f1;
-    border: 1px solid black;
-    box-shadow: 3px 5px #e2e2e2;
-}
-
-#logout_patient{
-    margin-top: 97.5%;
-    border-radius: 10px;
-    text-align: center;
-}
-
-#logout_patient:hover{
-    background-color: crimson;
-    color: white;
 }

@@ -1,5 +1,3 @@
-
-
 .divProfileAdmin{
     margin-left: 38%;
     padding-top: 5%;
@@ -55,12 +53,12 @@ table#tabProfileAdmin td:hover:not(#btnSifraAdminTd){
     background-color: crimson;
     color: white;
 }
-tbody {
+tbody.tbody_pageAdmin_n {
     background-color: white;
     line-height: 45px;
     text-align: center;
 }
-tbody tr:hover {
+tbody.tbody_pageAdmin_n tr:hover {
     background-color: #f1f1f1;
 }
 
@@ -77,12 +75,12 @@ tbody tr:hover {
     background-color: rgb(238, 237, 237);
     color: black;
 }
-button {
+button.btn_pageAdmin_n {
     background-color: rgb(149,177,149);
     border-radius: 10px;
     height: 25px;
 }
-button:hover {
+button.btn_pageAdmin_n:hover {
     cursor: pointer;
 }
 #notTable {
@@ -112,5 +110,4 @@ button:hover {
     width: 25%;
     font-size: 16px;
     background-color: rgb(238, 237, 237);
-
 }

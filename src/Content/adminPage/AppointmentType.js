@@ -29,7 +29,7 @@ const AppointmentType = (props) => {
           <th></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="tbody_pageAdmin_n">
         {props.generateTableDataTypes}
       </tbody>
     </table>
