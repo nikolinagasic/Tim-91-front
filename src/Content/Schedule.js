@@ -28,8 +28,9 @@ class Schedule extends React.Component{
    localData=[{
        Id:1,
        Subject: 'Pregled',
-       StartTime: new Date(2019,4,7,6,0),
+       StartTime: new Date(2019,4,7,6,15),
        EndTime: new Date(2019,4,7,7,0),
+       PatientMail: 'lela.jelena321@gmail.com',
        Description: 'Ime pacijenta: Pera, LBO:11234567999'
    },{
        Id:2,
@@ -38,7 +39,20 @@ class Schedule extends React.Component{
        EndTime: new Date(2019,4,17,7,0)
    }];
 
-   //napisati funkciju koja ce na klik dugmeta da omoguci zapocinjanje pregleda
+   //funkciju koja ce na klik dugmeta da omoguci zapocinjanje pregleda
+   //ovde jos treba prosledjivati info o lekaru i terminu
+   clickStart = () => {
+      console.log("ZAPOCET PREGLED");
+      let patient_mail = document.getElementById("PatientMail").value;
+      console.log(patient_mail);
+      this.props.history.push({
+        pathname: '/medicalPage',
+        state: { detail: patient_mail }
+      })
+
+   }
+
+
 
    editorWindowTemplate (props:any) : JSX.Element{
         return(
@@ -68,6 +82,11 @@ class Schedule extends React.Component{
                </td>
              </tr>
              <tr>
+               <td className="e-textlanel">Email</td>
+               <td><input id="PatientMail" name="PatientMail" className="e-field e-input" type="text" 
+                    style={{width: '100%'}}/></td>
+             </tr>
+             <tr>
                <td className="e-textlabel">Others</td>
                <td>
                  <textarea id="Description" name="Description" className="e-field e-input" 
@@ -77,7 +96,8 @@ class Schedule extends React.Component{
                </td>
              </tr>
              <tr>
-               <button style={{width: '150%',rowsSpan: '2'}} >
+               <button id= "button" onClick= {this.clickStart}
+                style={{width: '150%',rowsSpan: '2'}} >
                  Zapocni 
                </button>
              </tr>
