@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
 import './New.css'
+import imgFind from "../Images/find.png"
 
 const DoctorList = (props) => {
     return (
-      <div className="divProfileAdmin">
+      <div className="divProfileAdmine">
+              <button id="btnReg" onClick={props.clickRegister}>Региструј медицинско особље</button>
+              <p/>
+
         <table className="formSearch" name="findForm">
-          <tr>
+          <tr> 
+          <td>
+            <img src={imgFind} alt="Пронађи"/>   
+            </td>        
             <td>
               <p>Име:</p>    
             </td>
             <td>      
-              <input id="firstName" name="ime" onChange={props.changeHandler}></input>
+              <input id="doctorFirstName" name="ime" onChange={props.findDoctor}></input>
             </td>
             <td>
               <p>Презиме:</p>
             </td>
             <td>
-              <input id="lastName" name="prezime" onChange={props.changeHandler}></input>
+              <input id="doctorLastName" name="prezime" onChange={props.findDoctor}></input>
             </td>
-            <td>
-            <button onClick={props.findDoctor} id="btnSearch">Пронађи</button>
-            </td>
+            
           </tr>
         </table>     
         <p/>
@@ -40,8 +45,6 @@ const DoctorList = (props) => {
           </tbody>
         </table>
         <p/>
-        <p/>
-      <button id="btnReg" onClick={props.clickRegister}>Региструј медицинско особље</button>
       </div>
     );
 }

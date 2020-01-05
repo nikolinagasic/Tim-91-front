@@ -386,7 +386,33 @@ class PageAdmin extends Component {
             }
           }); 
         }
+        findType = (event) => {
+          let naziv = document.getElementById("name_type").value;
+          if(!naziv){
+            naziv = "~";
+          }
+         
+          console.log(naziv);
+          const url = 'http://localhost:8081/type/search/'+naziv;
+          const options = {
+              method: 'GET',
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json;charset=UTF-8',
+              },
+          };
+  
+          fetch(url, options)
+          .then(responseWrapped => responseWrapped.json())
+          .then(response => {
+              this.setState({
+                  listTypes: response,
+                  isAppointmentTypes: true
+              });
+          });
+          console.log(this.state.listTypes);
         
+        }
 
       sendChangeDoctorHandler = () => { //izmena doktora, dugme posalji
         this.setState({
@@ -463,9 +489,17 @@ class PageAdmin extends Component {
             }
           }); 
         }
-        findDoctor = (allDoctors,ime,prezime) => (event) => {
-          event.preventDefault;
-          console.log(allDoctors,ime,prezime);
+        findDoctor = (allDoctors) => (event) => {
+          
+          let ime = document.getElementById("doctorFirstName").value;
+          let prezime = document.getElementById("doctorLastName").value;
+          if(!ime){
+            ime = "~";
+          }
+          if(!prezime){
+              prezime = "~";
+          }
+          console.log(ime+prezime);
           const url = 'http://localhost:8081/doctor/find/'+ime+"/"+prezime;
           const options = {
               method: 'POST',
@@ -769,6 +803,7 @@ class PageAdmin extends Component {
     generateTableData(allDoctors){
       let res=[];
       let tableData = allDoctors;
+      console.log("usao"+tableData.length);
       for(var i =0; i < tableData.length; i++){
           res.push(
             <tr>
@@ -939,10 +974,9 @@ class PageAdmin extends Component {
     }
     let componentDoctors = null;
     if(this.state.isListDoctors){
-        console.log("usao u doktore");
         componentDoctors = (
             <DoctorList
-              findDoctor={this.findDoctor(this.state.allDoctors,this.state.ime,this.state.prezime)}
+              findDoctor={this.findDoctor(this.state.allDoctors)}
               generateTableData = {this.generateTableData(this.state.listDoctors)}
               clickRegister = {this.clickRegister}
               changeHandler = {this.changeHandler}
@@ -954,6 +988,7 @@ class PageAdmin extends Component {
     if(this.state.isAppointmentTypes){
        types = (
            <AppointmentType
+              findType={this.findType}
               addType = {this.addType(this.state.name_type)}
               changeHandler = {this.changeHandler}
               generateTableDataTypes = {this.generateTableDataTypes(this.state.listTypes)}
