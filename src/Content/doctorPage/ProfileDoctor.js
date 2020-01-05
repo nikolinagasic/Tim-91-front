@@ -20,12 +20,16 @@ const ProfileDoctor = (props) => {
               <td onClick={props.clickIzmena.bind(this, 'prezime')}>{props.pat.lastName}</td>
             </tr>
             <tr>
-              <th>Област</th>
-              <td onClick={props.clickIzmena.bind(this, 'област')}>{props.pat.field}</td>
+              <th>Тип прегледа</th>
+              <td onClick={props.clickZabrana.bind(this, 'tip')}>{props.pat.tip}</td>
             </tr>
             <tr>
               <th>Клиника</th>
               <td onClick={props.clickZabrana.bind(this, 'klinika')}>{props.pat.clinic}</td>
+            </tr>
+            <tr>
+              <th>Оцена</th>
+              <td onClick={props.clickZabrana.bind(this, 'ocena')}>{props.pat.rating}</td>
             </tr>
             <tr>
               <td colspan="2" id="btnSifraDoctorTd">

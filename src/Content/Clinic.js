@@ -66,13 +66,13 @@ class Clinic extends Component {
           <tr>
         <td>          
           <p id="naziv">Назив:</p>
-          <input id="id_name" type='text'
+          <input  type='text'
               name='name'
               onChange={this.myChangeHandler}
               required></input>
           
           <p id="adresa">Адреса:</p>
-          <input type='text'
+          <input  type='text'
               name='address'
               onChange={this.myChangeHandler}
               required></input>

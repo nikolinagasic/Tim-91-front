@@ -23,6 +23,8 @@ import ProfileNurse from './Content/nursePage/ProfileNurse';
 import DoctorList from './Content/adminPage/DoctorList';
 import ClinicSearch from './Content/searchAndFilter/ClinicSearch';
 import ReserveTerm from './Content/searchAndFilter/ReserveTerm';
+import Schedule from './Content/Schedule';
+import MedicalPage from './Content/medicalExaminaton/MedicalPage';
 import './App.css';
 
 class App extends Component {
@@ -42,7 +44,7 @@ class App extends Component {
             <div className="App">
               <header className="App-header">
                 <h1 className="App-title">Здравствено информациони систем</h1>
-                <Menu className="App-menu" />
+                <Menu />
               </header>
               <p className="App-intro">
                 <img src={logo} className="App-logo" alt="logo" id="logo_img"/>        
@@ -68,6 +70,8 @@ class App extends Component {
                 <Route path="/profilenurse" component={ProfileNurse}/>
                 <Route path="/doctorlist" component={DoctorList}/>
                 <Route path="/clinicSearchSort" component={ClinicSearch}/>
+                <Route path="/schedule" component={Schedule}/>
+                <Route path="/medicalPage" component={MedicalPage}/>
               </div>
             </div>
         </HashRouter>

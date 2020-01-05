@@ -3,7 +3,7 @@ import React from 'react';
 const Diagnosis = (props) => {
  
     return (
-      <div>
+      <div className="divDiagnosis">
       <table id="tabRequest">
         <thead>
           <tr>
