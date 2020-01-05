@@ -16,7 +16,7 @@ class DoctorSearch extends Component {
             date: this.props.date,           // datum pregleda
             choosedDoctor: null, 
             idChoosedDoctor: null,
-            reservationDetail:null,     // objekat koji ima sve detalje rezervacije     
+            reservationDetail:null,     // objekat koji ima sve detalje rezervacije (DoctorTermDTO)   
             
             isTermini: false,           // prikaz modalnog sa svim slobodnim terminima
             isDetailTerm: false         // prikaz detalja o terminu   
@@ -221,10 +221,33 @@ class DoctorSearch extends Component {
         });
     }
 
+    // slanje rezervacije za termin
     sendReserveTerm = () => {
         console.log('usao u rezervaciju termina');
-        alert('Uspesno ste rezervisali termin.');
-        this.closeAllTermsDialog();
+
+        const url = 'http://localhost:8081/doctor/reserveTerm';
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.context.token
+            },
+            body: JSON.stringify(this.state.reservationDetail)
+        };
+
+        fetch(url, options)
+        .then(response => {
+            console.log(response);
+            if(response){
+                // zatvori sve dijaloge
+                this.closeAllTermsDialog(); 
+                alert('Uspesno ste rezervisali termin.');
+            }
+            else{
+                alert('Termin nije rezervisan, neko je pre Vas to uradio.');
+            }
+        });
     }
 
     render(){
