@@ -10,16 +10,15 @@ const RoomList = (props) => {
         <p>Назив сале:</p>    
       </td>
       <td>
-      <input type="text" name="name_room" onChange={props.changeHandler}></input>
+      <input id="name_room" type="text" onChange={props.findRoom}></input>
       </td>
       <td>
         <p>Број сале:</p>    
       </td>
       <td>
-      <input type="text" name="number_room" onChange={props.changeHandler}></input>
+      <input id="number_room" type="text" onChange={props.findRoom}></input>
       </td>
       <td>
-      <button id="btnRoom">Пронађи</button>
       </td>
       <td>
       <button onClick={props.addRoom} id="btnRoom">Додај</button>

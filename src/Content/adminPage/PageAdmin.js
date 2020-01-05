@@ -326,17 +326,18 @@ class PageAdmin extends Component {
           this.setState({errormessage: err});
           this.setState({[nam]: val});
         }
-        addType  = (n) => (event) => {
-          event.preventDefault;
-          let name = n;
-          console.log("duzina:"+name.length);
-          if (name.length<3) {
+        addType  = (event) => {
+          let naziv = document.getElementById("name_type").value;
+          if(!naziv){
+            naziv = "~";
+          }          
+          if (naziv.length<3) {
             alert("Назив типа прегледа мора имати најмање 3 карактера.");
           } else {
-          console.log("usao u dodavanje: "+name);
+          console.log("usao u dodavanje: "+naziv);
           const url = 'http://localhost:8081/type/save';
           let obj = {
-            "name" : name
+            "name" : naziv
           }
           const options = {
             method: 'POST',
@@ -355,7 +356,7 @@ class PageAdmin extends Component {
               alert("Нови тип прегледа је додат.");
               this.clickAppointmentTypes();
             }  else {
-              alert("Тип прегледа "+name+" већ постоји.");
+              alert("Тип прегледа "+naziv+" већ постоји.");
             }
           });
         }
@@ -373,18 +374,14 @@ class PageAdmin extends Component {
           };
 
           fetch(url, options) 
+          .then(responseWrapped => responseWrapped.json())
           .then(response => {
-            console.log(response.status);
-            if (response.ok == true) {
-              alert("Тип прегледа "+name+" је успешно обрисан.");
-              this.clickAppointmentTypes();
-            }  else if (response.status == 409) {
-              alert("Не може се обрисати тип прегледа који припада неком лекару.");
-            }
-            else {
-              alert("Грешка.");
-            }
-          }); 
+              this.setState({
+                  listTypes: response,
+                  isAppointmentTypes: true
+              });
+          });
+        
         }
         findType = (event) => {
           let naziv = document.getElementById("name_type").value;
@@ -466,10 +463,10 @@ class PageAdmin extends Component {
         this.setState({doctor : doctor});
         return true;
       }
-        deleteDoctor = (mail,firstName,lastName) => (event) => {
+        deleteDoctor = (id,clinic) => (event) => {
           event.preventDefault;
-          console.log("usao u brisanje: "+mail);
-          const url = 'http://localhost:8081/doctor/delete/'+mail;
+          console.log("usao u brisanje: "+id+clinic);
+          const url = 'http://localhost:8081/doctor/delete/'+id+'/'+clinic;
           const options = {
             method: 'POST',
             headers: {
@@ -479,15 +476,14 @@ class PageAdmin extends Component {
           };
 
           fetch(url, options) 
+          .then(responseWrapped => responseWrapped.json())
           .then(response => {
-            console.log(response.status);
-            if (response.ok == true) {
-              alert("Доктор "+firstName+" "+lastName+" је успешно обрисан.");
-              this.clickDoctors();
-            }  else {
-              alert("Грешка.");
-            }
-          }); 
+              this.setState({
+                  listDoctors: response,
+                  isListDoctors: true
+              });
+          });
+          console.log(this.state.listDoctors);
         }
         findDoctor = (allDoctors) => (event) => {
           
@@ -557,20 +553,22 @@ class PageAdmin extends Component {
           });
       
         }
-        addRoom  = (name,number) => (event) => {
-          event.preventDefault;
-          if (name == null || number == null) {
+        addRoom  = (clinic) => (event) => {
+          let naziv = document.getElementById("name_room").value;
+          let broj = document.getElementById("number_room").value;
+          if(!naziv || !broj){
             alert("Унесите назив и број сале.");       
-          } else if (!/^\d+$/.test(number)) {
+          
+          } else if (!/^\d+$/.test(broj)) {
             alert("Број сале мора бити број.");       
           }
           else {
-            console.log("usao u dodavanje: "+name);
+            console.log("usao u dodavanje: "+naziv);
             const url = 'http://localhost:8081/room/save';
             let obj = {
-              "name" : name,
-              "number" : number,
-              "clinic" : this.state.cadmin.clinic
+              "name" : naziv,
+              "number" : broj,
+              "clinic" : clinic
             }
             const options = {
               method: 'POST',
@@ -589,38 +587,64 @@ class PageAdmin extends Component {
                 alert("Нова сала је додата.");
                 this.clickRooms();
               }  else if(response.status == 409) {
-                alert("Сала " + name + " " + number + " већ постоји.");
+                alert("Сала под називом " + naziv * " већ постоји.");
               } else {
                 alert("Грешка.");
               }
             });
             }
           }
-        deleteRoom = (name) => (event) => {
-            event.preventDefault;
-            console.log("usao u brisanje: "+name);
-            const url = 'http://localhost:8081/room/delete/'+name;
-            const options = {
+        deleteRoom = (name,clinic) => (event) => {
+          event.preventDefault;
+          console.log("usao u brisanje: "+name+clinic);
+          const url = 'http://localhost:8081/room/delete/'+name+'/'+clinic;
+          const options = {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+          };
+
+          fetch(url, options) 
+          .then(responseWrapped => responseWrapped.json())
+          .then(response => {
+              this.setState({
+                  listRooms: response,
+                  isRooms: true
+              });
+          });
+        }
+        findRoom = (allRooms) => (event) => {
+          
+          let naziv = document.getElementById("name_room").value;
+          let broj = document.getElementById("number_room").value;
+          if(!naziv){
+            naziv = "~";
+          }
+          if(!broj){
+              broj = "~";
+          }
+          console.log(naziv+broj);
+          const url = 'http://localhost:8081/room/find/'+naziv+"/"+broj;
+          const options = {
               method: 'POST',
               headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json;charset=UTF-8'
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json;charset=UTF-8',
               },
-            };
+              body: JSON.stringify(allRooms)
+          };
   
-            fetch(url, options) 
-            .then(response => {
-              console.log(response.status);
-              if (response.ok == true) {
-                alert("Сала под називом "+name+" је успешно обрисана.");
-                this.clickRooms();
-              }  else if (response.status == 409) {
-                alert("Не може се обрисати сала за коју је заказан преглед.");
-              }
-              else {
-                alert("Грешка.");
-              }
-            }); 
+          fetch(url, options)
+          .then(responseWrapped => responseWrapped.json())
+          .then(response => {
+              this.setState({
+                  listRooms: response,
+                  isRooms: true
+              });
+          });
+          console.log(this.state.listDoctors);
         }
             clickProfile = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden";
@@ -699,6 +723,7 @@ class PageAdmin extends Component {
               .then(response => {
                 console.log(response);
                 this.setState({
+                  allRooms: response,
                   listRooms: response,
                   isListDoctors: false,
                   isAppointmentTypes: false,
@@ -800,7 +825,7 @@ class PageAdmin extends Component {
               alert("Страница је у процесу израде");
             } 
         
-    generateTableData(allDoctors){
+    generateTableData(allDoctors,clinic){
       let res=[];
       let tableData = allDoctors;
       console.log("usao"+tableData.length);
@@ -812,7 +837,7 @@ class PageAdmin extends Component {
           <td key={tableData[i].tip}>{tableData[i].tip}</td>
           <td > <button className="btn_pageAdmin_n" 
             onClick={this.clickProfileDoctor(tableData[i].mail)}>Измени</button></td>
-          <td > <button className="btn_pageAdmin_n" onClick={this.deleteDoctor(tableData[i].mail,tableData[i].firstName,tableData[i].lastName)}>Обриши</button></td>
+          <td > <button className="btn_pageAdmin_n" onClick={this.deleteDoctor(tableData[i].id,clinic)}>Обриши</button></td>
           </tr>
           )
       }
@@ -833,7 +858,7 @@ class PageAdmin extends Component {
       }
       return res;
     } 
-    generateTableDataRooms(listRooms){
+    generateTableDataRooms(listRooms,clinic){
       let res=[];
       let tableData = listRooms;
       for(var i =0; i < tableData.length; i++){
@@ -843,7 +868,7 @@ class PageAdmin extends Component {
           <td key= {tableData[i].number}>{tableData[i].number}</td>
 
           <td > <button className="btn_pageAdmin_n" onClick={this.clickIzmenaSale(tableData[i].name)}>Измени</button></td>
-          <td > <button className="btn_pageAdmin_n" onClick={this.deleteRoom(tableData[i].name)}>Обриши</button></td>
+          <td > <button className="btn_pageAdmin_n" onClick={this.deleteRoom(tableData[i].name,clinic)}>Обриши</button></td>
           </tr>
           )
       }
@@ -977,7 +1002,7 @@ class PageAdmin extends Component {
         componentDoctors = (
             <DoctorList
               findDoctor={this.findDoctor(this.state.allDoctors)}
-              generateTableData = {this.generateTableData(this.state.listDoctors)}
+              generateTableData = {this.generateTableData(this.state.listDoctors,this.state.cadmin.clinic)}
               clickRegister = {this.clickRegister}
               changeHandler = {this.changeHandler}
             >
@@ -989,7 +1014,7 @@ class PageAdmin extends Component {
        types = (
            <AppointmentType
               findType={this.findType}
-              addType = {this.addType(this.state.name_type)}
+              addType = {this.addType}
               changeHandler = {this.changeHandler}
               generateTableDataTypes = {this.generateTableDataTypes(this.state.listTypes)}
             >
@@ -1000,9 +1025,10 @@ class PageAdmin extends Component {
     if(this.state.isRooms){
        rooms = (
            <RoomList
-              addRoom = {this.addRoom(this.state.name_room,this.state.number_room)}
+              findRoom={this.findRoom(this.state.allRooms)}
+              addRoom = {this.addRoom(this.state.cadmin.clinic)}
               changeHandler = {this.changeHandler}
-              generateTableDataRooms = {this.generateTableDataRooms(this.state.listRooms)}
+              generateTableDataRooms = {this.generateTableDataRooms(this.state.listRooms,this.state.cadmin.clinic)}
             >
             </RoomList>
        )
