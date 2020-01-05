@@ -3,6 +3,11 @@
     padding-top: 5%;
     font-size: large;
 }
+.divProfileAdmine{
+    margin-left: 38%;
+    padding-top: 1%;
+    font-size: large;
+}
 
 table#tabProfileAdmin {
     border-collapse: collapse;
@@ -42,10 +47,7 @@ table#tabProfileAdmin td:hover:not(#btnSifraAdminTd){
 }
 #logout{
     margin-top: 16%;
-    border-bottom: 1px solid #d1d1d1;
-    border-top: 1px solid #d1d1d1;
     border-radius: 10px;
-    height: 15px;
     text-align: center;
 }
 
@@ -63,7 +65,7 @@ tbody.tbody_pageAdmin_n tr:hover {
 }
 
 .formSearch td{
-   padding-right: 15px;
+   padding-left: 15px;
 }
 #btnSearch {
     margin-left: 20%;
@@ -85,11 +87,12 @@ button.btn_pageAdmin_n:hover {
 }
 #notTable {
     width: 55%;
+    padding-left: 15px;
 }
 #btnTip {
     background-color: rgb(238, 237, 237);
-    border-radius: 10px;
-    margin-left: 20px;
+    height: 25px;
+    border-radius: 5px;
 }
 #btnRoom {
     background-color: rgb(238, 237, 237);
@@ -97,8 +100,8 @@ button.btn_pageAdmin_n:hover {
     margin-left: 4px;
 }
 #btnReg {
-    margin-top: 5%;
-    margin-left: 22%;
+    margin-top: 0%;
+    margin-left: 19%;
     height: 40px;
     font-size: 90%;
     background-color: rgb(238, 237, 237);
@@ -110,5 +113,7 @@ button.btn_pageAdmin_n:hover {
     width: 25%;
     font-size: 16px;
     background-color: rgb(238, 237, 237);
-
+}
+#imgFindType {
+    vertical-align: bottom;
 }

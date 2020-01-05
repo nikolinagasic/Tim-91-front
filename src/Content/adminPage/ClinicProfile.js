@@ -25,6 +25,7 @@ const ClinicProfile = (props) => {
           <td onClick={props.clickZabrana.bind(this, 'ocena')}>{props.clinic.rating}</td>
         </tr>
       </table>
+      <button id="btnReport">Извештај о пословању</button>
     </div>
     </div>
 );
