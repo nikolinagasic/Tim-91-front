@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import "./Login.css" 
 import "./Content.css" 
 import Modal from "./Modal"
-import ModalChangePassword from "./ModalChange/ModalChange"
+import ModalChangePassword from "./ModalChangePassword/ModalChangePassword"
 import {UserContext} from '../UserProvider'
 
 class Login extends Component {
@@ -51,6 +51,7 @@ class Login extends Component {
     .then(dataWrappedByPromise => dataWrappedByPromise.json())
       .then(data => {
         if(data !== null) {
+          //console.log("data: "+data);
           document.forms['patientLogForm'].reset();
           this.preuzmi_korisnika(data);
         }
@@ -78,6 +79,7 @@ class Login extends Component {
       fetch(url, options)
         .then(responseWrapped => responseWrapped.json())
         .then(response => {
+          console.log(response)
           if(response !== null){
             //////////// update context ////////////////
             this.context.token = token;
@@ -238,18 +240,7 @@ class Login extends Component {
           className="modal"
           show={this.state.modalChangePassword}
           send={this.sendPasswordHandler}
-          header="Прва промена лозинке">
-          <form>
-              <p>Унесите нову вредност лозинке:</p>
-              <input type="password" 
-              className="input_field"
-              id="firstPassword_input1"></input>
-              <p>Унесите лозинку поново:</p>
-              <input type="password" 
-                  className="input_field"
-                  id="firstPassword_input2"></input>
-          </form>
-          </ModalChangePassword>
+          header="Прва промена лозинке"/>
       );
     }
 

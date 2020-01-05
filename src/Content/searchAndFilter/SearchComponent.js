@@ -7,7 +7,7 @@ const SearchComponent = (props) => {
     let showFilter = false;
 
     let filter_click = () => {
-        if(showFilter){
+        if(showFilter == true){
             showFilter = false;
             document.getElementById("div_filter_clinic").style.display = 'none';
         }
@@ -22,8 +22,7 @@ const SearchComponent = (props) => {
             <form className="headerSearchClinic">
                 <div className="headerSearchDate">
                     <p>Датум прегледа:</p>
-                    <input type="date"
-                        min="2019-12-20" max="2020-02-12"
+                    <input type="date" min="2019-12-20" max="2020-02-12"
                         id="headerSearchClinicDate"></input>
                 </div>
 

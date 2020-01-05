@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 const ProfileCAdmin = (props) => {
  // console.log("U PROFILU"+props.pat.mail)
