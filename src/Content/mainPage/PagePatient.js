@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "./PagePatient.css" 
 import ProfilePatient from './ProfilePatient'
-import Modal from "../Modal"
+import Modal from "../ModalChange/ModalChange"
 import Radium from 'radium' 
 import ClinicSearch from '../searchAndFilter/ClinicSearch';
 import {UserContext} from '../../UserProvider'

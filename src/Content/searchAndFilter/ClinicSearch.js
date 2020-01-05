@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Radium from 'radium'
 import SearchComponent from './SearchComponent'
 import DoctorSearch from './DoctorSearch'
@@ -15,7 +15,8 @@ class ClinicSearch extends React.Component {
             lista_tipova: props.lista_tipova,
             showClinics: true,
             showDoctors: false,
-            lista_doktora: null
+            lista_doktora: null,
+            date: null                      // datum pregleda
         }
     }
 
@@ -34,6 +35,9 @@ class ClinicSearch extends React.Component {
         if(!datum){
             alert('Обавезан је унос датума прегледа.');
             return;
+        }
+        if(!ocena){
+            ocena = -1;
         }
 
         const url = 'http://localhost:8081/clinic/searchClinic/'+datum+"/"+tip+"/"+ocena;
@@ -68,6 +72,17 @@ class ClinicSearch extends React.Component {
 
     clickOnClinic = (clinicName) => {
         console.log(clinicName);
+        let datum1 = document.getElementById("headerSearchClinicDate").value;
+        if(!datum1){
+            alert('Обавезан је унос датума прегледа.');
+            return;
+        }
+
+        let dat = new Date(datum1);
+        let datum = dat.getTime();
+        this.setState({
+            date: datum
+        });
         
         const url = 'http://localhost:8081/clinic/getDoctorsByClinic/'+clinicName;
         const options = {
@@ -193,6 +208,7 @@ class ClinicSearch extends React.Component {
                 <DoctorSearch 
                     lista_doktora={this.state.lista_doktora}
                     backToClinics={this.back}
+                    date={this.state.date}
                 />
             );
         }

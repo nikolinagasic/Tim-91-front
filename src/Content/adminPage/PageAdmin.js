@@ -841,7 +841,6 @@ class PageAdmin extends Component {
             <tr>
           <td key={tableData[i].name}>{tableData[i].name}</td>          
           <td key= {tableData[i].number}>{tableData[i].number}</td>
-
           <td > <button className="btn_pageAdmin_n" onClick={this.clickIzmenaSale(tableData[i].name)}>Измени</button></td>
           <td > <button className="btn_pageAdmin_n" onClick={this.deleteRoom(tableData[i].name)}>Обриши</button></td>
           </tr>
@@ -850,7 +849,6 @@ class PageAdmin extends Component {
       return res;
     }    
   
-
   render() {
     let modalniIzmena = null;
     if (this.state.modalIzmena) {  //modalni dijalog za izmenu profila 
