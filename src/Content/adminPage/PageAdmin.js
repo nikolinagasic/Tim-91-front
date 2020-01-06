@@ -6,8 +6,10 @@ import DoctorList from "./DoctorList"
 import AppointmentType from "./AppointmentType" 
 import ClinicProfile from "./ClinicProfile" 
 import RoomList from "./RoomList" 
-import ProfileDoctor from "../doctorPage/ProfileDoctor" 
+import ProfileDoctor from "../doctorPage/ProfileDoctor"
+import ReserveList from "./ReserveList" 
 import Modal from '../Modal'
+import Window from 'react-awesome-modal'
 
 class PageAdmin extends Component {
     constructor(props) {
@@ -22,6 +24,7 @@ class PageAdmin extends Component {
           isRooms: false,
           isListDoctors: false,
           isClinic: false,
+          isReservation: false,
     
           modalIzmena: false,
           modalIzmenaKlinike: false,
@@ -163,7 +166,8 @@ class PageAdmin extends Component {
         modalIzmenaKlinike: false,
         modalIzmenaTipa: false,
         modalIzmenaDoktora: false,
-        modalIzmenaSale: false
+        modalIzmenaSale: false,
+        isRooms: false
       });
       }
   
@@ -655,7 +659,8 @@ class PageAdmin extends Component {
                     isProfileDoctor: false,
                     isRegister: false,
                     isRooms: false,
-                    isClinic: false
+                    isClinic: false,
+                    isReservation: false
                   });
                 
             }
@@ -683,6 +688,7 @@ class PageAdmin extends Component {
                   isProfileDoctor: false,
                   isRegister: false,
                   isRooms: false,
+                  isReservation: false,
                   isClinic: true
               });
             });
@@ -696,6 +702,7 @@ class PageAdmin extends Component {
                   isProfileDoctor: false,
                   isRegister: true,
                   isRooms: false,
+                  isReservation: false,
                   isClinic: false
               });
             }
@@ -706,6 +713,20 @@ class PageAdmin extends Component {
                 pathname: '/login'
               });
             }  
+            clickReservation = (event) => {
+              document.getElementById("logo_img").style.visibility = "hidden"; 
+              this.setState({
+                isReservation: true,
+                isListDoctors: false,
+                isAppointmentTypes: false,
+                isProfile: false,
+                isProfileDoctor: false,
+                isRegister: false,
+                isRooms: false,
+                isClinic: false            
+
+              }); 
+            }
             clickRooms = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden"; 
               let klinika = this.state.cadmin.clinic;
@@ -724,15 +745,15 @@ class PageAdmin extends Component {
                 console.log(response);
                 this.setState({
                   allRooms: response,
-                  listRooms: response,
+                  listRooms: response,           
                   isListDoctors: false,
                   isAppointmentTypes: false,
                   isProfile: false,
                   isProfileDoctor: false,
                   isRegister: false,
                   isRooms: true,
-                  isClinic: false            
-
+                  isReservation: true,
+                  isClinic: false 
                 }); 
               });
 
@@ -759,6 +780,7 @@ class PageAdmin extends Component {
                   isProfileDoctor: false,
                   isRegister: false,
                   isRooms: false,
+                  isReservation: false,
                   isClinic: false            
 
                 }); 
@@ -789,6 +811,7 @@ class PageAdmin extends Component {
                   isProfileDoctor: false,
                   isRegister: false,
                   isRooms: false,
+                  isReservation: false,
                   isClinic: false
               }); 
             });
@@ -817,6 +840,7 @@ class PageAdmin extends Component {
                         isProfileDoctor: true,
                         isRegister: false,
                         isRooms: false,
+                        isReservation: false,
                         isClinic: false
                     }); 
                   });
@@ -1022,13 +1046,35 @@ class PageAdmin extends Component {
     let rooms = null;
     if(this.state.isRooms){
        rooms = (
-           <RoomList
+        <Window 
+        className="modalSale"
+        visible={this.state.isRooms}
+        width="600"
+        height="560"
+        effect="fadeInUp"
+        onClickAway={() => this.closeModalHandler()}
+    >
+        <div>
+            <RoomList
               findRoom={this.findRoom(this.state.allRooms)}
               addRoom = {this.addRoom(this.state.cadmin.clinic)}
               changeHandler = {this.changeHandler}
+              closeModalHandler = {this.closeModalHandler}
               generateTableDataRooms = {this.generateTableDataRooms(this.state.listRooms,this.state.cadmin.clinic)}
             >
             </RoomList>
+        </div>
+    </Window>
+           
+       )
+    }
+    let reservation = null;
+    if(this.state.isReservation){
+       reservation = (
+           <ReserveList
+              clickRooms = {this.clickRooms}
+              >
+            </ReserveList>
        )
     }
     let registerIS = null;
@@ -1070,7 +1116,7 @@ class PageAdmin extends Component {
           onClick={this.clickAppointmentTypes}> Типови прегледа </a></li>
           <li className="li_list"><a 
           id="rooms"
-          onClick={this.clickRooms}> Сале </a></li>
+          onClick={this.clickReservation}> Сале </a></li>
           <li className="li_list"><a 
           id="termini"
           onClick={this.click}> Слободни термини </a></li> 
@@ -1108,6 +1154,7 @@ class PageAdmin extends Component {
         {types}
         {rooms}
         {profileDoc}
+        {reservation}
         </div>
       );
     }

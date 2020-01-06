@@ -13,7 +13,7 @@ const AppointmentType = (props) => {
         <p>Назив типа:</p>    
       </td>
       <td>
-      <input id="name_type" type="text" name="name_type" onChange={props.findType}></input>
+      <input className="dateSale" id="name_type" type="text" name="name_type" onChange={props.findType}></input>
       </td>
       
       <td>

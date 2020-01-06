@@ -3,30 +3,45 @@ import React from 'react'
 const RoomList = (props) => {
   
     return(
-    <div className="divProfileAdmin">
-    <table id="formSearch"> 
-    
+    <div className="divModalSale">
+     
+       <h4 className="h4Tittle">Списак сала</h4>
+      
+    <table className="formSearch">
+      
+      <tr>
+        <td></td>
+        <td>
+          <p className="glupiBroj">Датум:</p>
+        </td>
+        <td>
+          <input className="dateSale" type="date" min="2019-12-20" max="2020-02-12"></input>    
+        </td>
+        <td></td>
+      </tr>
+      <tr>
       <td>
-        <p>Назив сале:</p>    
+        <p>Назив:</p>    
       </td>
       <td>
-      <input id="name_room" type="text" onChange={props.findRoom}></input>
+      <input className="dateSale" id="name_room" type="text" onChange={props.findRoom}></input>
       </td>
       <td>
-        <p>Број сале:</p>    
+        <p className="glupiBroj">Број:</p>    
       </td>
       <td>
-      <input id="number_room" type="text" onChange={props.findRoom}></input>
+      <input className="dateSale" id="number_room" type="text" onChange={props.findRoom}></input>
       </td>
       <td>
       </td>
       <td>
       <button onClick={props.addRoom} id="btnRoom">Додај</button>
       </td>
+      </tr>
     </table>
 
     <p/>
-    <table className="New_room_list">
+    <table className="New_sale_list">
       <thead>
         <tr>
           <th>НАЗИВ</th>
@@ -39,6 +54,7 @@ const RoomList = (props) => {
         {props.generateTableDataRooms}
       </tbody>
     </table>
+
     </div>
     );
 }

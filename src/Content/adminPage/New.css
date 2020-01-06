@@ -4,6 +4,12 @@
     width: 65%;
 }
 
+.New_sale_list{
+    border-collapse: collapse;
+    background-color: rgb(149,177,149);
+    width: 98%;
+}
+
 .tip{
     width: 55%;
     border-collapse: collapse;
