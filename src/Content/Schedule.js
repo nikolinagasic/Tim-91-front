@@ -96,8 +96,8 @@ class Schedule extends React.Component{
                </td>
              </tr>
              <tr>
-               <button id= "button" onClick= {this.clickStart}
-                style={{width: '150%',rowsSpan: '2'}} >
+               <button id= "buttonScheduleJ" onClick= {this.clickStart}
+                style={{width: '150%',rowsSpan: '2',borderRadius: '8px',fontSize: '17px'}} >
                  Zapocni 
                </button>
              </tr>
