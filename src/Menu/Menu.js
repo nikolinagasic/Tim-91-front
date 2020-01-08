@@ -16,6 +16,7 @@ class Menu extends Component {
                 <a><NavLink to="/" onClick={this.showLogo}>ПОЧЕТНА</NavLink></a>
                 <a className="logReg_click"><NavLink to="/register" onClick={this.showLogo}>РЕГИСТРАЦИЈА</NavLink></a>
                 <a className="logReg_click"><NavLink to="/login" onClick={this.showLogo}>ПРИЈАВА</NavLink></a>
+                <a className="logReg_click"><NavLink to="/schedule" onClick={this.showLogo}>Kalendar</NavLink></a>
             </div>
         )
     }

@@ -40,9 +40,6 @@ class PageCAdmin extends Component {
   clickProfile = (event) => {
     //console.log("Klik na profil");
     document.getElementById("logo_img").style.visibility = "hidden";
-    if(this.state.ispostDiagnosis==true){
-      this.postDiagnosis();
-    }
     this.setState({
       isRegisterAdmin: false
     });
@@ -295,53 +292,6 @@ class PageCAdmin extends Component {
     });
   }
 
-  sendModalHandler = () => {
-    this.state.ispostDiagnosis=true; //menjali smo listu sifara pa cemo je morati ubaciti u bazu
-    this.setState({
-      modalShowing: false
-    });
-    //preuzimam podatke iz dijaloga i pravim objekat koji ubacujem u listu sifara
-    let curePassword = document.getElementById("curePassword_input").value;
-    let cureName = document.getElementById("cureName_input").value;
-    let diagnosisPassword = document.getElementById("diagnosisPassword_input").value;
-    let diagnosisName = document.getElementById("diagnosisName_input").value;
-    let temp = {
-      cure_password: curePassword,
-      cure_name: cureName,
-      diagnosis_password: diagnosisPassword,
-      diagnosis_name: diagnosisName
-    }
-    // kopija prethodne liste i dodavanje novog objekta 
-    if(this.state.render_list!=null){
-       this.setState({ render_list: this.state.render_list.concat(temp) });
-       this.setState({post_list: this.state.post_list.concat(temp)});
-    }else{
-      this.setState({ render_list: {temp} });
-      this.setState({post_list:{temp} });
-      console.log(temp);
-      console.log(this.state.render_list);
-    }
-  }
-
-  postDiagnosis(){
-    const url = 'http://localhost:8081/ccadmin/savediagnosis';
-    const options = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
-      },
-      body: JSON.stringify(this.state.post_list)
-    };
-    fetch(url, options)
-        .then(response => {
-          console.log(response.status);
-          if(response.status==201){
-            this.state.ispostDiagnosis=false;
-            this.setState({post_list:{}});
-          }
-        });
-  }
 
   closeModalHandler = () => {
     this.setState({
@@ -427,9 +377,9 @@ class PageCAdmin extends Component {
   }
 
 
-  clickDiagnosis = (event) => {
+  clickDiagnosis = () => {
     console.log("dijagnoza");
-    event.preventDefault();
+    //event.preventDefault();
     document.getElementById("logo_img").style.visibility = "hidden";
     //preuzimam iz baze listu svih sifara
     const url = 'http://localhost:8081/ccadmin/diagnosis';
@@ -444,9 +394,9 @@ class PageCAdmin extends Component {
     fetch(url, options)
       .then(responseWrapped => responseWrapped.json())
       .then(response => {
-        // console.log("RESPONSE");
-        // console.log(response);
-        if(response!=null){
+         console.log("RESPONSE");
+         console.log(response);
+        if(response.length>0){
           this.setState({
             render_list: response   
           });
@@ -467,6 +417,52 @@ class PageCAdmin extends Component {
           isDiagnosis: true
         });
       });
+  }
+
+  sendModalHandler = () => {
+    console.log("OVDEEEEEEEE");
+    this.state.ispostDiagnosis=true; //menjali smo listu sifara pa cemo je morati ubaciti u bazu
+    this.setState({
+      modalShowing: false
+    });
+    //preuzimam podatke iz dijaloga i pravim objekat koji ubacujem u listu sifara
+    let curePassword = document.getElementById("curePassword_input").value;
+    let cureName = document.getElementById("cureName_input").value;
+    let diagnosisPassword = document.getElementById("diagnosisPassword_input").value;
+    let diagnosisName = document.getElementById("diagnosisName_input").value;
+    let temp = {
+      cure_password: curePassword,
+      cure_name: cureName,
+      diagnosis_password: diagnosisPassword,
+      diagnosis_name: diagnosisName
+    }
+    this.postDiagnosis(temp);
+    
+  }
+
+  //saljem novu dijagnozu i lek na back
+  postDiagnosis(temp){
+    console.log("U POST");
+    const url = 'http://localhost:8081/ccadmin/savediagnosis';
+    const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+      body: JSON.stringify(temp)
+    };
+    fetch(url, options)
+        .then(response => {
+          console.log(response.status);
+          if(response.status==201){
+            this.state.ispostDiagnosis=false;
+            this.setState({post_list:{}});
+          }else{
+            alert("Vec postoji ta kombinacija");
+          }
+          this.clickDiagnosis();
+        });
   }
 
 
@@ -550,9 +546,6 @@ class PageCAdmin extends Component {
 
     let componentRequest = null;
     if (this.state.isRequest) {
-      if(this.state.ispostDiagnosis==true){
-        this.postDiagnosis();
-      }
       componentRequest = (
         <Request
           generateTableData={this.generateTableData(this.state.listRequest)}
@@ -563,9 +556,6 @@ class PageCAdmin extends Component {
 
     let registerAdmin = null;
     if (this.state.isRegisterAdmin) {
-        if(this.state.ispostDiagnosis==true){
-          this.postDiagnosis();
-        }
       registerAdmin = (
         <RegisterAdmin
           pat={this.state.ccadmin}>
@@ -575,9 +565,6 @@ class PageCAdmin extends Component {
 
     let registerClinic = null;
     if (this.state.isRegisterClinic) {
-        if(this.state.ispostDiagnosis==true){
-          this.postDiagnosis();
-        }
       registerClinic = (
         <Clinic
           pat={this.state.ccadmin}>

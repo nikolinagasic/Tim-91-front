@@ -3,13 +3,13 @@ import React from 'react';
 const Diagnosis = (props) => {
  
     return (
-      <div>
+      <div className="divDiagnosis">
       <table id="tabRequest">
         <thead>
           <tr>
             <th>ШИФРА ЛЕКА</th>
             <th>НАЗИВ ЛЕКА</th>
-            <th>ДИЈАГНОЗА</th>
+            <th>ШИФРА_ДИЈАГНОЗЕ</th>
             <th>НАЗИВ_ДИЈАГНОЗЕ</th>           
           </tr>
         </thead>
