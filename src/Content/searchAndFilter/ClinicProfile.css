@@ -1,0 +1,61 @@
+/* OPIS KLINIKE SA BACK-a */
+div.a_div_clinic_profile{
+    text-align: center;
+    margin-left: 120px;
+}
+
+p#a_back_to_clinics{
+    margin-top: 40px;
+    margin-left: -48%;
+    color: blue;
+    font-size: 14px;
+    cursor: pointer;
+    border-bottom: 0.5px solid #e2e2e2;
+}
+
+p#a_back_to_clinics:hover{
+    color: rgba(0, 0, 255, 0.7);
+    text-decoration: underline;
+}
+
+.a_grad_opstina_inline{
+    display: inline;
+    margin-right: 40px;
+    margin-left: 40px;
+}
+
+.a_opis_clinicProfile_inline{
+    display: inline;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+textarea.a_opis_clinicProfile_inline{
+    font-size: 1.9ex;
+    font-family: 'Sofia';
+    border-radius: 10px;
+    padding: 5px;
+}
+
+#a_div_opis_clinicProfile{
+    margin-top: 50px;
+}
+
+/* PRETRAGA DOKTORA */
+div#a_div_pretraga_clinicProfile{
+    margin-left: -28%;
+    margin-top: 50px;
+    border-top: 1px solid #e1e1e1; 
+    border-radius: 8px;
+}
+
+#aa_headerSearchSelect{
+    margin-left: 58%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+#aa_bodySearchDoctor{
+    margin-left: 12%;
+    margin-bottom: 100px;
+}

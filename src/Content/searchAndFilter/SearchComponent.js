@@ -76,10 +76,13 @@ const SearchComponent = (props) => {
             <form className="bodySearchClinic">
                 <table>
                     <thead>
-                        <th>Назив клинике</th>
-                        <th>Просечна оцена</th>
-                        <th>Адреса клинике</th>
-                        <th>Цена прегледа</th>    
+                        <tr>
+                            <th>Профил клинике</th>
+                            <th>Назив клинике</th>
+                            <th>Просечна оцена</th>
+                            <th>Адреса клинике</th>
+                            <th>Цена прегледа</th>    
+                        </tr>
                     </thead>        
                     <tbody>
                         {props.generateTable}
