@@ -2,6 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 import SearchComponent from './SearchComponent'
 import DoctorSearch from './DoctorSearch'
+import ClinicProfile from './ClinicProfile'
 import {UserContext} from '../../UserProvider'
 
 class ClinicSearch extends React.Component {
@@ -13,10 +14,13 @@ class ClinicSearch extends React.Component {
             lista_klinika_original: props.lista_klinika,
             lista_klinika: props.lista_klinika,
             lista_tipova: props.lista_tipova,
+            lista_doktora: null,
+            lista_doktora_original: null,
+            clinic: null,
+            
             showClinics: true,
             showDoctors: false,
-            lista_doktora: null,
-            date: null                      // datum pregleda
+            isClinicProfile: false
         }
     }
 
@@ -101,7 +105,8 @@ class ClinicSearch extends React.Component {
             this.setState({
                 lista_doktora: response,
                 showClinics:false,
-                showDoctors:true
+                showDoctors:true,
+                isClinicProfile:false
             });
         });
     }
@@ -112,19 +117,71 @@ class ClinicSearch extends React.Component {
             let tableData = listClinics;
             for (var i = 0; i < tableData.length; i++) {
                 let name = tableData[i].name;
+                let id = tableData[i].id;
                 res.push(
                     <tr className="tr_clinic_search"
-                        id={tableData[i].name}
-                        onClick={() => this.clickOnClinic(name)}>
-                        <td key={tableData[i].name}>{tableData[i].name}</td>
-                        <td key={tableData[i].rating}>{tableData[i].rating}</td>
-                        <td key={tableData[i].address}>{tableData[i].address}</td>
-                        <td key={tableData[i].price}>{tableData[i].price} rsd</td>
+                        id={tableData[i].name}>
+                        <td id="a_tr_clinic_search_prikazi"
+                            key={tableData[i].name}
+                            onClick={() => this.clickOnPrikaziClinic(id)}>
+                            Прикажи
+                        </td>
+                        <td onClick={() => this.clickOnClinic(name)}
+                         key={tableData[i].name}>{tableData[i].name}</td>
+                        <td onClick={() => this.clickOnClinic(name)}
+                         key={tableData[i].rating}>{tableData[i].rating}</td>
+                        <td onClick={() => this.clickOnClinic(name)}
+                         key={tableData[i].address}>{tableData[i].address}</td>
+                        <td onClick={() => this.clickOnClinic(name)}
+                         key={tableData[i].price}>{tableData[i].price} rsd</td>
                     </tr>
                 )
             }
         }
         return res;
+    }
+
+    // PRIKAZ PROFILA KLINIKE
+    clickOnPrikaziClinic = (id) => {
+        console.log('prikazi kliniku: ' + id);
+
+        const url = 'http://localhost:8081/clinic/getClinicByName/'+id;
+        const options = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.context.token
+            },
+        };
+
+        fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            console.log(response);
+            if(response != null){
+                console.log('uspesno dobavljena klinika: ' + response.name);
+                
+                const url1 = 'http://localhost:8081/clinic/getDoctors/'+response.name;
+                fetch(url1, options)
+                .then(responseWrapped1 => responseWrapped1.json())
+                .then(response1 => {
+                    console.log(response1)
+                    this.setState({
+                        isClinicProfile: true,
+                        showClinics: false,
+                        showDoctors: false,
+                        clinic: response,
+                        lista_doktora: response1,
+                        lista_doktora_original: response1
+                    });
+                });
+            }
+            else{
+                console.log('greska kod dobavljanja klinike');
+            }
+        });
+
     }
 
     generateOption(listOptions) {
@@ -186,6 +243,7 @@ class ClinicSearch extends React.Component {
     back = () => {
         this.setState({
             showDoctors: false,
+            isClinicProfile: false,
             showClinics: true
         });
     }
@@ -212,11 +270,23 @@ class ClinicSearch extends React.Component {
                 />
             );
         }
-
+        let clinicProfile = null;
+        if(this.state.isClinicProfile){
+            clinicProfile = (
+                <ClinicProfile
+                    clinic={this.state.clinic}
+                    back={this.back}
+                    lista_doktora={this.state.lista_doktora}
+                    lista_tipova={this.state.lista_tipova}
+                />
+            );
+        }
+        
         return(
             <div>
                 {clinics}
                 {doctors}
+                {clinicProfile}
             </div>
         );
     }
