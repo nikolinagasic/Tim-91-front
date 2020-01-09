@@ -17,13 +17,13 @@ const DoctorList = (props) => {
               <p>Име:</p>    
             </td>
             <td>      
-              <input id="doctorFirstName" name="ime" onChange={props.findDoctor}></input>
+              <input className="dateSale" id="doctorFirstName" name="ime" onChange={props.findDoctor}></input>
             </td>
             <td>
               <p>Презиме:</p>
             </td>
             <td>
-              <input id="doctorLastName" name="prezime" onChange={props.findDoctor}></input>
+              <input className="dateSale" id="doctorLastName" name="prezime" onChange={props.findDoctor}></input>
             </td>
             
           </tr>

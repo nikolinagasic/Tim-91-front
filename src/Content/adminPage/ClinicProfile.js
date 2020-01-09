@@ -3,9 +3,11 @@ import React, { Component } from 'react';
 const ClinicProfile = (props) => {
   return (
     <div>
-  <div className="divProfileAdmin" style={{
+  <div className="divProfileAdmine" style={{
         display: props.show ? 'block' : 'none'
       }}> 
+            <button id="btnReport">Извештај о пословању</button>
+<p/>
       <table id="tabProfileAdmin">
         
         <tr>
@@ -25,7 +27,6 @@ const ClinicProfile = (props) => {
           <td onClick={props.clickZabrana.bind(this, 'ocena')}>{props.clinic.rating}</td>
         </tr>
       </table>
-      <button id="btnReport">Извештај о пословању</button>
     </div>
     </div>
 );
