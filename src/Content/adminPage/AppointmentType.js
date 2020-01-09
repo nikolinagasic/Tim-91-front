@@ -17,7 +17,7 @@ const AppointmentType = (props) => {
       </td>
       
       <td>
-      <button onClick={props.addType} id="btnTip">Додај нови тип</button>
+      <button onClick={props.addType} id="btnRoom">Додај нови тип</button>
       </td>
     </table>
 

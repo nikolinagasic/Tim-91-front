@@ -1,4 +1,5 @@
 import React from 'react'
+import imgFind from "../Images/find.png"
 
 const RoomList = (props) => {
   
@@ -6,20 +7,20 @@ const RoomList = (props) => {
     <div className="divModalSale">
      
        <h4 className="h4Tittle">Списак сала</h4>
-      
-    <table className="formSearch">
-      
-      <tr>
-        <td></td>
+       <table className="formSearchDate">
+         <td></td>
         <td>
-          <p className="glupiBroj">Датум:</p>
+          <p >Датум:</p>
         </td>
         <td>
           <input className="dateSale" type="date" min="2019-12-20" max="2020-02-12"></input>    
         </td>
         <td></td>
-      </tr>
-      <tr>
+      </table>
+    <table className="formSearchSale">
+    <td>
+            <img id="imgFindType" src={imgFind} alt="Пронађи"/>   
+            </td>
       <td>
         <p>Назив:</p>    
       </td>
@@ -27,17 +28,15 @@ const RoomList = (props) => {
       <input className="dateSale" id="name_room" type="text" onChange={props.findRoom}></input>
       </td>
       <td>
-        <p className="glupiBroj">Број:</p>    
+        <p>Број:</p>    
       </td>
       <td>
       <input className="dateSale" id="number_room" type="text" onChange={props.findRoom}></input>
       </td>
+      
       <td>
+      <button onClick={props.addRoom} id="btnRoom">Додај салу</button>
       </td>
-      <td>
-      <button onClick={props.addRoom} id="btnRoom">Додај</button>
-      </td>
-      </tr>
     </table>
 
     <p/>

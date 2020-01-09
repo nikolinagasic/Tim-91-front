@@ -3,7 +3,7 @@ import React from 'react';
 const ProfileAdmin = (props) => {
   return (
     <div>
-  <div className="divProfileAdmin" style={{
+  <div className="divProfileAdmine" style={{
         display: props.show ? 'block' : 'none'
       }}> 
       <table id="tabProfileAdmin">

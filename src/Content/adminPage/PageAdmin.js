@@ -1116,7 +1116,7 @@ class PageAdmin extends Component {
           onClick={this.clickAppointmentTypes}> Типови прегледа </a></li>
           <li className="li_list"><a 
           id="rooms"
-          onClick={this.clickReservation}> Сале </a></li>
+          onClick={this.clickReservation}> Резервисање сала </a></li>
           <li className="li_list"><a 
           id="termini"
           onClick={this.click}> Слободни термини </a></li> 
