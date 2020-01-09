@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import "./PageDoctor.css" 
 import ProfileDoctor from './ProfileDoctor'
+import PatientList from './PatientList'
 import Modal from "../Modal" 
+import Window from 'react-awesome-modal'
 
 class PageDoctor extends Component {
     constructor(props) {
@@ -18,7 +20,9 @@ class PageDoctor extends Component {
           headerText: '',
           staraVrednost: '',
           changedValue: '',
-          modalPassword: false
+          modalPassword: false,
+          listPatients: [],
+          allPatients: []
         };
       }
     
@@ -39,7 +43,31 @@ class PageDoctor extends Component {
       }
     
       clickPatients = (event) => {
-        alert("Страница је у процесу израде");
+        document.getElementById("logo_img").style.visibility = "hidden"; 
+              const url = 'http://localhost:8081/patient/getAll';
+              const options = {
+                method: 'GET',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json;charset=UTF-8',
+                },
+              };
+        
+              fetch(url, options)
+              .then(responseWrapped => responseWrapped.json())
+              .then(response => {
+                this.setState({
+                  allPatients: response,
+                  listPatients: response,
+                  isAppointment: false,
+                  isProfile: false,
+                  isPatients: true,
+                  isCalendar: false,
+                  isVacation: false     
+
+                }); 
+            }); 
+            console.log(this.state.listPatients);
       }
     
       clickCalendar = (event) => {
@@ -86,7 +114,8 @@ class PageDoctor extends Component {
     
      closeModalHandler = () => {
       this.setState({
-        modalIzmena: false
+        modalIzmena: false,
+        modalPassword: false
       });
     }
      sendChangeHandler = () => {
@@ -177,39 +206,94 @@ class PageDoctor extends Component {
         });
       }
     
-      closeModalHandler = () => {
-        this.setState({
-            modalIzmena: false
-        });
-        this.setState({
-          modalPassword: false
-        }); 
+      findPatient = (allPatients) => (event) => {
+          
+        let ime = document.getElementById("name_patient").value;
+        let prezime = document.getElementById("lastName_patient").value;
+        let lbo = document.getElementById("lbo_patient").value;
+        
+        if(!ime){
+          ime = "~";
+        }
+        if(!prezime){
+          prezime = "~";
       }
+        if(!lbo){
+            lbo = "~";
+        }
+        if (!/^\d+$/.test(lbo) && lbo != "~") {
+          alert("ЛБО се састоји само из цифара.");
+        } else {
+        console.log(ime+[prezime+lbo]);
+        const url = 'http://localhost:8081/patient/find/'+ime+"/"+prezime+"/"+lbo;
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+            },
+            body: JSON.stringify(allPatients)
+        };
+
+        fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            this.setState({
+                listPatients: response,
+                isRooms: true
+            });
+        });
+        console.log(this.state.listPatients);
+      }
+      }
+
+      generateTableDatаPatients(listPatients){
+        let res=[];
+        let tableData = listPatients;
+        for(var i =0; i < tableData.length; i++) {
+        console.log("ispisuje"+tableData[i].firstName,tableData[i].lastName,tableData[i].lbo);
+        }
+        for(var i =0; i < tableData.length; i++){
+            res.push(
+              <tr>
+            <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
+            <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
+            <td key={tableData[i].lbo}>{tableData[i].lbo}</td>
+            </tr>
+            )
+        }
+        console.log(res);
+        return res;
+      } 
     
       render() {
           let modalniIzmena = null;
           let modalniSifra = null;
           if(this.state.modalIzmena){
             modalniIzmena = (
-              <Modal
-                className="modal"
-                show={this.state.modalIzmena}
-                close={(event) => this.closeModalHandler(event)}
-                send={this.sendChangeHandler}
-                header={this.state.headerText}
-                >
-                  <form>
-                    <p>Стара вредност:</p>
-                    <input type="text"
-                      className="input_field" 
-                      value={this.state.staraVrednost}
-                      disabled></input>
-                    <p>Нова вредност:</p>
-                    <input type="text" 
-                      className="input_field"
-                      id="newValue_input"></input>
-                  </form>
-              </Modal>);
+              <Window
+          visible={this.state.modalIzmena}
+          width="370"
+          height="250"
+          effect="fadeInUp"
+          onClickAway={() => this.closeModalHandler()}
+       >
+         
+          <form className="divModalSale">
+            <h4 className="h4Tittle">{this.state.headerText}</h4>
+            <div ><p>Стара вредност:</p>
+            <input type="text"
+              className="inputIzmena"
+              value={this.state.staraVrednost}
+              disabled></input>
+            <p>Нова вредност:</p>
+            <input type="text"
+              className="inputIzmena"
+              id="newValue_input"></input>
+            <button className="btnModalIzmena" onClick={this.sendChangeHandler}>Сачувај</button>
+            </div>
+          </form>
+        </Window>);
           }
     
           if(this.state.modalPassword){
@@ -230,7 +314,16 @@ class PageDoctor extends Component {
               </Modal>
             );
           }
-    
+          let patients = null;
+          if(this.state.isPatients){
+             patients = (
+                 <PatientList
+                    findPatient={this.findPatient(this.state.allPatients)}
+                    generateTableDatаPatients= {this.generateTableDatаPatients(this.state.listPatients)}
+                  >
+                  </PatientList>
+             )
+          }
     
           return (
             <div className="main_div">
@@ -266,6 +359,7 @@ class PageDoctor extends Component {
     
               {modalniIzmena} 
               {modalniSifra}    
+              {patients}
             </div>
           );
         }

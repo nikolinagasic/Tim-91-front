@@ -902,121 +902,141 @@ class PageAdmin extends Component {
     let modalniIzmena = null;
     if (this.state.modalIzmena) {  //modalni dijalog za izmenu profila 
       modalniIzmena = (
-        <Modal
-          className="modal"
-          show={this.state.modalIzmena}
-          close={(event) => this.closeModalHandler(event)}
-          send={this.sendChangeHandler}
-          header={this.state.headerText}
-        >
-          <form>
-            <p>Стара вредност:</p>
+        <Window
+          visible={this.state.modalIzmena}
+          width="370"
+          height="250"
+          effect="fadeInUp"
+          onClickAway={() => this.closeModalHandler()}
+       >
+         
+          <form className="divModalSale">
+            <h4 className="h4Tittle">{this.state.headerText}</h4>
+            <div ><p>Стара вредност:</p>
             <input type="text"
-              className="input_field"
+              className="inputIzmena"
               value={this.state.staraVrednost}
               disabled></input>
             <p>Нова вредност:</p>
             <input type="text"
-              className="input_field"
+              className="inputIzmena"
               id="newValue_input"></input>
+            <button className="btnModalIzmena" onClick={this.sendChangeHandler}>Сачувај</button>
+            </div>
           </form>
-        </Modal>);
+        </Window>);
 
     }
     let modalniIzmenaKlinike = null;
     if (this.state.modalIzmenaKlinike) {  //modalni dijalog za izmenu profila klinike
       modalniIzmenaKlinike = (
-        <Modal
-          className="modal"
-          show={this.state.modalIzmenaKlinike}
-          close={(event) => this.closeModalHandler(event)}
-          send={this.sendChangeClinicHandler}
-          header={this.state.headerText}
-        >
-          <form>
-            <p>Стара вредност:</p>
+        <Window
+          visible={this.state.modalIzmenaKlinike}
+          width="370"
+          height="250"
+          effect="fadeInUp"
+          onClickAway={() => this.closeModalHandler()}
+       >
+         
+          <form className="divModalSale">
+            <h4 className="h4Tittle">{this.state.headerText}</h4>
+            <div ><p>Стара вредност:</p>
             <input type="text"
-              className="input_field"
+              className="inputIzmena"
               value={this.state.staraVrednost}
               disabled></input>
             <p>Нова вредност:</p>
             <input type="text"
-              className="input_field"
+              className="inputIzmena"
               id="newValue_input"></input>
+            <button className="btnModalIzmena" onClick={this.sendChangeClinicHandler}>Сачувај</button>
+            </div>
           </form>
-        </Modal>);
+        </Window>);
 
     }
     let modalniIzmenaTipa = null;
     if (this.state.modalIzmenaTipa) {  //modalni dijalog za izmenu tipa
       modalniIzmenaTipa = (
-        <Modal
-          className="modal"
-          show={this.state.modalIzmenaTipa}
-          close={(event) => this.closeModalHandler(event)}
-          send={this.sendChangeTypeHandler}
-          header={this.state.headerText}
-        >
-          <form>
-            <p>Стара вредност:</p>
+        <Window
+          visible={this.state.modalIzmenaTipa}
+          width="370"
+          height="250"
+          effect="fadeInUp"
+          onClickAway={() => this.closeModalHandler()}
+       >
+         
+          <form className="divModalSale">
+            <h4 className="h4Tittle">{this.state.headerText}</h4>
+            <div ><p>Стара вредност:</p>
             <input type="text"
-              className="input_field"
+              className="inputIzmena"
               value={this.state.staraVrednost}
               disabled></input>
             <p>Нова вредност:</p>
             <input type="text"
-              className="input_field"
+              className="inputIzmena"
               id="newValue_input"></input>
+            <button className="btnModalIzmena" onClick={this.sendChangeTypeHandler}>Сачувај</button>
+            </div>
           </form>
-        </Modal>);
+        </Window>);
 
     }
     let modalniIzmenaDoktora = null;   
     if (this.state.modalIzmenaDoktora) {  //modalni dijalog za izmenu profila doktora
       modalniIzmenaDoktora = (
-        <Modal
-          className="modal"
-          show={this.state.modalIzmenaDoktora}
-          close={(event) => this.closeModalHandler(event)}
-          send={this.sendChangeDoctorHandler}
-          header={this.state.headerText}
-        >
-          <form>
-            <p>Стара вредност:</p>
+        <Window
+          visible={this.state.modalIzmenaDoktora}
+          width="370"
+          height="250"
+          effect="fadeInUp"
+          onClickAway={() => this.closeModalHandler()}
+       >
+         
+          <form className="divModalSale">
+            <h4 className="h4Tittle">{this.state.headerText}</h4>
+            <div ><p>Стара вредност:</p>
             <input type="text"
-              className="input_field"
+              className="inputIzmena"
               value={this.state.staraVrednost}
               disabled></input>
             <p>Нова вредност:</p>
             <input type="text"
-              className="input_field"
+              className="inputIzmena"
               id="newValue_input"></input>
+            <button className="btnModalIzmena" onClick={this.sendChangeDoctorHandler}>Сачувај</button>
+            </div>
           </form>
-        </Modal>);
+        </Window>);
 
     }  
     let modalniIzmenaSale = null;   
     if (this.state.modalIzmenaSale) {  //modalni dijalog za izmenu profila doktora
       modalniIzmenaSale = (
-        <Modal
-          className="modal"
-          show={this.state.modalIzmenaSale}
-          close={(event) => this.closeModalHandler(event)}
-          send={this.sendChangeRoomHandler}
-          header={this.state.headerText}
-        >
-          <form>
-            <p>Стара вредност:</p>
+        <Window
+          visible={this.state.modalIzmenaSale}
+          width="370"
+          height="250"
+          effect="fadeInUp"
+          onClickAway={() => this.setState({modalIzmenaSale : false})}
+       >
+         
+          <form className="divModalSale">
+            <h4 className="h4Tittle">{this.state.headerText}</h4>
+            <div ><p>Стара вредност:</p>
             <input type="text"
-              className="input_field"
+              className="inputIzmena"
               value={this.state.staraVrednost}
               disabled></input>
             <p>Нова вредност:</p>
             <input type="text"
-              className="input_field"
+              className="inputIzmena"
               id="newValue_input"></input>
+            <button className="btnModalIzmena" onClick={this.sendChangeRoomHandler}>Сачувај</button>
+            </div>
           </form>
-        </Modal>);
+        </Window>);
 
     }
     let componentDoctors = null;
@@ -1064,8 +1084,8 @@ class PageAdmin extends Component {
             >
             </RoomList>
         </div>
+        {modalniIzmenaSale}
     </Window>
-           
        )
     }
     let reservation = null;
@@ -1149,7 +1169,6 @@ class PageAdmin extends Component {
         {modalniIzmenaKlinike}
         {modalniIzmenaTipa}
         {modalniIzmenaDoktora}
-        {modalniIzmenaSale}
         {componentDoctors}
         {types}
         {rooms}
