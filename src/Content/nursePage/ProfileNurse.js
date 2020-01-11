@@ -26,7 +26,7 @@ const ProfileNurse = (props) => {
         </tr>
         <tr>
           <td colspan="2" id="btnSifraNurseTd">
-            <button id="btnSifraNurse" onClick={props.clickSifra}> Промени лозинку </button>
+            <button id="btnChangePassword" onClick={props.clickSifra}> Промени лозинку </button>
           </td>
         </tr>
       </table>

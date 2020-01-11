@@ -201,6 +201,10 @@ button.btn_pageAdmin_n:hover {
     background-color: rgb(149,177,149);
     border: none;
 }
+.btnModalIzmena:hover {
+    cursor: pointer;
+    background-color: #f1f1f1;
+}
 .inputIzmena {
     height: 30px;
     width: 250px;

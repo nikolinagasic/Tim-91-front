@@ -43,8 +43,8 @@ const RoomList = (props) => {
     <table className="New_sale_list">
       <thead>
         <tr>
+          <th>ИД</th>
           <th>НАЗИВ</th>
-          <th>БРОЈ</th>
           <th></th>
           <th></th>
         </tr>

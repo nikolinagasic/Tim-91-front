@@ -8,11 +8,13 @@ import ClinicProfile from "./ClinicProfile"
 import RoomList from "./RoomList" 
 import ProfileDoctor from "../doctorPage/ProfileDoctor"
 import ReserveList from "./ReserveList" 
-import Modal from '../Modal'
 import Window from 'react-awesome-modal'
+import {UserContext} from '../../UserProvider'
+
 
 class PageAdmin extends Component {
-    constructor(props) {
+  static contextType = UserContext;     // instanciram context
+   constructor(props) {
         super(props);
         this.state = {
           cadmin: this.props.location.state.detail, 
@@ -148,15 +150,15 @@ class PageAdmin extends Component {
           console.log('greska izmena');
         }
       }
-      clickIzmenaSale = (name) => (event) => {
+      clickIzmenaSale = (name,number) => (event) => {
         event.preventDefault();
         this.setState({
           modalIzmenaSale: true
       });
-      this.setState({changedValue: 'broj'});
+      this.setState({changedValue: 'naziv'});
   
-        this.setState({headerText: "Измена броја"});
-        this.setState({staraVrednost: name});
+        this.setState({headerText: "Измена назива сале"});
+        this.setState({staraVrednost: [name,number]});
     
       }
       
@@ -240,11 +242,16 @@ class PageAdmin extends Component {
         let newValue = document.getElementById("newValue_input").value;
         let changedName = this.state.changedValue;
     
+        
+        
+        if (changedName == "adresa") {
+            if (newValue == "") 
+              alert("Поље адреса клинике не сме бити празно.");
+        } else {
         const sve_ok = this.promenaStateClinic(changedName, newValue);
         if(!sve_ok){
           return;
         }
-    
         let name = this.state.clinic.name;
         //saljemo azuriranog admina na back da te promene sacuvamo u bazi
         const url = 'http://localhost:8081/clinic/changeAttribute/'+changedName+"/"+newValue+"/"+name;
@@ -266,7 +273,7 @@ class PageAdmin extends Component {
             alert("Дошло је до грешке приликом измене поља '" + changedName + "'.");
           }
         });
-    
+        }
       }   
       promenaStateClinic = (nazivAtributa, novaVrednost) => {
         console.log("promena stanja");
@@ -359,7 +366,7 @@ class PageAdmin extends Component {
             if (response.ok == true) {
               alert("Нови тип прегледа је додат.");
               this.clickAppointmentTypes();
-            }  else {
+            }  else if (response.status == 409) {
               alert("Тип прегледа "+naziv+" већ постоји.");
             }
           });
@@ -376,16 +383,20 @@ class PageAdmin extends Component {
               'Content-Type': 'application/json;charset=UTF-8'
             },
           };
-
-          fetch(url, options) 
-          .then(responseWrapped => responseWrapped.json())
+         
+          fetch(url, options)         
+          .then(responseWrapped => responseWrapped.json().catch(err => {throw new Error();}))
           .then(response => {
+            console.log(response == null);
+            
               this.setState({
                   listTypes: response,
                   isAppointmentTypes: true
               });
+          }).catch (err => {
+            alert("Не може се обрисати тип прегледа који се користи.");
           });
-        
+         
         }
         findType = (event) => {
           let naziv = document.getElementById("name_type").value;
@@ -520,7 +531,7 @@ class PageAdmin extends Component {
           });
           console.log(this.state.listDoctors);
         }
-        sendChangeRoomHandler = () => { //izmena sale, dugme posalji
+        sendChangeRoomHandler = (number) => { //izmena sale, dugme posalji
           this.setState({
             modalIzmenaSale: false
           });
@@ -531,11 +542,10 @@ class PageAdmin extends Component {
    //       if(!sve_ok){
    //         return;
     //      }
-          let name = this.state.staraVrednost;
-          console.log("naziv:"+name);
+      //    let name = this.state.staraVrednost;
   
           //saljemo na back da te promene sacuvamo u bazi
-          const url = 'http://localhost:8081/room/changeAttribute/'+changedName+"/"+newValue+"/"+name;
+          const url = 'http://localhost:8081/room/changeAttribute/'+changedName+"/"+newValue+"/"+this.state.staraVrednost[1];
           const options = {
             method: 'POST',
             headers: {
@@ -560,11 +570,20 @@ class PageAdmin extends Component {
         addRoom  = (clinic) => (event) => {
           let naziv = document.getElementById("name_room").value;
           let broj = document.getElementById("number_room").value;
+          let all = this.state.allRooms;
+          let postoji = false;
+          for (var i = 0; i<all.length;i++) {
+            if (all[i].number == broj) {
+                postoji = true;
+            }
+          }
           if(!naziv || !broj){
             alert("Унесите назив и број сале.");       
           
           } else if (!/^\d+$/.test(broj)) {
             alert("Број сале мора бити број.");       
+          } else if (postoji) {
+            alert("Број сале "+broj+" већ постоји.");
           }
           else {
             console.log("usao u dodavanje: "+naziv);
@@ -598,10 +617,10 @@ class PageAdmin extends Component {
             });
             }
           }
-        deleteRoom = (name,clinic) => (event) => {
+        deleteRoom = (number,clinic) => (event) => {
           event.preventDefault;
-          console.log("usao u brisanje: "+name+clinic);
-          const url = 'http://localhost:8081/room/delete/'+name+'/'+clinic;
+          console.log("usao u brisanje: "+number+clinic);
+          const url = 'http://localhost:8081/room/delete/'+number+'/'+clinic;
           const options = {
             method: 'POST',
             headers: {
@@ -615,6 +634,7 @@ class PageAdmin extends Component {
           .then(response => {
               this.setState({
                   listRooms: response,
+                  allRooms: response,
                   isRooms: true
               });
           });
@@ -707,12 +727,13 @@ class PageAdmin extends Component {
               });
             }
             clickLogout = () => {
-              //this.context.token = null;
-              //this.context.user = null;
-              this.props.history.push({
-                pathname: '/login'
-              });
-            }  
+                // obrisi token i korisnika
+                this.context.token = null;
+                this.context.user = null;
+                this.props.history.push({
+                  pathname: '/login'
+                });             
+            }   
             clickReservation = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden"; 
               this.setState({
@@ -727,7 +748,7 @@ class PageAdmin extends Component {
 
               }); 
             }
-            clickRooms = (event) => {
+            clickRooms = (event) => { //////ovde
               document.getElementById("logo_img").style.visibility = "hidden"; 
               let klinika = this.state.cadmin.clinic;
               const url = 'http://localhost:8081/room/getByClinic/'+klinika;
@@ -888,17 +909,79 @@ class PageAdmin extends Component {
       for(var i =0; i < tableData.length; i++){
           res.push(
             <tr>
-          <td key={tableData[i].name}>{tableData[i].name}</td>          
           <td key= {tableData[i].number}>{tableData[i].number}</td>
-          <td > <button className="btn_pageAdmin_n" onClick={this.clickIzmenaSale(tableData[i].name)}>Измени</button></td>
-          <td > <button className="btn_pageAdmin_n" onClick={this.deleteRoom(tableData[i].name,clinic)}>Обриши</button></td>
+          <td key={tableData[i].name}>{tableData[i].name}</td>          
+          <td > <button className="btn_pageAdmin_n" onClick={this.clickIzmenaSale(tableData[i].name,tableData[i].number)}>Измени</button></td>
+          <td > <button className="btn_pageAdmin_n" onClick={this.deleteRoom(tableData[i].number,clinic)}>Обриши</button></td>
           </tr>
           )
       }
       return res;
     }    
+    sendChangedPassword = () => {
+      let pass1 = document.getElementById('firstPassword_input1').value;
+      let pass2 = document.getElementById('firstPassword_input2').value;
+      
+      if(pass1.length < 8 || pass2.length < 8){
+        alert('Лозинка мора садржати минимално 8 карактера.');
+        return;
+      }
+      if(pass1 !== pass2){
+        alert('Поновите исту лозинку у оба поља.');
+        return;
+      }
   
+      const url = 'http://localhost:8081/patient/changePassword/';
+      const options = {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          "Auth-Token": this.context.token
+        },
+        body: pass1
+      };
+  
+      fetch(url, options)
+      .then(response => {
+        console.log(response);
+        alert("Успешно промењена лозинка.");
+
+        this.setState({
+          modalPassword: false
+        })
+      });
+    }
+  changePassword = () => {
+      this.setState({modalPassword:true})
+  }
   render() {
+    let modalniSifra = null;
+        if(this.state.modalPassword){
+          modalniSifra = (
+            <Window
+            visible={this.state.modalPassword}
+            width="370"
+            height="250"
+            effect="fadeInUp"
+            onClickAway={() => this.closeModalHandler()}
+         >
+            <form className="divModalSale">
+            <h4 className="h4Tittle">Измена лозинке</h4>
+            <div ><p>Унесите нову вредност лозинке:</p>
+            <input type="password"
+              className="inputIzmena"
+              id="firstPassword_input1"
+              ></input>
+            <p>Потврдите нову вредност лозинке:</p>
+            <input type="password"
+              className="inputIzmena"
+              id="firstPassword_input2"></input>
+            <button className="btnModalIzmena" onClick={this.sendChangedPassword}>Сачувај</button>
+            </div>
+          </form>
+            </Window>
+          );
+        }
     let modalniIzmena = null;
     if (this.state.modalIzmena) {  //modalni dijalog za izmenu profila 
       modalniIzmena = (
@@ -1027,7 +1110,7 @@ class PageAdmin extends Component {
             <div ><p>Стара вредност:</p>
             <input type="text"
               className="inputIzmena"
-              value={this.state.staraVrednost}
+              value={this.state.staraVrednost[0]}
               disabled></input>
             <p>Нова вредност:</p>
             <input type="text"
@@ -1051,7 +1134,7 @@ class PageAdmin extends Component {
             </DoctorList>
         )
     }
-    let types = null;
+    let types = null; ///////ovde i dole i gore
     if(this.state.isAppointmentTypes){
        types = (
            <AppointmentType
@@ -1155,6 +1238,7 @@ class PageAdmin extends Component {
           show = {this.state.isProfile} 
           clickIzmena={this.clickIzmena}
           clickZabrana={this.clickZabrana}
+          clickSifra={this.changePassword}
           >
         </ProfileAdmin>
         
@@ -1165,6 +1249,7 @@ class PageAdmin extends Component {
           clickZabrana={this.clickZabrana}
           >
         </ClinicProfile>
+        {modalniSifra}
         {modalniIzmena}
         {modalniIzmenaKlinike}
         {modalniIzmenaTipa}

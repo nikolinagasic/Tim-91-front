@@ -39,7 +39,7 @@ const PatientList = (props) => {
         </tr>
       </thead>
       <tbody className="tbody_pageAdmin_n">
-        {props.generateTableDatаPatients}
+        {props.generateTableData}
       </tbody>
     </table>
     </div>

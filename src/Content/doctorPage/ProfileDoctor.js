@@ -32,8 +32,8 @@ const ProfileDoctor = (props) => {
               <td onClick={props.clickZabrana.bind(this, 'ocena')}>{props.pat.rating}</td>
             </tr>
             <tr>
-              <td colspan="2" id="btnSifraDoctorTd">
-                <button id="btnSifraDoctor" onClick={props.clickSifra}> Промени лозинку </button>
+            <td colspan="2" id="btnSifraDoctorTd">
+                <button id="btnChangePassword" onClick={props.clickSifra}> Промени лозинку </button>
               </td>
             </tr>
           </table>

@@ -2,48 +2,51 @@ import React, { Component } from 'react';
 import "./PageDoctor.css" 
 import ProfileDoctor from './ProfileDoctor'
 import PatientList from './PatientList'
-import Modal from "../Modal" 
 import Window from 'react-awesome-modal'
+import {UserContext} from '../../UserProvider'
+
 
 class PageDoctor extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          doctor: this.props.location.state.detail, 
-          isProfile: false,
-          isAppointment: false,
-          isPatients: false,
-          isCalendar: false,
-          isVacation: false,
-    
-          modalIzmena: false,
-          headerText: '',
-          staraVrednost: '',
-          changedValue: '',
-          modalPassword: false,
-          listPatients: [],
-          allPatients: []
-        };
-      }
-    
-      clickAppointment = (event) => {
-        alert("Страница је у процесу израде");
-      }
-    
-      clickProfile = (event) => {
-        console.log('kliknuo na profil');
-        document.getElementById("logo_img").style.visibility = "hidden"; 
-        this.setState({
-          isAppointment: false,
-          isProfile: true,
-          isPatients: false,
-          isCalendar: false,
-          isVacation: false
-        });
-      }
-    
-      clickPatients = (event) => {
-        document.getElementById("logo_img").style.visibility = "hidden"; 
+  static contextType = UserContext;     // instanciram context
+
+  constructor(props) {
+      super(props);
+      this.state = {
+        doctor: this.props.location.state.detail, 
+        isProfile: false,
+        isAppointment: false,
+        isPatients: false,
+        isCalendar: false,
+        isVacation: false,
+  
+        allPatients: null,
+        listPatients: null,
+        modalIzmena: false,
+        headerText: '',
+        staraVrednost: '',
+        changedValue: '',
+        modalPassword: false
+      };
+    }
+  
+    clickAppointment = (event) => {
+      alert("Страница је у процесу израде");
+    }
+  
+    clickProfile = (event) => {
+      console.log('kliknuo na profil');
+      document.getElementById("logo_img").style.visibility = "hidden"; 
+      this.setState({
+        isAppointment: false,
+        isProfile: true,
+        isPatients: false,
+        isCalendar: false,
+        isVacation: false
+      });
+    }
+  
+    clickPatients = (event) => {
+      document.getElementById("logo_img").style.visibility = "hidden"; 
               const url = 'http://localhost:8081/patient/getAll';
               const options = {
                 method: 'GET',
@@ -56,222 +59,219 @@ class PageDoctor extends Component {
               fetch(url, options)
               .then(responseWrapped => responseWrapped.json())
               .then(response => {
+                console.log(response);
                 this.setState({
+                  listPatients:response,
                   allPatients: response,
-                  listPatients: response,
-                  isAppointment: false,
                   isProfile: false,
+                  isAppointment: false,
                   isPatients: true,
                   isCalendar: false,
-                  isVacation: false     
-
+                  isVacation: false
                 }); 
-            }); 
-            console.log(this.state.listPatients);
-      }
-    
-      clickCalendar = (event) => {
-        alert("Страница је у процесу израде");
-      }
-    
-      clickVacation = (event) => {
-        alert("Страница је у процесу израде");
-      }
-
-      clickZabrana = (polje) => {
-        if (polje === 'mail') {
-          alert('Није могуће мењати вредност поља е-поште.');  
-        }
-        else if (polje === 'klinika') {
-          alert('Није могуће мењати вредност поља клинике.');  
-        }   
-        else if (polje === 'tip') {
-          alert('Није могуће мењати вредност типа прегледа.');  
-        }  
-        else if (polje === 'ocena') {
-          alert('Није могуће мењати оцену.');  
-        }      
-      }
-    
-      clickIzmena = (naziv, staraVr) => {
-        this.setState({
-            modalIzmena: true
-        });
-        this.setState({changedValue: naziv});
-    
-        if(naziv === 'ime'){
-          this.setState({headerText: "Измена имена"});
-          this.setState({staraVrednost: this.state.doctor.firstName});
-        }
-        else if(naziv === 'prezime'){
-          this.setState({headerText: "Измена презимена"});
-          this.setState({staraVrednost: this.state.doctor.lastName});
-        }
-        else{
-          console.log('greska izmena');
-        }
-     }
-    
-     closeModalHandler = () => {
-      this.setState({
-        modalIzmena: false,
-        modalPassword: false
-      });
+              });
     }
-     sendChangeHandler = () => {
-       this.setState({
-          modalIzmena: false
+  
+    clickCalendar = (event) => {
+      alert("Страница је у процесу израде");
+    }
+  
+    clickVacation = (event) => {
+      alert("Страница је у процесу израде");
+    }
+    clickLogout = (event) => {
+      this.context.token = null;
+      this.context.user = null;
+      this.props.history.push({
+      pathname: '/login'
+      }); 
+    }
+    clickZabrana = (polje) => {
+      if (polje === 'mail') {
+        alert('Није могуће мењати вредност поља е-поште.');  
+      }
+      else if (polje === 'klinika') {
+        alert('Није могуће мењати вредност поља клинике.');  
+      }   
+      else if (polje === 'tip') {
+        alert('Није могуће мењати вредност типа прегледа.');  
+      }  
+      else if (polje === 'ocena') {
+        alert('Није могуће мењати оцену.');  
+      }      
+    }
+  
+    clickIzmena = (naziv, staraVr) => {
+      this.setState({
+          modalIzmena: true
       });
-      let newValue = document.getElementById("newValue_input").value;
-      let changedName = this.state.changedValue;
-      const sve_ok = this.promenaState(changedName, newValue);
-      if(!sve_ok){
+      this.setState({changedValue: naziv});
+  
+      if(naziv === 'ime'){
+        this.setState({headerText: "Измена имена"});
+        this.setState({staraVrednost: this.state.doctor.firstName});
+      }
+      else if(naziv === 'prezime'){
+        this.setState({headerText: "Измена презимена"});
+        this.setState({staraVrednost: this.state.doctor.lastName});
+      }
+      else{
+        console.log('greska izmena');
+      }
+   }
+  
+   sendChangeHandler = () => {
+     this.setState({
+        modalIzmena: false
+    });
+    let newValue = document.getElementById("newValue_input").value;
+    let changedName = this.state.changedValue;
+    const sve_ok = this.promenaState(changedName, newValue);
+    if(!sve_ok){
+      return;
+    }
+    let email = this.state.doctor.mail;
+    const url = 'http://localhost:8081/doctor/changeAttribute/'+changedName+"/"+newValue+"/"+email;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+  
+    fetch(url, options)
+      .then(response => {
+        console.log(response.ok);
+        console.log(response)
+        if(response.ok === true){
+          alert("Успешно сте изменили поље '" + changedName+"'.");
+        }
+        else {
+          alert("Дошло је до грешке приликом измене поља '" + changedName + "'.");
+        }
+      });
+   }
+  
+   promenaState = (nazivAtributa, novaVrednost) => {
+    
+    const doctor = {       
+      ...this.state.doctor
+    };
+    
+    if(nazivAtributa === 'ime'){
+      doctor.firstName = novaVrednost;
+    }
+    else if(nazivAtributa === 'prezime'){
+      doctor.lastName = novaVrednost;
+    }
+  
+    this.setState({doctor : doctor});
+      return true;
+    }
+  
+    sendChangedPassword = () => {
+      let pass1 = document.getElementById('firstPassword_input1').value;
+      let pass2 = document.getElementById('firstPassword_input2').value;
+      
+      if(pass1.length < 8 || pass2.length < 8){
+        alert('Лозинка мора садржати минимално 8 карактера.');
         return;
       }
-      let email = this.state.doctor.mail;
-      const url = 'http://localhost:8081/doctor/changeAttribute/'+changedName+"/"+newValue+"/"+email;
+      if(pass1 !== pass2){
+        alert('Поновите исту лозинку у оба поља.');
+        return;
+      }
+  
+      const url = 'http://localhost:8081/patient/changePassword/';
       const options = {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json;charset=UTF-8'
+          "Auth-Token": this.context.token
         },
+        body: pass1
       };
-    
+  
       fetch(url, options)
-        .then(response => {
-          console.log(response.ok);
-          console.log(response)
-          if(response.ok === true){
-            alert("Успешно сте изменили поље '" + changedName+"'.");
-          }
-          else {
-            alert("Дошло је до грешке приликом измене поља '" + changedName + "'.");
-          }
-        });
-     }
-    
-     promenaState = (nazivAtributa, novaVrednost) => {
-      
-      const doctor = {       
-        ...this.state.doctor
-      };
-      
-      if(nazivAtributa === 'ime'){
-        doctor.firstName = novaVrednost;
-      }
-      else if(nazivAtributa === 'prezime'){
-        doctor.lastName = novaVrednost;
-      }
-    
-      this.setState({doctor : doctor});
-        return true;
-      }
-    
-      sendChangedPassword = () => {
-        let password = document.getElementById("newPassword_input").value;
-        
-        if(password.length < 8){
-          alert('Лозинка мора садржати барем 8 карактера.');
-          return;
-        }
-        
-        const url = 'http://localhost:8081/doctor/changePassword/'+password;
-        const options = {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json;charset=UTF-8'
-          },
-        };
-    
-        fetch(url, options)
-          .then(response => {
-            if(response.ok === true){
-              alert("Успешно сте изменили лозинку.");
-            }
-            else {
-              alert("Дошло је до грешке приликом измене лозинке");
-            }
-          });
-    
-          this.setState({
-            modalPassword: false
-          }); 
-      }
-    
-      changePassword = () => {
+      .then(response => {
+        console.log(response);
+        alert("Успешно промењена лозинка.");
+
         this.setState({
-          modalPassword: true
-        });
+          modalPassword: false
+        })
+      });
+    }
+  
+    changePassword = () => {
+      this.setState({
+        modalPassword: true
+      });
+    }
+  
+    closeModalHandler = () => {
+      this.setState({
+          modalIzmena: false,
+          modalPassword: false
+      }); 
+    }
+    findPatient = (event)=> {
+      let firstName = document.getElementById("name_patient").value;
+      let lastName = document.getElementById("lastName_patient").value;
+      let lbo = document.getElementById("lbo_patient").value;
+      if (!firstName) {
+        firstName = "~";
       }
-    
-      findPatient = (allPatients) => (event) => {
-          
-        let ime = document.getElementById("name_patient").value;
-        let prezime = document.getElementById("lastName_patient").value;
-        let lbo = document.getElementById("lbo_patient").value;
-        
-        if(!ime){
-          ime = "~";
-        }
-        if(!prezime){
-          prezime = "~";
+      if (!lastName) {
+        lastName = "~";
       }
-        if(!lbo){
-            lbo = "~";
-        }
-        if (!/^\d+$/.test(lbo) && lbo != "~") {
-          alert("ЛБО се састоји само из цифара.");
-        } else {
-        console.log(ime+[prezime+lbo]);
-        const url = 'http://localhost:8081/patient/find/'+ime+"/"+prezime+"/"+lbo;
-        const options = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json;charset=UTF-8',
-            },
-            body: JSON.stringify(allPatients)
-        };
-
-        fetch(url, options)
-        .then(responseWrapped => responseWrapped.json())
-        .then(response => {
-            this.setState({
-                listPatients: response,
-                isRooms: true
-            });
-        });
-        console.log(this.state.listPatients);
+      if (!lbo) {
+        lbo = "~";
       }
+      console.log(firstName+lastName+lbo);
+      if (!/^\d+$/.test(lbo) && lbo != "~") {
+        alert("ЛБО се састоји само из цифара.");
       }
-
-      generateTableDatаPatients(listPatients){
-        let res=[];
-        let tableData = listPatients;
-        for(var i =0; i < tableData.length; i++) {
-        console.log("ispisuje"+tableData[i].firstName,tableData[i].lastName,tableData[i].lbo);
-        }
-        for(var i =0; i < tableData.length; i++){
-            res.push(
-              <tr>
-            <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
-            <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
-            <td key={tableData[i].lbo}>{tableData[i].lbo}</td>
-            </tr>
-            )
-        }
-        console.log(res);
-        return res;
-      } 
-    
-      render() {
-          let modalniIzmena = null;
-          let modalniSifra = null;
-          if(this.state.modalIzmena){
-            modalniIzmena = (
-              <Window
+      else {
+        const url = 'http://localhost:8081/patient/find/'+firstName+'/' + lastName + '/'+ lbo;
+          const options = {
+              method: 'GET',
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json;charset=UTF-8',
+              },
+          };
+  
+          fetch(url, options)
+          .then(responseWrapped => responseWrapped.json())
+          .then(response => {
+              this.setState({
+                  listPatients: response,
+                  isPatients: true
+              });
+          });
+      }
+    }
+    generateTableData(listPatients){
+      let res=[];
+      let tableData = listPatients;
+      for(var i =0; i < tableData.length; i++){
+          res.push(
+            <tr>
+          <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
+          <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
+          <td key={tableData[i].lbo}>{tableData[i].lbo}</td>
+          </tr>
+          )
+      }
+      return res;
+    } 
+    render() {
+        let modalniIzmena = null;
+        if(this.state.modalIzmena){
+          modalniIzmena = (
+            <Window
           visible={this.state.modalIzmena}
           width="370"
           height="250"
@@ -294,75 +294,82 @@ class PageDoctor extends Component {
             </div>
           </form>
         </Window>);
-          }
-    
-          if(this.state.modalPassword){
-            modalniSifra = (
-              <Modal
-                className="modal"
-                show={this.state.modalPassword}
-                close={(event) => this.closeModalHandler(event)}
-                send={this.sendChangedPassword}
-                header={"Промени лозинку"}
-                >
-                  <form>
-                    <p>Унесите нову вредност лозинке:</p>
-                    <input type="password" 
-                      className="input_field"
-                      id="newPassword_input"></input>
-                  </form>
-              </Modal>
-            );
-          }
-          let patients = null;
-          if(this.state.isPatients){
-             patients = (
-                 <PatientList
-                    findPatient={this.findPatient(this.state.allPatients)}
-                    generateTableDatаPatients= {this.generateTableDatаPatients(this.state.listPatients)}
-                  >
-                  </PatientList>
-             )
-          }
-    
-          return (
-            <div className="main_div">
-              <ul id="unordered_list" className="ul_list">
-                <li className="li_list"><a 
-                id="profile" 
-                onClick={this.clickProfile}> Профил корисника </a></li>
-                <li className="li_list"><a 
-                id="appointment"
-                onClick={this.clickАppointment}> Започни преглед </a></li>
-                <li className="li_list"><a 
-                id="patients" 
-                onClick={this.clickPatients}> Листа пацијената </a></li>
-                <li className="li_list"><a 
-                id="calendar"
-                onClick={this.clickCalendar}> Радни календар </a></li>
-                <li className="li_list"><a 
-                id="vacation"
-                onClick={this.clickVacation}> Годишњи одмор </a></li>
-                <li className="li_list"><a 
-                id="logout_d"
-                onClick={this.clickLogout}> Одјави се </a></li>
-              </ul>
-              
-              <ProfileDoctor
-                pat={this.state.doctor}
-                show = {this.state.isProfile}
-                clickIzmena={this.clickIzmena}
-                clickZabrana={this.clickZabrana}
-                clickSifra={this.changePassword}
-                > 
-              </ProfileDoctor>
-    
-              {modalniIzmena} 
-              {modalniSifra}    
-              {patients}
+        }
+        let modalniSifra = null;
+        if(this.state.modalPassword){
+          modalniSifra = (
+            <Window
+            visible={this.state.modalPassword}
+            width="370"
+            height="250"
+            effect="fadeInUp"
+            onClickAway={() => this.closeModalHandler()}
+         >
+            <form className="divModalSale">
+            <h4 className="h4Tittle">Измена лозинке</h4>
+            <div ><p>Унесите нову вредност лозинке:</p>
+            <input type="password"
+              className="inputIzmena"
+              id="firstPassword_input1"
+              ></input>
+            <p>Потврдите нову вредност лозинке:</p>
+            <input type="password"
+              className="inputIzmena"
+              id="firstPassword_input2"></input>
+            <button className="btnModalIzmena" onClick={this.sendChangedPassword}>Сачувај</button>
             </div>
+          </form>
+            </Window>
           );
         }
-    }
+        let patients = null;
+        if(this.state.isPatients){
+           patients = (
+               <PatientList
+                  findPatient={this.findPatient}
+            generateTableData = {this.generateTableData(this.state.listPatients)}
+                >
+                </PatientList>
+           )
+        }
+        return (
+          <div className="main_div">
+            <ul id="unordered_list" className="ul_list">
+              <li className="li_list"><a 
+              id="profile" 
+              onClick={this.clickProfile}> Профил корисника </a></li>
+              <li className="li_list"><a 
+              id="appointment"
+              onClick={this.clickАppointment}> Започни преглед </a></li>
+              <li className="li_list"><a 
+              id="patients" 
+              onClick={this.clickPatients}> Листа пацијената </a></li>
+              <li className="li_list"><a 
+              id="calendar"
+              onClick={this.clickCalendar}> Радни календар </a></li>
+              <li className="li_list"><a 
+              id="vacation"
+              onClick={this.clickVacation}> Годишњи одмор </a></li>
+              <li className="li_list"><a 
+              id="logout_d"
+              onClick={this.clickLogout}> Одјави се </a></li>
+            </ul>
+            
+            <ProfileDoctor
+              pat={this.state.doctor}
+              show = {this.state.isProfile}
+              clickIzmena={this.clickIzmena}
+              clickZabrana={this.clickZabrana}
+              clickSifra={this.changePassword}
+              > 
+            </ProfileDoctor>
+  
+            {modalniIzmena} 
+            {modalniSifra}    
+            {patients}
+          </div>
+        );
+      }
+  }
     
     export default PageDoctor;
