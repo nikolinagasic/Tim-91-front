@@ -41,7 +41,6 @@ class RegisterMedical extends Component {
     event.preventDefault();
     let pass = "12345678";
     let err = '';
-    let name_type = document.getElementById("hidden_id").value;
     if (pass.length < 7) {
       err = <strong>Лозинка мора садржати минимално 7 карактера.</strong>;
       this.setState({errormessage:err});
@@ -56,8 +55,8 @@ class RegisterMedical extends Component {
       
       let obj;
       var url;
-console.log("ime tipa:"+name_type);
       if ( document.getElementById("doctor").checked === true) {
+        let name_type = document.getElementById("hidden_id").value;
         url = 'http://localhost:8081/clinicAdministrator/registerDoctor';
         obj = {
           "mail" : this.state.email,

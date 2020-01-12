@@ -9,7 +9,6 @@ const DoctorList = (props) => {
               <p/>
 
         <table className="formSearch" name="findForm">
-          <tr> 
           <td>
             <img src={imgFind} alt="Пронађи"/>   
             </td>        
@@ -26,7 +25,6 @@ const DoctorList = (props) => {
               <input className="dateSale" id="doctorLastName" name="prezime" onChange={props.findDoctor}></input>
             </td>
             
-          </tr>
         </table>     
         <p/>
 

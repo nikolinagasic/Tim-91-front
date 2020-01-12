@@ -39,11 +39,23 @@ button#btnSifraDoctor:hover{
 }
 #logout_d{
     margin-top: 70.5%;
-    border-radius: 10px;
     text-align: center;
 }
 
 #logout_d:hover{
     background-color: crimson;
     color: white;
+}
+#btnChangePassword {
+    background-color: rgb(149,177,149);
+    border: none;
+    height: 40px;
+    width: 95%;
+    font-size: 95%;
+    margin-left: 4px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#btnChangePassword:hover {
+    cursor: pointer;
+    background-color: #f1f1f1;
 }
