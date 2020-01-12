@@ -3,7 +3,10 @@
     background-color: rgb(149,177,149);
     width: 65%;
 }
-
+.New_room_list th {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600; 
+}
 .New_sale_list{
     border-collapse: collapse;
     background-color: rgb(149,177,149);

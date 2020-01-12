@@ -216,3 +216,15 @@ button.btn_pageAdmin_n:hover {
     margin-left: 5%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+#btnPrikaziZahteve {
+    margin-left: 95%;
+    height: 40px;
+    width: 100%;
+    background-color: rgb(149,177,149);
+    border: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#btnPrikaziZahteve:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
