@@ -6,7 +6,7 @@ const ReserveList = (props) => {
     <div className="divProfileAdmine">
       <table>
         <td>
-    <h4>Захтеви за прегледе</h4>  
+    <h4 className="h4Tittle">Захтеви за прегледе</h4>  
     </td>
     <td>
       <button id="btnPrikaziZahteve">Прикажи захтеве за операције</button>

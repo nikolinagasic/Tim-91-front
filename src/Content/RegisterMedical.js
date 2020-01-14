@@ -13,7 +13,8 @@ class RegisterMedical extends Component {
       display: false,
       list_box: [],
       list_types: [],
-      errormessage: ''
+      errormessage: '',
+      prva_smena: false
     };
     this.getTypes();
   }
@@ -28,9 +29,19 @@ class RegisterMedical extends Component {
       this.setState(
         {display:true}
       );   
+      
     } else {
       this.setState(
         {display:false}
+      );
+    }
+    if (document.getElementById("prva").checked == true) {
+      this.setState(
+        {prva_smena:true}
+      ); 
+    } else if (document.getElementById("druga").checked == true) {
+      this.setState(
+        {prva_smena:false}
       );
     }
     this.setState({errormessage: err});
@@ -49,10 +60,19 @@ class RegisterMedical extends Component {
         err = <strong>Морате изабрати тип медицинског особља за регистрацију.</strong>;
         this.setState({errormessage:err});
       }
+      else if(!(document.getElementById("prva").checked || document.getElementById("druga").checked)){
+        err = <strong>Морате изабрати смену.</strong>;
+        this.setState({errormessage:err});
+      }
     else{
       this.setState({errormessage:''});
       console.log('sve ok, salji objekat');
-      
+      let smena = null;
+        if (this.state.prva_smena) {
+          smena = 1;
+        } else {
+          smena = 2;
+        }
       let obj;
       var url;
       if ( document.getElementById("doctor").checked === true) {
@@ -62,7 +82,8 @@ class RegisterMedical extends Component {
           "mail" : this.state.email,
           "password" : "12345678",
           "clinic" : this.props.pat.clinic,
-          "tip" : name_type
+          "tip" : name_type,
+          "workShift" : smena
         }
       }
       else {
@@ -70,7 +91,8 @@ class RegisterMedical extends Component {
         obj = {
           "mail" : this.state.email,
           "password" : "12345678",
-          "clinic" : this.props.pat.clinic
+          "clinic" : this.props.pat.clinic,
+          "workShift" : smena
         }
       }
       const options = {
@@ -138,12 +160,18 @@ class RegisterMedical extends Component {
     let listComponent=null;
     if(this.state.display){
        listComponent=(
+         <div>
+        <p>Тип прегледа:</p>
           <SelectBox
               name="hidden_id"
               items={this.state.list_box}>
           </SelectBox>
+          </div>
        );
     }
+   
+        
+        
     return (
     <div className="RegisterMedical" id="med">
       <form name="medicalRegForm" onSubmit={this.mySubmitHandler}>
@@ -170,7 +198,15 @@ class RegisterMedical extends Component {
           <input id="nurse" type="radio" name="container"
           onChange={this.myChangeHandler}></input>
           <label id="text">Медицинска сестра</label>
-          <p>Тип прегледа:</p>
+          <p>Смена:</p>
+          <input id="prva" type="radio" name="container_smena"
+          onChange={this.myChangeHandler}></input>
+          <label id="text">Пре подне</label>
+          <p></p>
+          <input id="druga" type="radio" name="container_smena"
+          onChange={this.myChangeHandler}></input>
+          <label id="text">После подне</label>
+          
          <div 
             id = 'id_tip'
             name='tip'
@@ -178,6 +214,7 @@ class RegisterMedical extends Component {
             onChange={this.myChangeHandler}>
             {listComponent}
             </div>
+         
           <p></p>
           {this.state.errormessage}
           <p></p>
