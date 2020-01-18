@@ -239,13 +239,15 @@ class DoctorSearch extends Component {
         fetch(url, options)
         .then(response => {
             console.log(response);
-            if(response){
+            console.log(response.ok);
+            if(response.ok){
                 // zatvori sve dijaloge
                 this.closeAllTermsDialog(); 
-                alert('Uspesno ste rezervisali termin.');
+                alert('Захтев успешно послат. О детаљима прегледа бићете обавештени путем адресе е-поште.');
             }
             else{
-                alert('Termin nije rezervisan, neko je pre Vas to uradio.');
+                this.closeAllTermsDialog();
+                alert('Захтев није успешно послат. Покушајте поново.');
             }
         });
     }

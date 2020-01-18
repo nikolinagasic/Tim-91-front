@@ -147,7 +147,7 @@ class Login extends Component {
 
   openModalHandler = (event) => {
     this.setState({
-      isShowing: true
+        isShowing: true
    });    
   }
   

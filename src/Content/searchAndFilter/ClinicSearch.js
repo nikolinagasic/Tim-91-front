@@ -81,7 +81,7 @@ class ClinicSearch extends React.Component {
             alert('Обавезан је унос датума прегледа.');
             return;
         }
-
+        
         let dat = new Date(datum1);
         let datum = dat.getTime();
         this.setState({
@@ -116,6 +116,7 @@ class ClinicSearch extends React.Component {
         if (listClinics != null) {
             let tableData = listClinics;
             for (var i = 0; i < tableData.length; i++) {
+
                 let name = tableData[i].name;
                 let id = tableData[i].id;
                 res.push(
