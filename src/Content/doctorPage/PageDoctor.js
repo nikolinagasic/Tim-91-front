@@ -4,6 +4,7 @@ import ProfileDoctor from './ProfileDoctor'
 import PatientList from './PatientList'
 import Window from 'react-awesome-modal'
 import {UserContext} from '../../UserProvider'
+import Navigation from './Navigation'
 
 
 class PageDoctor extends Component {
@@ -18,6 +19,7 @@ class PageDoctor extends Component {
         isPatients: false,
         isCalendar: false,
         isVacation: false,
+        isNavigation: false,
   
         allPatients: null,
         listPatients: null,
@@ -25,7 +27,8 @@ class PageDoctor extends Component {
         headerText: '',
         staraVrednost: '',
         changedValue: '',
-        modalPassword: false
+        modalPassword: false,
+        patient: null
       };
     }
   
@@ -41,7 +44,8 @@ class PageDoctor extends Component {
         isProfile: true,
         isPatients: false,
         isCalendar: false,
-        isVacation: false
+        isVacation: false,
+        isNavigation: false,
       });
     }
   
@@ -67,7 +71,8 @@ class PageDoctor extends Component {
                   isAppointment: false,
                   isPatients: true,
                   isCalendar: false,
-                  isVacation: false
+                  isVacation: false,
+                  isNavigation: false
                 }); 
               });
     }
@@ -98,6 +103,9 @@ class PageDoctor extends Component {
       }  
       else if (polje === 'ocena') {
         alert('Није могуће мењати оцену.');  
+      }  
+      else if (polje === 'smena') {
+        alert('Није могуће мењати смену.');  
       }      
     }
   
@@ -119,7 +127,33 @@ class PageDoctor extends Component {
         console.log('greska izmena');
       }
    }
-  
+   clickProfilePatient = (mail) => (event) => {
+    event.preventDefault;
+    document.getElementById("logo_img").style.visibility = "hidden";
+    console.log("mail:"+mail);       
+    const url = 'http://localhost:8081/patient/getByMail/'+mail;
+          const options = {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+          };
+          
+          fetch(url, options)
+          .then(responseWrapped => responseWrapped.json())
+          .then(response => {
+            this.setState({
+              patient: response,
+              isProfile: false,
+              isAppointment: false,
+              isPatients: false,
+              isCalendar: false,
+              isVacation: false,
+              isNavigation: true
+          }); 
+        });
+  }
    sendChangeHandler = () => {
      this.setState({
         modalIzmena: false
@@ -262,11 +296,15 @@ class PageDoctor extends Component {
           <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
           <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
           <td key={tableData[i].lbo}>{tableData[i].lbo}</td>
+          <td > <button className="btn_pageAdmin_n" 
+            onClick={this.clickProfilePatient(tableData[i].mail)}>Профил</button></td>
+          
           </tr>
           )
       }
       return res;
     } 
+    
     render() {
         let modalniIzmena = null;
         if(this.state.modalIzmena){
@@ -332,6 +370,19 @@ class PageDoctor extends Component {
                 </PatientList>
            )
         }
+        
+    let navigation = null;
+        if (this.state.isNavigation) {
+        navigation = (
+          <Navigation
+          patient={this.state.patient}
+          doctor={this.state.doctor}
+          clickProfilePatient = {this.clickProfilePatient}
+          token = {this.context.token}       
+          >
+        </Navigation>
+        );
+    }
         return (
           <div className="main_div">
             <ul id="unordered_list" className="ul_list">
@@ -363,10 +414,11 @@ class PageDoctor extends Component {
               clickSifra={this.changePassword}
               > 
             </ProfileDoctor>
-  
+            
             {modalniIzmena} 
             {modalniSifra}    
             {patients}
+            {navigation}
           </div>
         );
       }

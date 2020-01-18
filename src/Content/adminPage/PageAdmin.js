@@ -41,6 +41,7 @@ class PageAdmin extends Component {
           listDoctors: null,
           listTypes: null,
           listRooms: null,
+          listTerms: null,
           name_type: null,
           doctor: null,
           name_room: null,
@@ -736,7 +737,21 @@ class PageAdmin extends Component {
             }   
             clickReservation = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden"; 
+              console.log(this.state.cadmin.clinic);
+              const url = 'http://localhost:8081/clinicAdministrator/getTerms/'+this.state.cadmin.clinic;
+              const options = {
+                method: 'GET',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json;charset=UTF-8',
+                },
+              };
+        
+              fetch(url, options)
+              .then(responseWrapped => responseWrapped.json())
+              .then(response => {
               this.setState({
+                listTerms: response,
                 isReservation: true,
                 isListDoctors: false,
                 isAppointmentTypes: false,
@@ -745,8 +760,9 @@ class PageAdmin extends Component {
                 isRegister: false,
                 isRooms: false,
                 isClinic: false            
-
+              });
               }); 
+
             }
             clickRooms = (event) => { //////ovde
               document.getElementById("logo_img").style.visibility = "hidden"; 
@@ -913,6 +929,25 @@ class PageAdmin extends Component {
           <td key={tableData[i].name}>{tableData[i].name}</td>          
           <td > <button className="btn_pageAdmin_n" onClick={this.clickIzmenaSale(tableData[i].name,tableData[i].number)}>Измени</button></td>
           <td > <button className="btn_pageAdmin_n" onClick={this.deleteRoom(tableData[i].number,clinic)}>Обриши</button></td>
+          </tr>
+          )
+      }
+      return res;
+    }    
+    generateTableDataTerms(listTerms){
+      let res=[];
+      let tableData = listTerms;
+      for(var i =0; i < tableData.length; i++){
+        console.log(tableData[i]);
+        let vreme = tableData[i].start_term + '-'+tableData[i].end_term;
+        let doktor = tableData[i].firstNameDoctor+' '+tableData[i].lastNameDoctor;
+        let datum = new Date(tableData[i].date);
+          res.push(
+            <tr>
+          <td key= {datum.toDateString()}>{datum.toDateString()}</td>
+          <td key= {vreme}>{vreme}</td>
+          <td key={doktor}>{doktor}</td> 
+          <td > <button className="btn_pageAdmin_n" onClick={this.clickRooms}>Додели салу</button></td>       
           </tr>
           )
       }
@@ -1176,6 +1211,7 @@ class PageAdmin extends Component {
        reservation = (
            <ReserveList
               clickRooms = {this.clickRooms}
+              generateTableDataTerms = {this.generateTableDataTerms(this.state.listTerms)}
               >
             </ReserveList>
        )

@@ -67,6 +67,9 @@ class PageNurse extends Component {
     }
     else if (polje === 'klinika') {
       alert('Није могуће мењати вредност поља клинике.');  
+    }  
+    else if (polje === 'smena') {
+      alert('Није могуће мењати смену.');  
     }      
   }
 

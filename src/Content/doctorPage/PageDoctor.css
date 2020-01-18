@@ -50,7 +50,7 @@ button#btnSifraDoctor:hover{
     background-color: rgb(149,177,149);
     border: none;
     height: 40px;
-    width: 95%;
+    width: 40%;
     font-size: 95%;
     margin-left: 4px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -58,4 +58,32 @@ button#btnSifraDoctor:hover{
 #btnChangePassword:hover {
     cursor: pointer;
     background-color: #f1f1f1;
+}
+table#tabProfileDoc {
+    border-collapse: collapse;
+    width: 400px;
+    margin-left: -10%;
+}
+
+table#tabProfileDoc th , table#tabProfileDoc td{
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+#btnProfileDoc {
+    height: 50px;
+    width: 300px;
+    font-size: 15px;
+    background-color: rgb(149,177,149);
+    border: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#btnProfileDoc:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+#marginNavigation {
+    position: absolute;
+    right: 5%;
 }

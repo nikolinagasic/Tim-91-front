@@ -16,7 +16,6 @@
     padding-top: 2%;
     font-size: large;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
 }
 
 table#tabProfileAdmin {
@@ -67,10 +66,10 @@ table#tabProfileAdmin td:hover:not(#btnSifraAdminTd){
 }
 tbody.tbody_pageAdmin_n {
     background-color: white;
-    line-height: 45px;
+    line-height: 35px;
     text-align: center;
-    
-}
+    }
+
 tbody.tbody_pageAdmin_n tr:hover {
     background-color: #f1f1f1;
 }
@@ -126,7 +125,7 @@ tbody.tbody_pageAdmin_n tr:hover {
     color: black;
 }
 button.btn_pageAdmin_n {
-    height: 50px;
+    height: 35px;
     width: 100%;
     background-color:  inherit;
     border-style: none;
@@ -215,4 +214,16 @@ button.btn_pageAdmin_n:hover {
     margin-top: 0%;
     margin-left: 5%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#btnPrikaziZahteve {
+    margin-left: 95%;
+    height: 40px;
+    width: 100%;
+    background-color: rgb(149,177,149);
+    border: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#btnPrikaziZahteve:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
 }

@@ -2,6 +2,13 @@ import React from 'react';
 
 
 const ProfileNurse = (props) => {
+ let workShift = props.pat.workShift;
+ let smena;
+ if (workShift == 1) {
+   smena = "Пре подне";
+ } else {
+   smena = "После подне";
+ }
   return (
     <div>
   <div className="divProfileNurse" style={{
@@ -23,6 +30,10 @@ const ProfileNurse = (props) => {
         <tr>
           <th>Клиника</th>
           <td onClick={props.clickZabrana.bind(this, 'klinika')}>{props.pat.clinic}</td>
+        </tr>
+        <tr>
+          <th>Смена</th>
+          <td onClick={props.clickZabrana.bind(this, 'smena')}>{smena}</td>
         </tr>
         <tr>
           <td colspan="2" id="btnSifraNurseTd">
