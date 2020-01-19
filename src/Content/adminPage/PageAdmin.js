@@ -8,12 +8,15 @@ import ClinicProfile from "./ClinicProfile"
 import RoomList from "./RoomList" 
 import ProfileDoctor from "../doctorPage/ProfileDoctor" 
 import Modal from '../Modal'
+import {UserContext} from '../../UserProvider'
+import PredefinedExam from './PredefinedExam'
 
 class PageAdmin extends Component {
+  static contextType = UserContext; 
+  
     constructor(props) {
         super(props);
         this.state = {
-          cadmin: this.props.location.state.detail, 
           clinic: this.props.location.state.detail,
           isProfile: false,
           isProfileDoctor: false,
@@ -22,7 +25,14 @@ class PageAdmin extends Component {
           isRooms: false,
           isListDoctors: false,
           isClinic: false,
-    
+          
+          // unapred_def
+          isUnapredDef: false,
+          listaSala_ud: null,
+          listaLekara_ud: null,
+          listaTipova_ud: null,
+          listaSatnica_ud: [],
+
           modalIzmena: false,
           modalIzmenaKlinike: false,
           modalIzmenaTipa: false,
@@ -70,32 +80,33 @@ class PageAdmin extends Component {
     
         if(naziv === 'ime'){
           this.setState({headerText: "Измена имена"});
-          this.setState({staraVrednost: this.state.cadmin.firstName});
+          this.setState({staraVrednost: this.context.user.firstName});
         }
         else if(naziv === 'prezime'){
           this.setState({headerText: "Измена презимена"});
-          this.setState({staraVrednost: this.state.cadmin.lastName});
+          this.setState({staraVrednost: this.context.user.lastName});
         }
         else if(naziv === 'adresa'){
           this.setState({headerText: "Измена адресе"});
-          this.setState({staraVrednost: this.state.cadmin.address});
+          this.setState({staraVrednost: this.context.user.address});
         }
         else if(naziv === 'grad'){
           this.setState({headerText: "Измена града"});
-          this.setState({staraVrednost: this.state.cadmin.city});
+          this.setState({staraVrednost: this.context.user.city});
         }
         else if(naziv === 'drzava'){
           this.setState({headerText: "Измена државе"});
-          this.setState({staraVrednost: this.state.cadmin.country});
+          this.setState({staraVrednost: this.context.user.country});
         }
         else if(naziv === 'telefon'){
           this.setState({headerText: "Измена телефона"});
-          this.setState({staraVrednost: this.state.cadmin.telephone});
+          this.setState({staraVrednost: this.context.user.telephone});
         }
         else{
           console.log('greska izmena');
         }
       }   
+      
       clickIzmenaKlinike = (naziv,staraVr) => {
         console.log(naziv);
         this.setState({
@@ -179,7 +190,7 @@ class PageAdmin extends Component {
           return;
         }
     
-        let email = this.state.cadmin.mail;
+        let email = this.context.user.mail;
         //saljemo azuriranog admina na back da te promene sacuvamo u bazi
         const url = 'http://localhost:8081/clinicAdministrator/changeAttribute/'+changedName+"/"+newValue+"/"+email;
         const options = {
@@ -205,30 +216,30 @@ class PageAdmin extends Component {
       promenaState = (nazivAtributa, novaVrednost) => {
         console.log("promena stanja");
         //kopija admina
-        const cadmin = {
-          ...this.state.cadmin
-        };
+        // const cadmin = {
+        //   ...this.state.cadmin
+        // };
         if(nazivAtributa === 'ime'){
-          cadmin.firstName = novaVrednost;
+          this.context.user.firstName = novaVrednost;
         }else if(nazivAtributa === "prezime"){
-          cadmin.lastName = novaVrednost;
+          this.context.user.lastName = novaVrednost;
         }else if(nazivAtributa === "adresa"){
-          cadmin.address = novaVrednost;
+          this.context.user.address = novaVrednost;
         }
         else if(nazivAtributa === "grad"){
-          cadmin.city = novaVrednost;
+          this.context.user.city = novaVrednost;
         }
         else if(nazivAtributa === "drzava"){
-          cadmin.country = novaVrednost;
+          this.context.user.country = novaVrednost;
         }
         else if(nazivAtributa === "telefon"){
-          cadmin.telephone = novaVrednost;
+          this.context.user.telephone = novaVrednost;
         }
         // update-uj state
-        this.setState({cadmin : cadmin});
+        //this.setState({cadmin : cadmin});
         return true;
       }
-  
+      
       sendChangeClinicHandler = () => { //izmena profila klinike
         this.setState({
           modalIzmenaKlinike: false
@@ -649,19 +660,20 @@ class PageAdmin extends Component {
             clickProfile = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden";
                   this.setState({
-                    isListDoctors: false,
-                    isAppointmentTypes: false,
+                    isUnapredDef: false,
                     isProfile: true,
                     isProfileDoctor: false,
                     isRegister: false,
+                    isAppointmentTypes: false,
                     isRooms: false,
+                    isListDoctors: false,
                     isClinic: false
                   });
                 
             }
             clickClinic = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden"; 
-              let name = this.state.cadmin.clinic;
+              let name = this.context.user.clinic;
               console.log(name);
               const url = 'http://localhost:8081/clinic/getOne/'+name;
             const options = {
@@ -677,12 +689,13 @@ class PageAdmin extends Component {
               .then(response => {
                 this.setState({
                   clinic: response,
-                  isListDoctors: false,
-                  isAppointmentTypes: false,
+                  isUnapredDef: false,
                   isProfile: false,
                   isProfileDoctor: false,
                   isRegister: false,
+                  isAppointmentTypes: false,
                   isRooms: false,
+                  isListDoctors: false,
                   isClinic: true
               });
             });
@@ -690,13 +703,14 @@ class PageAdmin extends Component {
             clickRegister = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden"; 
               this.setState({
-                  isListDoctors: false,
-                  isAppointmentTypes: false,
-                  isProfile: false,
-                  isProfileDoctor: false,
-                  isRegister: true,
-                  isRooms: false,
-                  isClinic: false
+                isUnapredDef: false,
+                isProfile: false,
+                isProfileDoctor: false,
+                isRegister: true,
+                isAppointmentTypes: false,
+                isRooms: false,
+                isListDoctors: false,
+                isClinic: false
               });
             }
             clickLogout = () => {
@@ -708,7 +722,7 @@ class PageAdmin extends Component {
             }  
             clickRooms = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden"; 
-              let klinika = this.state.cadmin.clinic;
+              let klinika = this.context.user.clinic;
               const url = 'http://localhost:8081/room/getByClinic/'+klinika;
               const options = {
                 method: 'GET',
@@ -725,13 +739,14 @@ class PageAdmin extends Component {
                 this.setState({
                   allRooms: response,
                   listRooms: response,
-                  isListDoctors: false,
-                  isAppointmentTypes: false,
+                  isUnapredDef: false,
                   isProfile: false,
                   isProfileDoctor: false,
                   isRegister: false,
+                  isAppointmentTypes: false,
                   isRooms: true,
-                  isClinic: false            
+                  isListDoctors: false,
+                  isClinic: false          
 
                 }); 
               });
@@ -753,20 +768,21 @@ class PageAdmin extends Component {
               .then(response => {
                 this.setState({
                   listTypes: response,
-                  isListDoctors: false,
-                  isAppointmentTypes: true,
+                  isUnapredDef: false,
                   isProfile: false,
                   isProfileDoctor: false,
                   isRegister: false,
+                  isAppointmentTypes: true,
                   isRooms: false,
-                  isClinic: false            
+                  isListDoctors: false,
+                  isClinic: false          
 
                 }); 
             }); 
             }                        
             clickDoctors = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden";
-              let clinic = this.state.cadmin.clinic;
+              let clinic = this.context.user.clinic;
               console.log(clinic);
               const url = 'http://localhost:8081/doctor/getDoctors/'+clinic;
               const options = {
@@ -783,12 +799,13 @@ class PageAdmin extends Component {
                 this.setState({
                   allDoctors: response,
                   listDoctors: response,
-                  isListDoctors: true,
-                  isAppointmentTypes: false,
+                  isUnapredDef: false,
                   isProfile: false,
                   isProfileDoctor: false,
                   isRegister: false,
+                  isAppointmentTypes: false,
                   isRooms: false,
+                  isListDoctors: true,
                   isClinic: false
               }); 
             });
@@ -811,12 +828,13 @@ class PageAdmin extends Component {
                     .then(response => {
                       this.setState({
                         doctor: response,
-                        isListDoctors: false,
-                        isAppointmentTypes: false,
+                        isUnapredDef: false,
                         isProfile: false,
                         isProfileDoctor: true,
                         isRegister: false,
+                        isAppointmentTypes: false,
                         isRooms: false,
+                        isListDoctors: false,
                         isClinic: false
                     }); 
                   });
@@ -873,8 +891,279 @@ class PageAdmin extends Component {
       }
       return res;
     }    
+
+    // unapred_def
+  // ide na false, kada ove ostale stavljam na true (profil, odsustva ...)
+  clickUnapredDef = () => {
+    document.getElementById("logo_img").style.visibility = "hidden"; 
+
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Auth-Token": this.context.token,
+      }
+    };
+
+    //console.log(this.context.user.clinic);
+
+    // administrator ce imati kliniku u kojoj radi (this.context.user.clinic)
+    fetch('http://localhost:8081/clinic/getDoctors/'+this.context.user.clinic, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response1 => {
+          this.setState({
+            listaLekara_ud: response1
+          });
+          
+          fetch('http://localhost:8081/clinic/getRooms/'+this.context.user.clinic, options)
+            .then(responseWrapped => responseWrapped.json())
+            .then(response2 => {
+              this.setState({
+                listaSala_ud: response2,
+              });
+
+              fetch('http://localhost:8081/term_definition/getAll', options)
+                .then(responseWrapped => responseWrapped.json())
+                .then(response3 => {
+                  this.setState({
+                    lista_termina: response3
+                  });
+                  
+                  fetch('http://localhost:8081/type/getAll', options)
+                    .then(responseWrapped => responseWrapped.json())
+                    .then(response4 => {
+                      this.setState({
+                        listaTipova_ud: response4,
+                        isUnapredDef: true,
+                        isProfile: false,
+                        isProfileDoctor: false,
+                        isRegister: false,
+                        isAppointmentTypes: false,
+                        isRooms: false,
+                        isListDoctors: false,
+                        isClinic: false
+                      });       
+                  });
+        
+              });    
+          });   
+      });
+    }
+
+    // unapred_def
+  generateOption(listOptions, optionType) {
+    let res = [];
+    if (listOptions != null) {
+      let tableData = listOptions;
+      for (var i = 0; i < tableData.length; i++) {
+        if(optionType === 'dr'){
+              let ime_prezime = tableData[i].firstName + " " + tableData[i].lastName;
+              res.push(
+                  <option key={tableData[i].id}
+                    id={tableData[i].id}
+                  >{ime_prezime}</option>
+              )
+            }
+            else if(optionType === 'rooms' || optionType === 'type'){
+              res.push(
+                <option key={tableData[i].id}
+                  id={tableData[i].id}>{tableData[i].name}</option>
+              )
+            }
+            else if(optionType === 'satnica'){
+              let od_do = tableData[i].start_term + " " + tableData[i].end_term;
+              res.push(
+                <option key={tableData[i].id}
+                  id={tableData[i].id}>{od_do}</option>
+              )
+            }
+        }
+    }
+    return res;
+  }
+
+  // unapred_def
+  changeLekar = () => {
+    let e = document.getElementById("a_selectDoctors_predefinedExam"); 
+    let id = e.options[e.selectedIndex].id;
+
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Auth-Token": this.context.token,
+      }
+    };
+
+    fetch('http://localhost:8081/doctor/getTermsByWorkShift/'+id, options)
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        this.setState({ listaSatnica_ud: response })
+    });
+  }
+
+  // unapred_def
+  changeTip = () => {
+    let e = document.getElementById("a_selectType_predefinedExam"); 
+    let id = e.options[e.selectedIndex].id;
+    
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Auth-Token": this.context.token,
+      }
+    };
+
+    // POSLATI I KLINIKU U KOJOJ TRAZIM (token od admina)
+    fetch('http://localhost:8081/doctor/getDoctorsByType/'+id, options)
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        this.setState({ listaLekara_ud: response })
+    });
+  }
+
+  // unapred_def
+  sendPredefinedExam = () => {
+    let date = document.getElementById("a_date_predefinedExam").value;
+    let dat = new Date(date);
+    date = dat.getTime();
+    let satnica = document.getElementById("a_selectSatnica_predefinedExam");
+    let satnica_id = satnica.options[satnica.selectedIndex].id;
+    let room = document.getElementById("a_selectRoom_predefinedExam");
+    let room_id = room.options[room.selectedIndex].id;
+    let type = document.getElementById("a_selectType_predefinedExam");
+    let type_id = type.options[type.selectedIndex].id;
+    let doctor = document.getElementById("a_selectDoctors_predefinedExam");
+    let doctor_id = doctor.options[doctor.selectedIndex].id;
+    let price = document.getElementById("a_cena_predefinedExam").value;
+    let discount = document.getElementById("a_popust_predefinedExam").value;
+
+    console.log(date + " " +satnica_id + " " +room_id + " " +type_id + " " +doctor_id + " " +
+                  price + " " + discount);
+    if(this.checkFields()){
+      const options = {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+          "Auth-Token": this.context.token,
+        }
+      };
+
+      let url_params = date + "/" + satnica_id + "/" + room_id + "/" + type_id + "/" + doctor_id + "/" + 
+              price + "/" + discount;
   
+      fetch('http://localhost:8081/clinicAdministrator/createPredefinedTerm/'+ url_params, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+          console.log(response);
+          if(response == -1){       // doktor nije slobodan tada
+            alert('Доктор није слободан у том термину.');
+          }
+          else if(response == -2){   // sala nije slobodna tad
+            alert('Сала није слободна у том термину.');
+          }
+          else if(response == 0){      // sve okej 
+            alert('Успешно сте креирали термин.');
+          }
+      });
+    }
+    else{
+      return;
+    }
+    
+  }
+
+  // unapred_def
+  checkFields = () => {
+    let date = document.getElementById("a_date_predefinedExam").value;
+    let satnica = document.getElementById("a_selectSatnica_predefinedExam").value;
+    let room = document.getElementById("a_selectRoom_predefinedExam").value;
+    let type = document.getElementById("a_selectType_predefinedExam").value;
+    let doctor = document.getElementById("a_selectDoctors_predefinedExam").value;
+    let price = document.getElementById("a_cena_predefinedExam").value;
+    let discount = document.getElementById("a_popust_predefinedExam").value;
+    console.log(date + " " +satnica + " " +room + " " +type + " " +doctor + " " +price + " " + discount);
+  
+    if(!date){
+      alert('Обавезан је унос датума.');
+      document.getElementById("a_date_predefinedExam").focus();
+      return false;
+    }
+    else if(!satnica){
+      alert('Обавезан је унос сатнице.');
+      document.getElementById("a_selectSatnica_predefinedExam").focus();
+      return false;
+    }
+    else if(!price){
+      alert('Обавезан је унос цене.');
+      document.getElementById("a_cena_predefinedExam").focus();
+      return false;
+    }
+    else if(!Number(price)){
+      alert('Цена мора садржати само бројеве.');
+      document.getElementById("a_cena_predefinedExam").focus();
+      return false;
+    }
+    else if(!discount){
+      alert('Обавезан је унос попуста.');
+      document.getElementById("a_popust_predefinedExam").focus();
+      return false;
+    }
+    else if(!Number(discount)){
+      alert('Попуст мора садржати само бројеве.');
+      document.getElementById("a_popust_predefinedExam").focus();
+      return false;
+    }
+
+    return true;
+  }
+
+  // unapred_def
+  validateCenaPopust = () => {
+    let price = document.getElementById("a_cena_predefinedExam").value;
+    let discount = document.getElementById("a_popust_predefinedExam").value;
+    
+    if(!Number(price) && price){
+      alert('Цена мора садржати само бројеве.');
+      document.getElementById("a_cena_predefinedExam").focus();
+    }
+    else if(!Number(discount) && discount){
+      alert('Попуст мора садржати само бројеве.');
+      document.getElementById("a_popust_predefinedExam").focus();
+    }
+  }
+  
+  clickSatnica = () => {
+    let satnica = document.getElementById("a_selectSatnica_predefinedExam").value;
+    if(!satnica){
+      alert('Потребно је прво изабрати лекара.');
+    }
+  }
+
   render() {
+    // unapred_def
+    let component_unapredDef = null;
+    if(this.state.isUnapredDef){
+      component_unapredDef = (
+        <PredefinedExam
+          send = {this.sendPredefinedExam}
+          generateDoctors = {this.generateOption(this.state.listaLekara_ud, 'dr')}
+          generateRooms = {this.generateOption(this.state.listaSala_ud, 'rooms')}
+          generateTypes = {this.generateOption(this.state.listaTipova_ud, 'type')}
+          generateSatnica = {this.generateOption(this.state.listaSatnica_ud, 'satnica')}
+          changeTip = {this.changeTip}
+          changeLekar = {this.changeLekar}
+          validate = {this.validateCenaPopust}
+          clickSatnica = {this.clickSatnica}
+        />
+      );
+    }
+    
     let modalniIzmena = null;
     if (this.state.modalIzmena) {  //modalni dijalog za izmenu profila 
       modalniIzmena = (
@@ -1000,7 +1289,7 @@ class PageAdmin extends Component {
         componentDoctors = (
             <DoctorList
               findDoctor={this.findDoctor(this.state.allDoctors)}
-              generateTableData = {this.generateTableData(this.state.listDoctors,this.state.cadmin.clinic)}
+              generateTableData = {this.generateTableData(this.state.listDoctors,this.context.user.clinic)}
               clickRegister = {this.clickRegister}
               changeHandler = {this.changeHandler}
             >
@@ -1024,9 +1313,9 @@ class PageAdmin extends Component {
        rooms = (
            <RoomList
               findRoom={this.findRoom(this.state.allRooms)}
-              addRoom = {this.addRoom(this.state.cadmin.clinic)}
+              addRoom = {this.addRoom(this.context.user.clinic)}
               changeHandler = {this.changeHandler}
-              generateTableDataRooms = {this.generateTableDataRooms(this.state.listRooms,this.state.cadmin.clinic)}
+              generateTableDataRooms = {this.generateTableDataRooms(this.state.listRooms,this.context.user.clinic)}
             >
             </RoomList>
        )
@@ -1035,7 +1324,7 @@ class PageAdmin extends Component {
     if(this.state.isRegister){
         registerIS = (
           <RegisterMedical
-              pat={this.state.cadmin}
+              pat={this.context.user}
               clickDoctors = {this.clickDoctors}>            
           </RegisterMedical>
         );
@@ -1073,7 +1362,7 @@ class PageAdmin extends Component {
           onClick={this.clickRooms}> Сале </a></li>
           <li className="li_list"><a 
           id="termini"
-          onClick={this.click}> Слободни термини </a></li> 
+          onClick={this.clickUnapredDef}> Дефиниши термине прегледа </a></li> 
           <li className="li_list"><a 
           id="profile" 
           onClick={this.click}> Захтеви за одсуство </a></li>       
@@ -1085,7 +1374,7 @@ class PageAdmin extends Component {
 
         {registerIS}
         <ProfileAdmin
-          admin={this.state.cadmin}
+          admin={this.context.user}
           show = {this.state.isProfile} 
           clickIzmena={this.clickIzmena}
           clickZabrana={this.clickZabrana}
@@ -1108,6 +1397,7 @@ class PageAdmin extends Component {
         {types}
         {rooms}
         {profileDoc}
+        {component_unapredDef}
         </div>
       );
     }
