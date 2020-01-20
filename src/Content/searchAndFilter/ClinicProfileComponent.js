@@ -5,7 +5,7 @@ const ClinicProfile = (props) => {
         
     return(
         <div className="a_div_clinic_profile">
-            <p id="a_back_to_clinics" onClick={props.back}>Прикажи клинике</p>
+            <p className="a_back_to_clinics" onClick={props.back}>Прикажи клинике</p>
             
             <h1>"{props.name}"</h1>            
             <h3>Просечна оцена: <em>{props.rating}</em></h3>
@@ -18,6 +18,12 @@ const ClinicProfile = (props) => {
                 <h2 className="a_opis_clinicProfile_inline">Опис:</h2>
                 <textarea className="a_opis_clinicProfile_inline"
                     rows="7" cols="70">{props.description}</textarea>
+            </div>
+
+            <div>
+                <p id="a_click_unapredDef" onClick={props.predefinedTerm}>
+                    Унапред дефинисани термини    
+                </p>
             </div>
 
             <div id="a_div_pretraga_clinicProfile">

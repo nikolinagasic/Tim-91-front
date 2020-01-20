@@ -6,21 +6,6 @@ import Radium from 'radium'
 import ClinicSearch from '../searchAndFilter/ClinicSearch';
 import {UserContext} from '../../UserProvider'
 import PatientMedicalRecord from './PatientMedicalRecord';
-// unapred_def
-import PredefinedExam from '../adminPage/PredefinedExam'
-
-
-
-
-
-
-// TODO ****** obrisi sve unapred_def *******
-
-
-
-
-
-
 
 class PagePatient extends Component {
   static contextType = UserContext;
@@ -34,14 +19,6 @@ class PagePatient extends Component {
       isProfil: false,
       isIstorija: false,
       isKlinike: false,
-
-
-      // unapred_def
-      isUnapredDef: false,
-      listaSala_ud: null,
-      listaLekara_ud: null,
-      listaTipova_ud: null,
-      listaSatnica_ud: [],
 
 
       modalShowing: false,
@@ -336,264 +313,7 @@ class PagePatient extends Component {
   }
 
 
-  // unapred_def
-  // ide na false, kada ove ostale stavljam na true (profil, odsustva ...)
-  clickUnapredDef = () => {
-    document.getElementById("logo_img").style.visibility = "hidden"; 
-
-    const options = {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8',
-        "Auth-Token": this.context.token,
-      }
-    };
-
-    // administrator ce imati kliniku u kojoj radi (this.context.user.clinic)
-    fetch('http://localhost:8081/clinic/getDoctors/'+'Моја клиника', options)
-      .then(responseWrapped => responseWrapped.json())
-      .then(response1 => {
-        this.setState({
-          listaLekara_ud: response1
-        });
-        
-        fetch('http://localhost:8081/clinic/getRooms/' + 'Моја клиника', options)
-          .then(responseWrapped => responseWrapped.json())
-          .then(response2 => {
-            this.setState({
-              listaSala_ud: response2,
-            });
-
-            fetch('http://localhost:8081/term_definition/getAll', options)
-              .then(responseWrapped => responseWrapped.json())
-              .then(response3 => {
-                this.setState({
-                  lista_termina: response3
-                });
-                
-                fetch('http://localhost:8081/type/getAll', options)
-                  .then(responseWrapped => responseWrapped.json())
-                  .then(response4 => {
-                    this.setState({
-                      listaTipova_ud: response4,
-                      isUnapredDef: true
-                    });       
-                });
-       
-            });    
-        });   
-    });
-  }
-
-  // unapred_def
-  generateOption(listOptions, optionType) {
-    let res = [];
-    if (listOptions != null) {
-      let tableData = listOptions;
-      for (var i = 0; i < tableData.length; i++) {
-        if(optionType === 'dr'){
-              let ime_prezime = tableData[i].firstName + " " + tableData[i].lastName;
-              res.push(
-                  <option key={tableData[i].id}
-                    id={tableData[i].id}
-                  >{ime_prezime}</option>
-              )
-            }
-            else if(optionType === 'rooms' || optionType === 'type'){
-              res.push(
-                <option key={tableData[i].id}
-                  id={tableData[i].id}>{tableData[i].name}</option>
-              )
-            }
-            else if(optionType === 'satnica'){
-              let od_do = tableData[i].start_term + " " + tableData[i].end_term;
-              res.push(
-                <option key={tableData[i].id}
-                  id={tableData[i].id}>{od_do}</option>
-              )
-            }
-        }
-    }
-    return res;
-  }
-
-  // unapred_def
-  changeLekar = () => {
-    let e = document.getElementById("a_selectDoctors_predefinedExam"); 
-    let id = e.options[e.selectedIndex].id;
-
-    const options = {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8',
-        "Auth-Token": this.context.token,
-      }
-    };
-
-    fetch('http://localhost:8081/doctor/getTermsByWorkShift/'+id, options)
-      .then(responseWrapped => responseWrapped.json())
-      .then(response => {
-        this.setState({ listaSatnica_ud: response })
-    });
-  }
-
-  // unapred_def
-  changeTip = () => {
-    let e = document.getElementById("a_selectType_predefinedExam"); 
-    let id = e.options[e.selectedIndex].id;
-    
-    const options = {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8',
-        "Auth-Token": this.context.token,
-      }
-    };
-
-    // POSLATI I KLINIKU U KOJOJ TRAZIM (token od admina)
-    fetch('http://localhost:8081/doctor/getDoctorsByType/'+id, options)
-      .then(responseWrapped => responseWrapped.json())
-      .then(response => {
-        this.setState({ listaLekara_ud: response })
-    });
-  }
-
-  // unapred_def
-  sendPredefinedExam = () => {
-    let date = document.getElementById("a_date_predefinedExam").value;
-    let dat = new Date(date);
-    date = dat.getTime();
-    let satnica = document.getElementById("a_selectSatnica_predefinedExam");
-    let satnica_id = satnica.options[satnica.selectedIndex].id;
-    let room = document.getElementById("a_selectRoom_predefinedExam");
-    let room_id = room.options[room.selectedIndex].id;
-    let type = document.getElementById("a_selectType_predefinedExam");
-    let type_id = type.options[type.selectedIndex].id;
-    let doctor = document.getElementById("a_selectDoctors_predefinedExam");
-    let doctor_id = doctor.options[doctor.selectedIndex].id;
-    let price = document.getElementById("a_cena_predefinedExam").value;
-    let discount = document.getElementById("a_popust_predefinedExam").value;
-
-    console.log(date + " " +satnica_id + " " +room_id + " " +type_id + " " +doctor_id + " " +
-                  price + " " + discount);
-    if(this.checkFields()){
-      const options = {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json;charset=UTF-8',
-          "Auth-Token": this.context.token,
-        }
-      };
-
-      let url_params = date + "/" + satnica_id + "/" + room_id + "/" + type_id + "/" + doctor_id + "/" + 
-              price + "/" + discount;
-  
-      fetch('http://localhost:8081/clinicAdministrator/createPredefinedTerm/'+ url_params, options)
-        .then(responseWrapped => responseWrapped.json())
-        .then(response => {
-          console.log(response);
-          if(response == -1){       // doktor nije slobodan tada
-            alert('Доктор није слободан у том термину.');
-          }
-          else if(response == -2){   // sala nije slobodna tad
-            alert('Сала није слободна у том термину.');
-          }
-          else if(response == 0){      // sve okej 
-            alert('Успешно сте креирали термин.');
-          }
-      });
-    }
-    else{
-      return;
-    }  
-  }
-
-  // unapred_def
-  checkFields = () => {
-    let date = document.getElementById("a_date_predefinedExam").value;
-    let satnica = document.getElementById("a_selectSatnica_predefinedExam").value;
-    let room = document.getElementById("a_selectRoom_predefinedExam").value;
-    let type = document.getElementById("a_selectType_predefinedExam").value;
-    let doctor = document.getElementById("a_selectDoctors_predefinedExam").value;
-    let price = document.getElementById("a_cena_predefinedExam").value;
-    let discount = document.getElementById("a_popust_predefinedExam").value;
-    console.log(date + " " +satnica + " " +room + " " +type + " " +doctor + " " +price + " " + discount);
-  
-    if(!date){
-      alert('Обавезан је унос датума.');
-      document.getElementById("a_date_predefinedExam").focus();
-      return false;
-    }
-    else if(!satnica){
-      alert('Обавезан је унос сатнице.');
-      document.getElementById("a_selectSatnica_predefinedExam").focus();
-      return false;
-    }
-    else if(!price){
-      alert('Обавезан је унос цене.');
-      document.getElementById("a_cena_predefinedExam").focus();
-      return false;
-    }
-    else if(!Number(price)){
-      alert('Цена мора садржати само бројеве.');
-      document.getElementById("a_cena_predefinedExam").focus();
-      return false;
-    }
-    else if(!discount){
-      alert('Обавезан је унос попуста.');
-      document.getElementById("a_popust_predefinedExam").focus();
-      return false;
-    }
-    else if(!Number(discount)){
-      alert('Попуст мора садржати само бројеве.');
-      document.getElementById("a_popust_predefinedExam").focus();
-      return false;
-    }
-
-    return true;
-  }
-
-  // unapred_def
-  validateCenaPopust = () => {
-    let price = document.getElementById("a_cena_predefinedExam").value;
-    let discount = document.getElementById("a_popust_predefinedExam").value;
-    
-    if(!Number(price) && price){
-      alert('Цена мора садржати само бројеве.');
-      document.getElementById("a_cena_predefinedExam").focus();
-    }
-    else if(!Number(discount) && discount){
-      alert('Попуст мора садржати само бројеве.');
-      document.getElementById("a_popust_predefinedExam").focus();
-    }
-  }
-
   render() {
-      
-      // unapred_def
-      let component_unapredDef = null;
-      if(this.state.isUnapredDef){
-        component_unapredDef = (
-          <PredefinedExam
-            send = {this.sendPredefinedExam}
-            generateDoctors = {this.generateOption(this.state.listaLekara_ud, 'dr')}
-            generateRooms = {this.generateOption(this.state.listaSala_ud, 'rooms')}
-            generateTypes = {this.generateOption(this.state.listaTipova_ud, 'type')}
-            generateSatnica = {this.generateOption(this.state.listaSatnica_ud, 'satnica')}
-            changeTip = {this.changeTip}
-            changeLekar = {this.changeLekar}
-            validate = {this.validateCenaPopust}
-          />
-        );
-      }
-
-
-
-
       let modalni = null;
       if(this.state.modalShowing){
         modalni = (
@@ -680,13 +400,6 @@ class PagePatient extends Component {
             <li className="li_list"><a 
             id="klinike"
             onClick={this.clickKlinike}> Листа клиника </a></li>
-
-
-            <li className="li_list"><a 
-            id="unapred_def"
-            onClick={this.clickUnapredDef}> Дефиниши термине прегледа </a></li>
-
-
             <li className="li_list"><a 
             id="logout_patient"
             onClick={this.clickLogout}> Одјави се </a></li>
@@ -700,19 +413,11 @@ class PagePatient extends Component {
             clickSifra={this.changePassword}
             > 
           </ProfilePatient>
-          
-         
 
           {modalni} 
           {modalniSifra}
           {klinike}   
           {karton} 
-
-
-          {/* unapred_def */}
-          {component_unapredDef}
-
-
         </div>
       );
     }

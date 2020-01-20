@@ -4,6 +4,7 @@ import SearchComponent from './SearchComponent'
 import DoctorSearch from './DoctorSearch'
 import ClinicProfile from './ClinicProfile'
 import {UserContext} from '../../UserProvider'
+import PredefinedTerm from './PredefinedTerms'
 
 class ClinicSearch extends React.Component {
     static contextType = UserContext;
@@ -17,10 +18,12 @@ class ClinicSearch extends React.Component {
             lista_doktora: null,
             lista_doktora_original: null,
             clinic: null,
+            lista_predefinisanih_termina: null,
             
             showClinics: true,
             showDoctors: false,
-            isClinicProfile: false
+            isClinicProfile: false,
+            isPredefinedTerm: false
         }
     }
 
@@ -134,12 +137,99 @@ class ClinicSearch extends React.Component {
                         <td onClick={() => this.clickOnClinic(name)}
                          key={tableData[i].address}>{tableData[i].address}</td>
                         <td onClick={() => this.clickOnClinic(name)}
-                         key={tableData[i].price}>{tableData[i].price} rsd</td>
+                         key={tableData[i].price}>{tableData[i].price} рсд</td>
                     </tr>
                 )
             }
         }
         return res;
+    }
+
+    generatePredefinedTerm = (list) => {
+        let res = [];
+        if (list != null) {
+            let tableData = list;
+            for (var i = 0; i < tableData.length; i++) {
+                console.log(tableData[i]);
+                let d = new Date(tableData[i].date);
+                let date = d.toDateString();
+                let satnica = tableData[i].start_term + " - " + tableData[i].end_term;
+                let doctor = tableData[i].firstNameDoctor + " " + tableData[i].lastNameDoctor;
+                let id = tableData[i].id;
+                console.log(id);
+                res.push(
+                    <tr>
+                        <td key={date}
+                            >{date}</td>
+                        <td key={satnica}
+                            >{satnica}</td>
+                        <td key={tableData[i].room}
+                            >{tableData[i].room}</td>
+                        <td key={doctor}
+                            >{doctor}</td>
+                        <td key={tableData[i].type}
+                            >{tableData[i].type}</td>
+                        <td key={tableData[i].price}
+                            >{tableData[i].price} рсд</td>
+                        <td key={tableData[i].discount}
+                            >{tableData[i].discount}%</td>
+                        <td key={tableData[i].id}>
+                            <button className="a_rezervisi_unapredDef" 
+                                onClick={() => this.clickRezUnapreDef(id)}>
+                                Резервиши
+                            </button></td>
+                    </tr>
+                )
+            }
+        }
+        return res;
+    }
+
+    clickRezUnapreDef = (id) => {
+        console.log('click na predefined id: ' + id);
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.context.token,
+            }
+        };
+      
+        fetch('http://localhost:8081/clinic/reservePredefinedTerm/'+id, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            console.log(response);
+            if(response){
+                alert('Термин успешно резервисан.');
+                this.refreshRezTerm();
+            }
+            else{
+                alert('Неко је пре Вас резервисао овај термин. Покушајте поново.');
+            }
+        });
+    }
+
+    refreshRezTerm = () => {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.context.token,
+            },
+            body: JSON.stringify(this.state.clinic)
+        };
+      
+        fetch('http://localhost:8081/clinic/getPredefinedTerms', options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            console.log(response);
+            this.setState({
+                lista_predefinisanih_termina: response
+            });
+        });
     }
 
     // PRIKAZ PROFILA KLINIKE
@@ -245,7 +335,42 @@ class ClinicSearch extends React.Component {
         this.setState({
             showDoctors: false,
             isClinicProfile: false,
-            showClinics: true
+            showClinics: true,
+            isPredefinedTerm:false
+        });
+    }
+
+    clickPredefinedTerm = () => {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.context.token,
+            },
+            body: JSON.stringify(this.state.clinic)
+        };
+      
+        fetch('http://localhost:8081/clinic/getPredefinedTerms', options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            console.log(response);
+            this.setState({
+                lista_predefinisanih_termina: response,
+                showDoctors: false,
+                isClinicProfile: false,
+                showClinics: false,
+                isPredefinedTerm: true
+            });
+        });
+    }
+
+    backToClinic = () => {
+        this.setState({
+            showDoctors: false,
+            isClinicProfile: true,
+            showClinics: false,
+            isPredefinedTerm: false
         });
     }
 
@@ -279,6 +404,16 @@ class ClinicSearch extends React.Component {
                     back={this.back}
                     lista_doktora={this.state.lista_doktora}
                     lista_tipova={this.state.lista_tipova}
+                    predefinedTerm={this.clickPredefinedTerm}
+                />
+            );
+        }
+        let predTerm = null;
+        if(this.state.isPredefinedTerm){
+            predTerm = (
+                <PredefinedTerm
+                    back={this.backToClinic}
+                    generateTable={this.generatePredefinedTerm(this.state.lista_predefinisanih_termina)}
                 />
             );
         }
@@ -288,6 +423,7 @@ class ClinicSearch extends React.Component {
                 {clinics}
                 {doctors}
                 {clinicProfile}
+                {predTerm}
             </div>
         );
     }

@@ -18,7 +18,7 @@ class ClinicProfile extends React.Component{
             choosedDoctor: null, 
             idChoosedDoctor: null,
             isTermini: false,           // prikaz modalnog sa svim slobodnim terminima
-            isDetailTerm: false         // prikaz detalja o terminu   
+            isDetailTerm: false         // prikaz detalja o terminu  
         }
     }
 
@@ -339,6 +339,7 @@ class ClinicProfile extends React.Component{
                     // props
                     back={this.props.back}
                     lista_doktora={this.state.lista_doktora}
+                    predefinedTerm={this.props.predefinedTerm}
                     // generate
                     generateOption = {this.generateOption(this.state.lista_tipova)}
                     generateTable={this.generateTableDoctor(this.state.lista_doktora)}
