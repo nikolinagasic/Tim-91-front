@@ -31,11 +31,13 @@ class DoctorSearch extends Component {
                 let name = tableData[i].firstName;
                 let l_name = tableData[i].lastName;
                 let id_doctor = tableData[i].id;
+                let rating = tableData[i].rating;
+                rating = this.roundToTwo(rating);
                 res.push(
                     <tr>
                         <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
                         <td key={tableData[i].lastName}>{tableData[i].lastName}</td>
-                        <td key={tableData[i].rating}>{tableData[i].rating}</td>
+                         <td key={tableData[i].rating}>{rating}</td>
                         <td><button className="pogledaj_search_doctor" 
                             onClick={this.clickPogledaj.bind(this, name, l_name, id_doctor)}
                             >Погледај</button></td>
@@ -44,6 +46,10 @@ class DoctorSearch extends Component {
             }
         }
         return res;
+    }
+
+    roundToTwo(num) {    
+        return +(Math.round(num + "e+2")  + "e-2");
     }
 
     generateTerms = (listTerms) => {

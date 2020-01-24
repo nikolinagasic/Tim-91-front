@@ -122,6 +122,8 @@ class ClinicSearch extends React.Component {
 
                 let name = tableData[i].name;
                 let id = tableData[i].id;
+                let rating = tableData[i].rating;
+                rating = this.roundToTwo(rating);
                 res.push(
                     <tr className="tr_clinic_search"
                         id={tableData[i].name}>
@@ -133,7 +135,7 @@ class ClinicSearch extends React.Component {
                         <td onClick={() => this.clickOnClinic(name)}
                          key={tableData[i].name}>{tableData[i].name}</td>
                         <td onClick={() => this.clickOnClinic(name)}
-                         key={tableData[i].rating}>{tableData[i].rating}</td>
+                         key={tableData[i].rating}>{rating}</td>
                         <td onClick={() => this.clickOnClinic(name)}
                          key={tableData[i].address}>{tableData[i].address}</td>
                         <td onClick={() => this.clickOnClinic(name)}
@@ -143,6 +145,10 @@ class ClinicSearch extends React.Component {
             }
         }
         return res;
+    }
+
+    roundToTwo(num) {    
+        return +(Math.round(num + "e+2")  + "e-2");
     }
 
     generatePredefinedTerm = (list) => {

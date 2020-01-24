@@ -6,6 +6,7 @@ import Radium from 'radium'
 import ClinicSearch from '../searchAndFilter/ClinicSearch';
 import {UserContext} from '../../UserProvider'
 import PatientMedicalRecord from './PatientMedicalRecord';
+import PatientHistory from './PatientHistory';
 
 class PagePatient extends Component {
   static contextType = UserContext;
@@ -28,7 +29,9 @@ class PagePatient extends Component {
       modalPassword: false, 
       lista_klinika: null, 
       lista_tipova: null,
-      medical_record: null
+      medical_record: null,
+      lista_klinika_istorija: null,
+      lista_doktora_istorija: null
     };
   }
 
@@ -70,7 +73,43 @@ class PagePatient extends Component {
   }
   
   clickIstorija = (event) => {
-    alert("Страница је у процесу израде");
+    console.log('click istorija');
+    document.getElementById("logo_img").style.visibility = "hidden"; 
+    
+    fetch('http://localhost:8081/clinic/getPatientHistoryClinics', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Auth-Token": this.context.token
+      },
+    })
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        this.setState({
+          lista_klinika_istorija: response
+        });
+
+        fetch('http://localhost:8081/doctor/getPatientHistoryDoctors', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Auth-Token": this.context.token
+          },
+        })
+        .then(responseWrapped => responseWrapped.json())
+        .then(response1 => {
+          console.log(response1);
+          this.setState({
+            lista_doktora_istorija: response1,
+            isKarton: false,
+            isProfil: false,
+            isIstorija: true,
+            isKlinike: false
+          });
+        });
+    });
   }
 
   clickKlinike = (event) => {
@@ -384,6 +423,16 @@ class PagePatient extends Component {
         );
       }
 
+      let istorija = null;
+      if(this.state.isIstorija){
+        istorija = (
+          <PatientHistory 
+            klinike = {this.state.lista_klinika_istorija}
+            doktori = {this.state.lista_doktora_istorija}
+          />
+        );
+      }
+
 
       return (
         <div className="main_div">
@@ -418,6 +467,7 @@ class PagePatient extends Component {
           {modalniSifra}
           {klinike}   
           {karton} 
+          {istorija}
         </div>
       );
     }
