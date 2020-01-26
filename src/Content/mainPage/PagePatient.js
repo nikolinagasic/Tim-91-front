@@ -7,6 +7,7 @@ import ClinicSearch from '../searchAndFilter/ClinicSearch';
 import {UserContext} from '../../UserProvider'
 import PatientMedicalRecord from './PatientMedicalRecord';
 import PatientHistory from './PatientHistory';
+import PatientRating from './PatientRate';
 
 class PagePatient extends Component {
   static contextType = UserContext;
@@ -18,9 +19,9 @@ class PagePatient extends Component {
       //token: this.props.location.state.token,
       isKarton: false,
       isProfil: false,
-      isIstorija: false,
+      isIstorija: false,    // ocenjivanje
       isKlinike: false,
-
+      isRating: false,   // istorija
 
       modalShowing: false,
       headerText: '',
@@ -31,7 +32,8 @@ class PagePatient extends Component {
       lista_tipova: null,
       medical_record: null,
       lista_klinika_istorija: null,
-      lista_doktora_istorija: null
+      lista_doktora_istorija: null,
+      lista_pregleda_istorija2: null
     };
   }
 
@@ -65,15 +67,16 @@ class PagePatient extends Component {
          isKarton: true,
          isProfil: false,
          isIstorija: false,
-         isKlinike: false
+         isKlinike: false,
+         isRating: false
        });
        console.log(this.state.medical_record);
     });
 
   }
   
-  clickIstorija = (event) => {
-    console.log('click istorija');
+  clickOcenjivanje = (event) => {
+    console.log('click ocenjivanje');
     document.getElementById("logo_img").style.visibility = "hidden"; 
     
     fetch('http://localhost:8081/clinic/getPatientHistoryClinics', {
@@ -106,10 +109,50 @@ class PagePatient extends Component {
             isKarton: false,
             isProfil: false,
             isIstorija: true,
-            isKlinike: false
+            isKlinike: false,
+            isRating: false
           });
         });
     });
+  }
+
+  clickIstorija = () => {
+    document.getElementById("logo_img").style.visibility = "hidden"; 
+
+    fetch('http://localhost:8081/patient/getAllExaminations', {
+      method: 'GET',
+      headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+      "Auth-Token": this.context.token
+      },
+    })
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        console.log(response);
+        this.setState({
+          lista_pregleda_istorija2 : response
+        });
+
+        fetch('http://localhost:8081/type/getAll', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Auth-Token": this.context.token}
+        })
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+          this.setState({
+            lista_tipova: response,
+            isKarton: false,
+            isProfil: false,
+            isIstorija: false,
+            isKlinike: false,
+            isRating: true
+          });
+        });
+      });
   }
 
   clickKlinike = (event) => {
@@ -141,7 +184,8 @@ class PagePatient extends Component {
           isKarton: false,
           isProfil: false,
           isIstorija: false,
-          isKlinike: true
+          isKlinike: true,
+          isRating: false
         });
       });
     });
@@ -151,6 +195,7 @@ class PagePatient extends Component {
     console.log('kliknuo na profil');
     document.getElementById("logo_img").style.visibility = "hidden"; 
 
+    console.log(this.context.token);
     const url = 'http://localhost:8081/patient/getPat';
     const options = {
       method: 'GET',
@@ -164,12 +209,14 @@ class PagePatient extends Component {
     fetch(url, options)
     .then(responseWrapped => responseWrapped.json())
       .then(response => {
+        console.log(response);
         console.log('patient first name: ' + response.firstName);
         
         this.setState({
           //patient: response,
           isKarton: false,
           isProfil: true,
+          isRating: false,
           isIstorija: false,
           isKlinike: false
         });
@@ -432,6 +479,15 @@ class PagePatient extends Component {
           />
         );
       }
+      let istorija2 = null;
+      if(this.state.isRating){
+        istorija2 = (
+          <PatientRating 
+            lista_pregleda = {this.state.lista_pregleda_istorija2}
+            options = {this.state.lista_tipova}
+          />
+        );
+      }
 
 
       return (
@@ -444,8 +500,11 @@ class PagePatient extends Component {
             id="profil" 
             onClick={this.clickProfil}> Профил корисника </a></li>
             <li className="li_list"><a 
-            id="istorija" 
+            id="istorija2" 
             onClick={this.clickIstorija}> Историја </a></li>
+            <li className="li_list"><a 
+            id="istorija" 
+            onClick={this.clickOcenjivanje}> Оцењивање </a></li>
             <li className="li_list"><a 
             id="klinike"
             onClick={this.clickKlinike}> Листа клиника </a></li>
@@ -468,6 +527,7 @@ class PagePatient extends Component {
           {klinike}   
           {karton} 
           {istorija}
+          {istorija2}
         </div>
       );
     }

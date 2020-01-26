@@ -1,0 +1,34 @@
+div#lista_pregleda{
+    text-align: center;
+}
+
+table.a_rating_table_of_examinations{
+    border-collapse: collapse;
+    margin-left: 30%;
+    margin-top: 5%;
+    width: 60%;
+    margin-bottom: 10%;
+}
+
+table.a_rating_table_of_examinations td, table.a_rating_table_of_examinations th {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    height: 35px;
+}
+
+div#a_sort_table_of_examination{
+    margin-top: 5%;
+    text-align: center;
+}
+
+select.a_select_examination, #a_date_table_of_examination{
+    text-align: center;
+    border-radius: 5px;
+    background-color: rgba(221, 219, 219, 0.253);
+    border: 1px solid rgba(0, 0, 0, 0.247);
+    box-shadow: 3px 5px #e2e2e2;
+    width: 180px;
+    height: 35px;
+    font-size: 15px;
+}
