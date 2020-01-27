@@ -14,7 +14,7 @@ table.a_rating_table_of_examinations td, table.a_rating_table_of_examinations th
     padding: 8px;
     text-align: center;
     border-bottom: 1px solid #ddd;
-    height: 35px;
+    height: 40px;
 }
 
 div#a_sort_table_of_examination{
@@ -31,4 +31,23 @@ select.a_select_examination, #a_date_table_of_examination{
     width: 180px;
     height: 35px;
     font-size: 15px;
+}
+
+form.a_patientRate_form-inline{
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+form.a_patientRate_form-inline div{
+    margin-left: 60px;
+    margin-top: 3%;
+}
+
+#a_sort_table_of_examination h1{
+    margin-left: 15%;
+}
+
+form.a_patientRate_form-inline div:first-child{
+    margin-left: 36%;
 }
