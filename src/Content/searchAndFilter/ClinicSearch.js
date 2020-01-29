@@ -91,7 +91,8 @@ class ClinicSearch extends React.Component {
             date: datum
         });
         
-        const url = 'http://localhost:8081/clinic/getDoctorsByClinic/'+clinicName+"/"+this.state.date;
+        const url = 'http://localhost:8081/clinic/getDoctorsByClinic/'+clinicName+"/"+datum;
+        console.log('url: ' + url);
         const options = {
             method: 'GET',
             headers: {
