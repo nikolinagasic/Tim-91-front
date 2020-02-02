@@ -78,9 +78,9 @@ const SearchComponent = (props) => {
                     <thead>
                         <tr>
                             <th>Профил клинике</th>
-                            <th>Назив клинике</th>
+                            <th onClick={props.sortClinicName}>Назив клинике</th>
                             <th>Просечна оцена</th>
-                            <th>Адреса клинике</th>
+                            <th onClick={props.sortClinicAddress}>Адреса клинике</th>
                             <th>Цена прегледа</th>    
                         </tr>
                     </thead>        
