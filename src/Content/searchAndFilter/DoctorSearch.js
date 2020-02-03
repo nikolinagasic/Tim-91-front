@@ -156,6 +156,7 @@ class DoctorSearch extends Component {
         }
         
 
+        console.log(this.state.lista_lekara_original);
         const url = 'http://localhost:8081/doctor/searchDoctors/'+ime+"/"+prezime+"/"+ocena;
         const options = {
             method: 'POST',
@@ -179,7 +180,7 @@ class DoctorSearch extends Component {
     changeFilter = () => {
         let ocenaOd = document.getElementById("filter_doctor_ocenaOd").value;
         let ocenaDo = document.getElementById("filter_doctor_ocenaDo").value;
-        console.log(ocenaOd + "-" + ocenaDo);
+        // console.log(ocenaOd + "-" + ocenaDo);
 
         if(!ocenaOd){
             ocenaOd = "min";

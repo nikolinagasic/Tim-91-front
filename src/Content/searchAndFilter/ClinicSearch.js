@@ -20,6 +20,9 @@ class ClinicSearch extends React.Component {
             clinic: null,
             lista_predefinisanih_termina: null,
             
+            clinicNameOrder: 'a',
+            clinicAddressOrder: 'a',
+
             showClinics: true,
             showDoctors: false,
             isClinicProfile: false,
@@ -129,7 +132,7 @@ class ClinicSearch extends React.Component {
                     <tr className="tr_clinic_search"
                         id={tableData[i].name}>
                         <td id="a_tr_clinic_search_prikazi"
-                            key={tableData[i].name}
+                            key={tableData[i].id}
                             onClick={() => this.clickOnPrikaziClinic(id)}>
                             Прикажи
                         </td>
@@ -381,6 +384,71 @@ class ClinicSearch extends React.Component {
         });
     }
 
+    sortClinicName = () => {
+        console.log('sortiram');
+        if(this.state.clinicNameOrder === 'a'){
+            this.setState({
+                clinicNameOrder: 'd'
+            })
+        }
+        else{
+            this.setState({
+                clinicNameOrder: 'a'
+            })
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.context.token,
+            },
+            body: JSON.stringify(this.state.lista_klinika)
+        };
+
+        fetch('http://localhost:8081/clinic/sortClinicByName/'+this.state.clinicNameOrder, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            console.log(response);
+            this.setState({
+                lista_klinika : response
+            });
+        });
+    }
+
+    sortClinicAddress = () => {
+        if(this.state.clinicAddressOrder === 'a'){
+            this.setState({
+                clinicAddressOrder: 'd'
+            })
+        }
+        else{
+            this.setState({
+                clinicAddressOrder: 'a'
+            })
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.context.token,
+            },
+            body: JSON.stringify(this.state.lista_klinika)
+        };
+
+        fetch('http://localhost:8081/clinic/sortClinicByAddress/'+this.state.clinicAddressOrder, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            console.log(response);
+            this.setState({
+                lista_klinika : response
+            });
+        });
+    }
+
     render(){
         let clinics = null;
         if(this.state.showClinics){
@@ -390,6 +458,8 @@ class ClinicSearch extends React.Component {
                     generateTable={this.generateTableData(this.state.lista_klinika)}
                     generateOption = {this.generateOption(this.state.lista_tipova)}
                     change={this.changedInput}
+                    sortClinicName={this.sortClinicName}
+                    sortClinicAddress={this.sortClinicAddress}
                 />
             );
         }

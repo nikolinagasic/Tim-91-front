@@ -10,7 +10,10 @@ class PatientRate extends React.Component {
         this.state = {
             lista_pregleda_original : props.lista_pregleda,
             lista_pregleda : props.lista_pregleda,
-            options: props.options
+            options: props.options,
+
+            sortOrderTip : 'a',
+            sortOrderDate : 'a'
         };
     }
 
@@ -84,6 +87,70 @@ class PatientRate extends React.Component {
         });
     }
 
+    sortByDate = () => {
+        if(this.state.sortOrderDate === 'a'){
+            this.setState({
+                sortOrderDate: 'd'
+            })
+        }
+        else{
+            this.setState({
+                sortOrderDate: 'a'
+            })
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.context.token,
+            },
+            body: JSON.stringify(this.state.lista_pregleda)
+        };
+
+        fetch('http://localhost:8081/patient/sortOrderTermsDate/'+this.state.sortOrderDate, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            console.log(response);
+            this.setState({
+                lista_pregleda : response
+            });
+        });
+    }
+
+    sortByTip = () => {
+        if(this.state.sortOrderTip === 'a'){
+            this.setState({
+                sortOrderTip: 'd'
+            })
+        }
+        else{
+            this.setState({
+                sortOrderTip: 'a'
+            })
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.context.token,
+            },
+            body: JSON.stringify(this.state.lista_pregleda)
+        };
+
+        fetch('http://localhost:8081/patient/sortOrderTermsTip/'+this.state.sortOrderTip, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+            console.log(response);
+            this.setState({
+                lista_pregleda : response
+            });
+        });
+    }
+
     render(){
         return (
             <div id="a_rating_main_div">
@@ -121,9 +188,9 @@ class PatientRate extends React.Component {
                 <table className="a_rating_table_of_examinations">
                     <thead>
                         <tr>
-                            <th>Датум</th>
+                            <th onClick={this.sortByDate}>Датум</th>
                             <th>Доктор</th>
-                            <th>Тип прегледа</th>
+                            <th onClick={this.sortByTip}>Тип прегледа</th>
                             <th>Врста термина</th>
                         </tr>
                     </thead>
