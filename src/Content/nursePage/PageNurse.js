@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import "./PageNurse.css" 
 import ProfileNurse from './ProfileNurse'
-import Modal from "../Modal" 
+import Window from 'react-awesome-modal'
+import {UserContext} from '../../UserProvider'
+
 
 class PageNurse extends Component {
+  static contextType = UserContext;     // instanciram context
+
   constructor(props) {
     super(props);
     this.state = {
@@ -50,13 +54,22 @@ class PageNurse extends Component {
   clickVacation = (event) => {
     alert("Страница је у процесу израде");
   }
-
+  clickLogout = (event) => {
+    this.context.token = null;
+    this.context.user = null;
+    this.props.history.push({
+    pathname: '/login'
+    }); 
+  }
   clickZabrana = (polje) => {
     if (polje === 'mail') {
       alert('Није могуће мењати вредност поља е-поште.');  
     }
     else if (polje === 'klinika') {
       alert('Није могуће мењати вредност поља клинике.');  
+    }  
+    else if (polje === 'smena') {
+      alert('Није могуће мењати смену.');  
     }      
   }
 
@@ -130,35 +143,37 @@ class PageNurse extends Component {
   }
 
   sendChangedPassword = () => {
-    let password = document.getElementById("newPassword_input").value;
-    
-    if(password.length < 8){
-      alert('Лозинка мора садржати барем 8 карактера.');
-      return;
-    }
-    
-    const url = 'http://localhost:8081/nurse/changePassword/'+password;
-    const options = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
-      },
-    };
-
-    fetch(url, options)
+    let pass1 = document.getElementById('firstPassword_input1').value;
+      let pass2 = document.getElementById('firstPassword_input2').value;
+      
+      if(pass1.length < 8 || pass2.length < 8){
+        alert('Лозинка мора садржати минимално 8 карактера.');
+        return;
+      }
+      if(pass1 !== pass2){
+        alert('Поновите исту лозинку у оба поља.');
+        return;
+      }
+  
+      const url = 'http://localhost:8081/patient/changePassword/';
+      const options = {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          "Auth-Token": this.context.token
+        },
+        body: pass1
+      };
+  
+      fetch(url, options)
       .then(response => {
-        if(response.ok === true){
-          alert("Успешно сте изменили лозинку.");
-        }
-        else {
-          alert("Дошло је до грешке приликом измене лозинке");
-        }
-      });
+        console.log(response);
+        alert("Успешно промењена лозинка.");
 
-      this.setState({
-        modalPassword: false
-      }); 
+        this.setState({
+          modalPassword: false
+        })
+      });
   }
 
   changePassword = () => {
@@ -181,44 +196,55 @@ class PageNurse extends Component {
       let modalniSifra = null;
       if(this.state.modalIzmena){
         modalniIzmena = (
-          <Modal
-            className="modal"
-            show={this.state.modalIzmena}
-            close={(event) => this.closeModalHandler(event)}
-            send={this.sendChangeHandler}
-            header={this.state.headerText}
-            >
-              <form>
-                <p>Стара вредност:</p>
-                <input type="text"
-                  className="input_field" 
-                  value={this.state.staraVrednost}
-                  disabled></input>
-                <p>Нова вредност:</p>
-                <input type="text" 
-                  className="input_field"
-                  id="newValue_input"></input>
-              </form>
-          </Modal>);
+          <Window
+          visible={this.state.modalIzmena}
+          width="370"
+          height="250"
+          effect="fadeInUp"
+          onClickAway={() => this.closeModalHandler()}
+       >
+         
+          <form className="divModalSale">
+            <h4 className="h4Tittle">{this.state.headerText}</h4>
+            <div ><p>Стара вредност:</p>
+            <input type="text"
+              className="inputIzmena"
+              value={this.state.staraVrednost}
+              disabled></input>
+            <p>Нова вредност:</p>
+            <input type="text"
+              className="inputIzmena"
+              id="newValue_input"></input>
+            <button className="btnModalIzmena" onClick={this.sendChangeHandler}>Сачувај</button>
+            </div>
+          </form>
+        </Window>);
       }
 
       if(this.state.modalPassword){
         modalniSifra = (
-          <Modal
-            className="modal"
-            show={this.state.modalPassword}
-            close={(event) => this.closeModalHandler(event)}
-            send={this.sendChangedPassword}
-            header={"Промени лозинку"}
-            >
-              <form>
-                <p>Унесите нову вредност лозинке:</p>
-                <input type="password" 
-                  className="input_field"
-                  id="newPassword_input"></input>
-              </form>
-          </Modal>
-        );
+          <Window
+          visible={this.state.modalPassword}
+          width="370"
+          height="250"
+          effect="fadeInUp"
+          onClickAway={() => this.closeModalHandler()}
+       >
+          <form className="divModalSale">
+          <h4 className="h4Tittle">Измена лозинке</h4>
+          <div ><p>Унесите нову вредност лозинке:</p>
+          <input type="password"
+            className="inputIzmena"
+            id="firstPassword_input1"
+            ></input>
+          <p>Потврдите нову вредност лозинке:</p>
+          <input type="password"
+            className="inputIzmena"
+            id="firstPassword_input2"></input>
+          <button className="btnModalIzmena" onClick={this.sendChangedPassword}>Сачувај</button>
+          </div>
+        </form>
+        </Window> );
       }
 
 
@@ -240,6 +266,9 @@ class PageNurse extends Component {
             <li className="li_list"><a 
             id="vacation"
             onClick={this.clickVacation}> Годишњи одмор </a></li>
+            <li className="li_list"><a 
+              id="logout_d"
+              onClick={this.clickLogout}> Одјави се </a></li>
           </ul>
           
           <ProfileNurse

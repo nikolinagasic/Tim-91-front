@@ -70,7 +70,6 @@ class RegisterAdmin extends Component {
       
       let obj;      
       var url;
-
       if ( document.getElementById("clinic").checked === true) {
         url = 'http://localhost:8081/ccadmin/register_admin';
           obj = { 

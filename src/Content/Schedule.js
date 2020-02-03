@@ -40,7 +40,7 @@ class Schedule extends React.Component{
    }];
 
    //funkciju koja ce na klik dugmeta da omoguci zapocinjanje pregleda
-   //ovde jos treba prosledjivati info o lekaru i terminu
+   //ovde jos treba prosledjivati info o lekaru i terminu(u statu)
    clickStart = () => {
       console.log("ZAPOCET PREGLED");
       let patient_mail = document.getElementById("PatientMail").value;

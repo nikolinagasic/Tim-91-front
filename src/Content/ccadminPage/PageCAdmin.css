@@ -11,7 +11,10 @@
     font-size: medium;
 }
 
-
+#btnAddDiagnosisJ{
+    border-radius: 8px;
+    height: 20px;
+}
 
 table#tabProfileCAdmin {
     border-collapse: collapse;

@@ -28,7 +28,7 @@ const MedicalReviewEntry = (props) => {
                            <tr>
                                <td>
                                <td>Dijagnoza:</td>
-                               <td><input type="text" id="enterDijagnozaJ" name="enterDijagnozaJ"/></td>
+                               <td onClick={props.clickDiagnosisEntry}><input type="text" name="enterDiagnosisJ"/></td>
                                <td>Terapija:</td>
                                <td><input type="text" id="enterTerapijaJ" name="enterTerapijaJ"/></td>
                                </td>
