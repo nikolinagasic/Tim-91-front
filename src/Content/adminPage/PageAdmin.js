@@ -690,7 +690,6 @@ class PageAdmin extends Component {
                     isAppointmentTypes: false,
                     isRooms: false,
                     isListDoctors: false,
-                    isClinic: false
                     isClinic: false,
                     isReservation: false
                   });
