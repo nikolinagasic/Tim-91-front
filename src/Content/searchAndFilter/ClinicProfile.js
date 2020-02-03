@@ -18,7 +18,7 @@ class ClinicProfile extends React.Component{
             choosedDoctor: null, 
             idChoosedDoctor: null,
             isTermini: false,           // prikaz modalnog sa svim slobodnim terminima
-            isDetailTerm: false         // prikaz detalja o terminu   
+            isDetailTerm: false         // prikaz detalja o terminu  
         }
     }
 
@@ -30,11 +30,13 @@ class ClinicProfile extends React.Component{
                 let name = tableData[i].firstName;
                 let last_name = tableData[i].lastName;
                 let id_doctor = tableData[i].id;
+                let rating = tableData[i].rating;
+                rating = this.roundToTwo(rating);
                 res.push(
                     <tr>
                         <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
                         <td key={tableData[i].lastName}>{tableData[i].lastName}</td>
-                        <td key={tableData[i].rating}>{tableData[i].rating}</td>
+                        <td key={tableData[i].rating}>{rating}</td>
                         <td><button className="pogledaj_search_doctor" 
                             onClick={this.clickPogledaj.bind(this, name, last_name, id_doctor)}
                             >Погледај</button></td>
@@ -43,6 +45,10 @@ class ClinicProfile extends React.Component{
             }
         }
         return res;
+    }
+
+    roundToTwo(num) {    
+        return +(Math.round(num + "e+2")  + "e-2");
     }
 
     generateOption(listOptions) {
@@ -209,13 +215,14 @@ class ClinicProfile extends React.Component{
         fetch(url, options)
         .then(response => {
             console.log(response);
-            if(response){
+            if(response.ok){
                 // zatvori sve dijaloge
                 this.closeAllTermsDialog(); 
-                alert('Uspesno ste rezervisali termin.');
+                alert('Захтев успешно послат. О детаљима прегледа бићете обавештени путем адресе е-поште.');
             }
             else{
-                alert('Termin nije rezervisan, neko je pre Vas to uradio.');
+                this.closeAllTermsDialog();
+                alert('Захтев није успешно послат. Покушајте поново');
             }
         });
     }
@@ -338,6 +345,7 @@ class ClinicProfile extends React.Component{
                     // props
                     back={this.props.back}
                     lista_doktora={this.state.lista_doktora}
+                    predefinedTerm={this.props.predefinedTerm}
                     // generate
                     generateOption = {this.generateOption(this.state.lista_tipova)}
                     generateTable={this.generateTableDoctor(this.state.lista_doktora)}

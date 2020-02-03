@@ -4,7 +4,7 @@ div.a_div_clinic_profile{
     margin-left: 120px;
 }
 
-p#a_back_to_clinics{
+p.a_back_to_clinics {
     margin-top: 40px;
     margin-left: -48%;
     color: blue;
@@ -13,7 +13,20 @@ p#a_back_to_clinics{
     border-bottom: 0.5px solid #e2e2e2;
 }
 
-p#a_back_to_clinics:hover{
+p.a_back_to_clinics:hover{
+    color: rgba(0, 0, 255, 0.7);
+    text-decoration: underline;
+}
+
+p#a_click_unapredDef{
+    margin-top: 40px;
+    margin-left: 5%;
+    color: blue;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+p#a_click_unapredDef:hover{
     color: rgba(0, 0, 255, 0.7);
     text-decoration: underline;
 }
@@ -58,4 +71,44 @@ div#a_div_pretraga_clinicProfile{
 #aa_bodySearchDoctor{
     margin-left: 12%;
     margin-bottom: 100px;
+}
+
+table#a_table_predefinedTerm {
+    margin-top: 5%;
+    margin-left: 20%;
+    border-collapse: collapse;
+    width: 72%;
+}
+
+table#a_table_predefinedTerm th, table#a_table_predefinedTerm td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  height: 60px;
+}
+
+h1#a_h1_unapredDef{
+    margin-top: 3%;
+    margin-left: 5%;
+    text-decoration: underline;
+}
+
+button.a_rezervisi_unapredDef{
+    background-color: transparent;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    box-shadow: 1px 2px #e2e2e2;
+    font-family: 'Sofia';
+    font-size: 15px;
+    width: 90px;
+    height: 30px;
+    cursor: pointer;
+}
+
+button.a_rezervisi_unapredDef:hover{
+    background-color: #f1f1f1;
+    box-shadow: 1px 2px #cdcdcd;
+    width: 100px;
+    height: 35px;
+    font-size: 17px;
 }

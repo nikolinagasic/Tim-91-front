@@ -1,0 +1,54 @@
+div#a_mainDiv_patHistComp h2 {
+    text-decoration: underline;
+    margin-top: 5%;
+    margin-left: 24%;
+}
+table#a_tableClinic_patHistComp, table#a_tableDoctor_patHistComp {
+  border-collapse: collapse;
+  margin-left: 30%;
+  width: 60%;
+}
+
+table#a_tableClinic_patHistComp td, table#a_tableClinic_patHistComp th, 
+    table#a_tableDoctor_patHistComp td, table#a_tableDoctor_patHistComp th {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+div.a_modal_patientHistory{
+    text-align: center;
+}
+
+p.a_imePrz_modal_patHistory {
+  margin-top: 40px;
+}
+
+.a_input_modal_patHistory{
+  width: 150px;
+  height: 30px;
+  padding: 5px;
+  text-align: center;
+  border: 1px solid black;
+  background-color: #e1e1e1;
+  border-radius: 8px;
+  font-size: 17px;
+}
+
+.a_input_modal_patHistory:hover{
+  background-color: white;
+  border-color: #009933;
+}
+
+button.a_rateClinicDoctor_modal_patHistory{
+  vertical-align: bottom;
+  margin-top: 10%;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  width: 130px;
+  height: 40px;
+  background-color: #009933;
+  font-family: 'Sofia';
+  font-size: 17px;
+  cursor: pointer;
+}

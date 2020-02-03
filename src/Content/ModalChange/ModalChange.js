@@ -1,7 +1,7 @@
 import React from 'react';
 import './ModalChange.css';
 
-const modal = (props) => {
+const ModalChange = (props) => {
     return (
         <div className="mainDiv-modalChange">
             <div className="modalPass-wrapper"
@@ -26,4 +26,4 @@ const modal = (props) => {
     )
 }
 
-export default modal;
+export default ModalChange;
