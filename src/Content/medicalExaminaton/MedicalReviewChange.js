@@ -63,7 +63,7 @@ class MedicalReviewChange extends Component{
       return(
 
         <div>
-             <div className="divMedicalReviewJ" style={{
+             <div className="divMedicalReviewEntryJ" style={{
               display: this.props.show ? 'block' : 'none'
               }}>
                 <h3>Извештај лекара</h3>
@@ -80,11 +80,11 @@ class MedicalReviewChange extends Component{
                            </tr>
                            <tr>                     
                                <td>Дијагноза:</td>
-                               <td onClick={this.props.clickDiagnosisEntry}><input type="text" id="enterDiagnosisChangeJ" name="enterDiagnosisChangeJ" defaultValue={this.props.reviewData.diagnosis}/></td>                            
+                               <td ><input type="text" id="enterDiagnosisChangeJ" name="enterDiagnosisChangeJ" defaultValue={this.props.reviewData.diagnosis}/></td>                            
                            </tr>
                            <tr>                               
                                <td>Терапија:</td>
-                               <td onClick={this.props.clickCuresEntry}><textarea rows="2" id="enterTerapijaChangeJ" name="enterTerapijaChangeJ" defaultValue={this.props.reviewData.therapy}/></td>                               
+                               <td><textarea rows="2" id="enterTerapijaChangeJ" name="enterTerapijaChangeJ" defaultValue={this.props.reviewData.therapy}/></td>                               
                            </tr>
                            <tr>
                                <td><input type="submit" id="enterSubmitChangeJ" value="Сачувај измене" /></td>
