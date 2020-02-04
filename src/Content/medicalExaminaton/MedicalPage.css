@@ -154,7 +154,7 @@ table#tabMedicalRecord th , table#tabMedicalRecord td{
     border-radius: 8px;
     padding-left: 5px;
     margin-top: 4px;
-    margin-left: -50px;
+    margin-left: 0px;
 }
 
 .divMedicalReviewJ textarea {
@@ -165,7 +165,7 @@ table#tabMedicalRecord th , table#tabMedicalRecord td{
     border-radius: 8px;
     padding-left: 5px;
     margin-top: 4px;
-    margin-left: -50px;
+    margin-left: 0px;
 }
 
 #enterSubmitChangeJ{

@@ -18,6 +18,10 @@ import {L10n} from '@syncfusion/ej2-base';
  })
 
 class Schedule extends React.Component{
+
+     constructor(props) {
+         super(props);
+     }
     
     //type je podrzan samo u typescriptu a mi koristimo javascript
     //na stacku sam nasla resenje sa ovom check anotacijom
@@ -25,7 +29,7 @@ class Schedule extends React.Component{
     
     //u localData se nalaze podaci koji ce biti prikazani na kalendaru
     //povlacati ovo sa beka!!!!!!!!!
-   localData=[{
+  /* localData=[{
        Id:1,
        Subject: 'Pregled',
        StartTime: new Date(2019,4,7,6,15),
@@ -35,9 +39,30 @@ class Schedule extends React.Component{
    },{
        Id:2,
        Subject: 'Operacija',
-       StartTime: new Date(2019,4,17,6,0),
+       StartTime: new Date(2019,4,17,16,0),
        EndTime: new Date(2019,4,17,7,0)
-   }];
+   }];*/
+
+     //localData=this.state.localData;
+
+     changeLocalData = () =>{
+       var localData = [];
+       var forChangeList = this.props.listTerm;
+       for (var i = 0; i < forChangeList.length; i++){
+          var temp={
+            Id : forChangeList.id,
+            Subject : forChangeList.subject,
+            StartTime : new Date(forChangeList.startTime),
+            EndTime : new Date(forChangeList.endTime),
+            PatientMail : forChangeList.patient_mail
+          }
+          localData.push(temp);
+       }    
+       this.setState({localData : localData,
+                      ubaciPodatke : true})
+      }
+
+
 
    //funkciju koja ce na klik dugmeta da omoguci zapocinjanje pregleda
    //ovde jos treba prosledjivati info o lekaru i terminu(u statu)
@@ -47,7 +72,8 @@ class Schedule extends React.Component{
       console.log(patient_mail);
       this.props.history.push({
         pathname: '/medicalPage',
-        state: { detail: patient_mail }
+        state: { detail: patient_mail,
+                 id_doctor : this.props.idDoctor }
       })
 
    }
@@ -87,15 +113,6 @@ class Schedule extends React.Component{
                     style={{width: '100%'}}/></td>
              </tr>
              <tr>
-               <td className="e-textlabel">Others</td>
-               <td>
-                 <textarea id="Description" name="Description" className="e-field e-input" 
-                  rows={3} cols={50}
-                  style={{width: '100%', height: '60px', resize:'vertical'}}>
-                 </textarea>
-               </td>
-             </tr>
-             <tr>
                <button id= "buttonScheduleJ" onClick= {this.clickStart}
                 style={{width: '150%',rowsSpan: '2',borderRadius: '8px',fontSize: '17px'}} >
                  Zapocni 
@@ -107,10 +124,29 @@ class Schedule extends React.Component{
    }
 
     render() {
-        
+        var localData = [];
+        var forChangeList = this.props.listTerm;
+        for (var i = 0; i < forChangeList.length; i++){
+          var s1 = forChangeList[i].startTime;
+          var s2 = s1.split(",");
+          var s3 = forChangeList[i].endTime;
+          var s4 = s3.split(",");
+          var temp={
+            Id : forChangeList[i].id,
+            Subject : forChangeList[i].subject,
+            StartTime : new Date(s2[0],s2[1],s2[2],s2[3],s2[4]),
+            EndTime : new Date(s4[0],s4[1],s4[2],s4[3],s4[4]),
+            PatientMail : forChangeList[i].patient_mail
+          }
+          localData.push(temp);
+        }   
+        console.log("ovdee sam");
+        console.log(localData);
+
+
         return (
-          <ScheduleComponent currentView="Month" selectedDate={new Date(2019,4,8)}
-          eventSettings={{dataSource: this.localData}}
+          <ScheduleComponent currentView="Month" selectedDate={new Date(2020,8,8)}
+          eventSettings={{dataSource: localData}}
           editorTemplate={this.editorWindowTemplate.bind(this)}
           >
            <Inject services={[Day,Week,WorkWeek,Month,Agenda]} />

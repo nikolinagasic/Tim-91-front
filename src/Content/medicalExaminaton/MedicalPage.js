@@ -16,6 +16,7 @@ class MedicalPage extends Component {
     super(props);
     this.state = {
       patient_mail: this.props.location.state.detail,
+      doctor_id: this.props.location.state.id_doctor,
       isZdravstveniKarton: false,
       isIstorijaBolesti: false,
       isUnosIzvestaja: false,
@@ -33,8 +34,8 @@ class MedicalPage extends Component {
 
       medical_record: null,
       medical_review:null,
-      firstName: "jeka",
-      lastName: "lepasi",
+      firstName: null,
+      lastName: null,
       modalDialog: false,
       staraVrednost: '',
       changedValue: '',
@@ -59,7 +60,29 @@ class MedicalPage extends Component {
       prikaziIzvestaj: false,
       izmeniIzvestaj: false
     });
-    this.preuzmiKarton();
+    let mail = this.state.patient_mail;
+    const url = 'http://localhost:8081/medicalrecord/getNamePatient/' + mail;
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+    fetch(url, options)
+    .then(responseWrapped => responseWrapped.json())
+    .then(response => {
+        console.log("RESPONSE");
+        console.log(response);
+        let temp = response;
+        this.setState({
+             firstName : temp.firstName,
+             lastName : temp.lastName
+        });
+        this.preuzmiKarton();
+     });
+     
+
   }
 
   preuzmiKarton = () => {
@@ -270,7 +293,7 @@ class MedicalPage extends Component {
     let Diagnosis = document.getElementById("enterDiagnosisJ").value;
     let Therapy = document.getElementById("enterTerapijaJ").value;
     let mail = this.state.patient_mail;
-    let doctor_id = 3; //ovo postaviti dinamicki
+    let doctor_id = this.state.doctor_id; //ovo postaviti dinamicki
 
     let temp = {  //objekat koji saljemo na beck
       date: Datum,
@@ -483,8 +506,8 @@ class MedicalPage extends Component {
     });
 
      let mail = this.state.patient_mail;
-     let doctor_id = 3;  //ovo treba dinamicki
-     const url = 'http://localhost:8081/medicalrecord/getReviewsinRecord/'+ mail + "/3";
+     let doctor_id = this.state.doctor_id;  //ovo treba dinamicki
+     const url = 'http://localhost:8081/medicalrecord/getReviewsinRecord/'+ mail + "/" + doctor_id;
      console.log(url);
      const options = {
        method: 'GET',
@@ -776,7 +799,7 @@ class MedicalPage extends Component {
     if(this.state.izmeniIzvestaj){
       let d = new Date(this.state.medical_review.date);
       let dateForm = d.toDateString();
-      alert(dateForm);
+     // alert(dateForm);
       IzmenjenIzvestaj = (
         <MedicalReviewChange
            show={this.state.izmeniIzvestaj}

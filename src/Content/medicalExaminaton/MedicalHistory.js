@@ -19,7 +19,7 @@ const MedicalHistory= (props) => {
                  dugme = <button onClick={props.clickChangeReview}>{dozvola}</button>;
              }else{
                  dozvola = "преглед"
-                 dugme = <button onClick={props.clickChangeReview}>{dozvola}</button>;
+                 dugme = <button onClick={props.clickShowReview}>{dozvola}</button>;
              }
              let d = new Date(tableData[i].date);
              let dateTerm = d.toDateString();                                    
