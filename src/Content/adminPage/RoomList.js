@@ -13,7 +13,7 @@ const RoomList = (props) => {
           <p >Датум:</p>
         </td>
         <td>
-          <input className="dateSale" type="date" min="2019-12-20" max="2020-02-12"></input>    
+          <input id="date_room" className="dateSale" type="date" min="2019-12-20" max="2020-02-12"></input>    
         </td>
         <td></td>
       </table>

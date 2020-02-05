@@ -4,8 +4,15 @@ import SelectBox from "../SelectBox.js"
 
 
 const ScheduleDoctors = (props) => {
+  if (props.examination) {
+   var examination = (<h3>Заказивање прегледа</h3>);
+  } else {
+    var examination = (<h3>Заказивање операција</h3>);
+  }
+
     return (
       <div className="New_doctor_list_page">
+        {examination}
           <h4 className="h4Tittle">Изабери лекара</h4>    
 
         <table className="formSearch" name="findForm">

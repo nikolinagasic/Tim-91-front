@@ -27,7 +27,9 @@ class PageAdmin extends Component {
           isListDoctors: false,
           isClinic: false,
           isReservation: false,
+          isTermini: false,
     
+          term: null,
           modalIzmena: false,
           modalIzmenaKlinike: false,
           modalIzmenaTipa: false,
@@ -42,6 +44,7 @@ class PageAdmin extends Component {
           listTypes: null,
           listRooms: null,
           listTerms: null,
+          roomTermini: null,
           name_type: null,
           doctor: null,
           name_room: null,
@@ -170,7 +173,8 @@ class PageAdmin extends Component {
         modalIzmenaTipa: false,
         modalIzmenaDoktora: false,
         modalIzmenaSale: false,
-        isRooms: false
+        isRooms: false,
+        isTermini: false
       });
       }
   
@@ -644,14 +648,18 @@ class PageAdmin extends Component {
           
           let naziv = document.getElementById("name_room").value;
           let broj = document.getElementById("number_room").value;
+          let date = document.getElementById("date_room").value;
           if(!naziv){
             naziv = "~";
           }
           if(!broj){
               broj = "~";
+          } 
+          if (!date) {
+            date = -1;
           }
-          console.log(naziv+broj);
-          const url = 'http://localhost:8081/room/find/'+naziv+"/"+broj;
+          console.log(naziv+broj+date);
+          const url = 'http://localhost:8081/room/find/'+naziv+"/"+broj + "/"+date;
           const options = {
               method: 'POST',
               headers: {
@@ -671,6 +679,66 @@ class PageAdmin extends Component {
           });
           console.log(this.state.listDoctors);
         }
+        reserveRoom = (idr) => (event) => {
+          event.preventDefault;
+          let date = document.getElementById("date_room").value;
+
+          if(!date){
+            console.log("-1:"+date);
+            date = -1;
+          }else{
+            console.log(":"+date);
+            let dat = new Date(date);
+            date = dat.getTime();
+            console.log(":"+date);
+        }
+        console.log("id:"+this.state.term.id+" idr:"+idr+"date:"+date);
+          const url = 'http://localhost:8081/room/reserveRoom/'+this.state.term.id+'/'+idr+'/'+date;
+          const options = {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+          };
+          fetch(url, options) 
+          .then(response => {
+              if (response.ok) {
+                alert("Sala uspesno rezervisana.");
+                this.closeModalHandler();
+                this.clickReservation();
+                this.sendMail(date);
+              } else if (response.status == 404) {
+                alert("Doktor je zauzet u zadatom terminu.");
+              } else {
+                alert("Ova sala je u to vreme zauzeta. Izaberite drugi datum ili salu.");
+              }
+          });
+        } 
+        sendMail(date) {
+    console.log("salje"+this.state.term.id+date);
+      let  url = 'http://localhost:8081/clinicAdministrator/sendMail/'+this.state.term.id+'/'+date;
+      const options = {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8'
+        }
+      };
+
+      fetch(url, options)
+        .then(response => {
+          console.log(response.status);
+          if(response.ok){
+            alert("Poslati mejlovi.");
+          }
+          else{
+           alert("Nisu poslati mejlovi.");
+          }
+        });
+     
+
+        }
             clickProfile = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden";
                   this.setState({
@@ -681,7 +749,8 @@ class PageAdmin extends Component {
                     isRegister: false,
                     isRooms: false,
                     isClinic: false,
-                    isReservation: false
+                    isReservation: false,
+                    isTermini: false
                   });
                 
             }
@@ -710,7 +779,8 @@ class PageAdmin extends Component {
                   isRegister: false,
                   isRooms: false,
                   isReservation: false,
-                  isClinic: true
+                  isClinic: true,
+                  isTermini: false
               });
             });
             }
@@ -724,7 +794,8 @@ class PageAdmin extends Component {
                   isRegister: true,
                   isRooms: false,
                   isReservation: false,
-                  isClinic: false
+                  isClinic: false,
+                  isTermini: false
               });
             }
             clickLogout = () => {
@@ -759,12 +830,13 @@ class PageAdmin extends Component {
                 isProfileDoctor: false,
                 isRegister: false,
                 isRooms: false,
-                isClinic: false            
+                isClinic: false,
+                isTermini: false           
               });
               }); 
 
             }
-            clickRooms = (event) => { //////ovde
+            clickRooms = (term)=> (event) => { //////ovde
               document.getElementById("logo_img").style.visibility = "hidden"; 
               let klinika = this.state.cadmin.clinic;
               const url = 'http://localhost:8081/room/getByClinic/'+klinika;
@@ -780,9 +852,11 @@ class PageAdmin extends Component {
               .then(responseWrapped => responseWrapped.json())
               .then(response => {
                 console.log(response);
+                console.log("term"+term.start_term);
                 this.setState({
                   allRooms: response,
-                  listRooms: response,           
+                  listRooms: response,
+                  term: term,           
                   isListDoctors: false,
                   isAppointmentTypes: false,
                   isProfile: false,
@@ -790,7 +864,8 @@ class PageAdmin extends Component {
                   isRegister: false,
                   isRooms: true,
                   isReservation: true,
-                  isClinic: false 
+                  isClinic: false,
+                  isTermini: false
                 }); 
               });
 
@@ -818,7 +893,8 @@ class PageAdmin extends Component {
                   isRegister: false,
                   isRooms: false,
                   isReservation: false,
-                  isClinic: false            
+                  isClinic: false,
+                  isTermini: false           
 
                 }); 
             }); 
@@ -849,7 +925,8 @@ class PageAdmin extends Component {
                   isRegister: false,
                   isRooms: false,
                   isReservation: false,
-                  isClinic: false
+                  isClinic: false,
+                  isTermini: false
               }); 
             });
             }
@@ -878,7 +955,8 @@ class PageAdmin extends Component {
                         isRegister: false,
                         isRooms: false,
                         isReservation: false,
-                        isClinic: false
+                        isClinic: false,
+                        isTermini: false
                     }); 
                   });
             }
@@ -929,6 +1007,7 @@ class PageAdmin extends Component {
           <td key={tableData[i].name}>{tableData[i].name}</td>          
           <td > <button className="btn_pageAdmin_n" onClick={this.clickIzmenaSale(tableData[i].name,tableData[i].number)}>Измени</button></td>
           <td > <button className="btn_pageAdmin_n" onClick={this.deleteRoom(tableData[i].number,clinic)}>Обриши</button></td>
+          <td > <button className="btn_pageAdmin_n" onClick={this.reserveRoom(tableData[i].id)}>Резервиши</button></td>
           </tr>
           )
       }
@@ -938,7 +1017,7 @@ class PageAdmin extends Component {
       let res=[];
       let tableData = listTerms;
       for(var i =0; i < tableData.length; i++){
-        console.log(tableData[i]);
+        console.log(tableData[i].id);
         let vreme = tableData[i].start_term + '-'+tableData[i].end_term;
         let doktor = tableData[i].firstNameDoctor+' '+tableData[i].lastNameDoctor;
         let datum = new Date(tableData[i].date);
@@ -946,8 +1025,8 @@ class PageAdmin extends Component {
             <tr>
           <td key= {datum.toDateString()}>{datum.toDateString()}</td>
           <td key= {vreme}>{vreme}</td>
-          <td key={doktor}>{doktor}</td> 
-          <td > <button className="btn_pageAdmin_n" onClick={this.clickRooms}>Додели салу</button></td>       
+          <td key={doktor}>{doktor}</td>
+          <td > <button className="btn_pageAdmin_n" onClick={this.clickRooms(tableData[i])}>Додели салу</button></td>       
           </tr>
           )
       }
@@ -986,8 +1065,29 @@ class PageAdmin extends Component {
         })
       });
     }
+ /*   generateTerms = () => {
+      let res = [];
+        let listTerms = this.state.roomTermini;
+        if (listTerms != null) {
+            let tableData = listTerms;
+            for (var i = 0; i < tableData.length; i++) {
+                let date = tableData[i].date;
+                let vreme = tableData[i].start_term +'-'+tableData[i].end_term;
+                res.push(
+                    <tr>
+                        <td key={vreme}>{vreme}</td>
+                        <td> <button className="btn_pageAdmin_n" onClick={this.reserveRoom(date,tableData[i].start_term)}> Одабери </button></td>
+                    </tr>
+                )
+            }
+        }
+        return res;
+    }*/
   changePassword = () => {
       this.setState({modalPassword:true})
+  }
+  closeTermini() {
+    this.setState({ isTermini:false})
   }
   render() {
     let modalniSifra = null;
@@ -1237,6 +1337,33 @@ class PageAdmin extends Component {
         </ProfileDoctor>
         );
     }
+    let termini = null;
+    if(this.state.isTermini){
+        termini = (
+            <Window 
+                visible={this.state.isTermini}
+                width="450"
+                height="560"
+                effect="fadeInUp"
+                onClickAway={() => this.closeTermini()}
+            >
+                <div className="divModalSale">
+                    <h4 className="h4Tittle">Резервиши термин</h4>    
+                    <table className="New_sale_list">
+                        <thead>
+                            <tr >
+                                <th>Термин</th>
+                                <th>Потврда</th>
+                            </tr>
+                        </thead>
+                        <tbody className="tbody_pageAdmin_n">
+                            {this.generateTerms(this.state.roomTermini)}
+                        </tbody>
+                    </table>
+                </div>
+            </Window>
+        );
+    }
 
       return (
         <div className="main_div">
@@ -1295,6 +1422,7 @@ class PageAdmin extends Component {
         {rooms}
         {profileDoc}
         {reservation}
+        {termini}
         </div>
       );
     }
