@@ -16,6 +16,7 @@ class Navigation extends Component {
           patient: props.patient,
           isProfilePatient: true,
           isScheduleAppointment: false,
+          isScheduleSurgery: false,
           isDetailTerm: false,
           isTermini: false,
 
@@ -36,6 +37,7 @@ class Navigation extends Component {
         this.setState({
             isProfilePatient: true,
             isScheduleAppointment: false,
+            isScheduleSurgery: false,
             isDetailTerm: false
         });
     }
@@ -55,11 +57,12 @@ class Navigation extends Component {
         fetch(url, options)
         .then(responseWrapped => responseWrapped.json())
         .then(response => {
-  
+     
         this.setState({
             listDoctors: response,
             allDoctors: response,
             isScheduleAppointment: true,
+            isScheduleSurgery: false,
             isSurgery: false,
             isDetailTerm: false,
             isProfilePatient: false
@@ -68,13 +71,33 @@ class Navigation extends Component {
 
     }
     clickScheduleSurgery = (event) => {
+        let clinic = this.state.doctor.clinic;
+        console.log("klinika:"+clinic);
+        const url = 'http://localhost:8081/doctor/getDoctors/'+clinic;
+        const options = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Auth-Token": this.context.token
+            },
+        };
+
+        fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+       
         this.setState({
-            isScheduleAppointment: true,
+            listDoctors: response,
+            allDoctors: response,
+            isScheduleSurgery: true,
+            isScheduleAppointment: false,
             isSurgery: true,
             isDetailTerm: false,
             isProfilePatient: false
 
         });
+    });
     }
     clickIzaberiLekara =(id) => (event)=> {
 
@@ -137,8 +160,8 @@ class Navigation extends Component {
     }
     sendReserveTerm = () => { ////uvek rezervise
         console.log('usao u rezervaciju termina');
-
-        const url = 'http://localhost:8081/doctor/reserveTerm';
+        this.state.lista_termina = null;
+        const url = 'http://localhost:8081/doctor/reserveTermDoctor/'+this.state.patient.mail+'/'+!this.state.isSurgery;
         const options = {
             method: 'POST',
             headers: {
@@ -267,7 +290,8 @@ class Navigation extends Component {
 
     closeScheduleAppointment = (event) => {
         this.setState({
-            isScheduleAppointment: false
+            isScheduleAppointment: false,
+            isScheduleSurgery: false
         });
     }
     closeTermini = (event) => {
@@ -295,10 +319,26 @@ render() {
     let schedule = null;
     if (this.state.isScheduleAppointment) {
     schedule = (
+       
       <ScheduleDoctors
+      examination = {true}
       filterDoctors = {this.filterDoctors(this.state.allDoctors)}
       generateTableData  = {this.generateDoctors(this.state.listDoctors)}
       show = {this.state.isScheduleAppointment}  
+      list_box = {this.state.list_box}       
+      >
+    </ScheduleDoctors>
+    );
+}
+let surgery = null;
+    if (this.state.isScheduleSurgery) {
+    schedule = (
+        
+      <ScheduleDoctors
+      examination = {false}
+      filterDoctors = {this.filterDoctors(this.state.allDoctors)}
+      generateTableData  = {this.generateDoctors(this.state.listDoctors)}
+      show = {this.state.isScheduleSurgery}  
       list_box = {this.state.list_box}       
       >
     </ScheduleDoctors>
@@ -401,6 +441,7 @@ render() {
            {showDate}
            {showDetailTerm}
            {schedule}
+           {surgery}
         </td>
 
 
