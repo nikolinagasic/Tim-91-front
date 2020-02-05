@@ -2,15 +2,15 @@
     background: white;
     border: 1px solid #d0cccc;
     box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2), 0 7px 20px 0 rgba(0,0,0,0.17);
-    margin-left: 300px;
-    margin-top: -450px;
+    margin-left: 400px;
+    margin-top: -500px;
     transition: all .8s;
-    width: 45%;
+    width: 40%;
 }
 
 .modalPass-header {
     background: #e1e1e1;
-    height: 35px;
+    height: 60px;
     padding-left: 40px;
     padding-bottom: 20px;
     padding-top: 5px;
@@ -29,7 +29,7 @@
 
 .modalPass-footer {
     background: #e1e1e1;
-    height: 35px;
+    height: 60px;
     padding: 15px;
 }
 

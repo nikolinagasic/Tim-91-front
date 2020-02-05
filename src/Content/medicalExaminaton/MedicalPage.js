@@ -4,6 +4,11 @@ import Modal from "../Modal"
 import MedicalRecord from './MedicalRecord';
 import MedicalReviewEntry from './MedicalReviewEntry';
 import ModalAwesome from 'react-awesome-modal'
+import MedicalHistory from './MedicalHistory';
+import MedicalReview from './MedicalReview';
+import MedicalReviewChange from './MedicalReviewChange';
+import { differenceInCalendarWeeksWithOptions } from 'date-fns/esm/fp';
+
 
 
 class MedicalPage extends Component {
@@ -11,18 +16,26 @@ class MedicalPage extends Component {
     super(props);
     this.state = {
       patient_mail: this.props.location.state.detail,
+      doctor_id: this.props.location.state.id_doctor,
       isZdravstveniKarton: false,
       isIstorijaBolesti: false,
       isUnosIzvestaja: false,
       isUnosRecepta: false,
       isZakazi: false,
       prikaziKarton: false,
+      prikaziIzvestaj: false,
+      izmeniIzvestaj: false,
       isDiagnosis: false, //za modalni dijalog gde filtriram dijagnoze
-      list_diagnosis: null,
+      list_diagnosis: null, //lista dijagnoza za izbor
+      isCures: false, //za modalni dijalog gde vrsim izbor lekova
+      list_cures: null,   //lista svih lekova
+      list_therapy: [], //lista izabranih lekova
+      list_reviews: null, //lista izvestaja-istorija bolesti
 
       medical_record: null,
-      firstName: "jeka",
-      lastName: "lepasi",
+      medical_review:null,
+      firstName: null,
+      lastName: null,
       modalDialog: false,
       staraVrednost: '',
       changedValue: '',
@@ -32,6 +45,7 @@ class MedicalPage extends Component {
   }
 
   //VIDETI STA SA IMENOM I PREZIMENOM PACIJENTA-->traziti ih sa becka na osnovu mejla
+  //UBACITI IH I U REKORD???
 
   ClickZdravstveniKarton = (event) => {
     console.log("klik na karton");
@@ -42,9 +56,33 @@ class MedicalPage extends Component {
       isUnosIzvestaja: false,
       isUnosRecepta: false,
       isZakazi: false,
-      isDiagnosis: false  //prikaz dijaloga u okviru kog biram dijagnozu
+      isDiagnosis: false, //prikaz dijaloga u okviru kog biram dijagnozu
+      prikaziIzvestaj: false,
+      izmeniIzvestaj: false
     });
-    this.preuzmiKarton();
+    let mail = this.state.patient_mail;
+    const url = 'http://localhost:8081/medicalrecord/getNamePatient/' + mail;
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+    fetch(url, options)
+    .then(responseWrapped => responseWrapped.json())
+    .then(response => {
+        console.log("RESPONSE");
+        console.log(response);
+        let temp = response;
+        this.setState({
+             firstName : temp.firstName,
+             lastName : temp.lastName
+        });
+        this.preuzmiKarton();
+     });
+     
+
   }
 
   preuzmiKarton = () => {
@@ -210,7 +248,9 @@ class MedicalPage extends Component {
       isUnosIzvestaja: true,
       isUnosRecepta: false,
       isZakazi: false,
-      prikaziKarton: false
+      prikaziKarton: false,
+      prikaziIzvestaj: false,
+      izmeniIzvestaj: false
     });
     //preuzimam dijagnoze sa becka
     const url = 'http://localhost:8081/ccadmin/diagnosis';
@@ -236,20 +276,27 @@ class MedicalPage extends Component {
      
   }
 
+  //cuvam u bazi uneti izvestaj
   clickSaveEntry = (event) => {
     event.preventDefault();
     console.log("kliknuto na save");
     //preuzeti podatke sa forme i posalti na beck
     //za slanje na beck potrebni su mi jos mejl pacijenta i id doctora
-    let Date = document.getElementById("enterDatumJ").value;
+    let datum = document.getElementById("enterDatumJ").value;
+    if(!datum){
+      alert('Обавезан је унос датумa.');
+      return;
+    }
+    let dat = new Date(datum);
+    let Datum = dat.getTime();
     let MedicalResults = document.getElementById("enterNalazJ").value;
-    let Diagnosis = document.getElementById("enterDijagnozaJ").value;
+    let Diagnosis = document.getElementById("enterDiagnosisJ").value;
     let Therapy = document.getElementById("enterTerapijaJ").value;
     let mail = this.state.patient_mail;
-    let doctor_id = 3; //ovo postaviti dinamicki
+    let doctor_id = this.state.doctor_id; //ovo postaviti dinamicki
 
     let temp = {  //objekat koji saljemo na beck
-      date: Date,
+      date: Datum,
       medicalResults: MedicalResults,
       diagnosis: Diagnosis,
       therapy: Therapy,
@@ -290,6 +337,7 @@ class MedicalPage extends Component {
     this.setState({
       isDiagnosis: true
     });
+    
   }
 
   change = () => {              //promena input polja za naziv dijagnoze--->filtriranje
@@ -321,8 +369,6 @@ class MedicalPage extends Component {
           });
         }
       });
-    
-
   }
 
 
@@ -331,6 +377,7 @@ class MedicalPage extends Component {
     console.log("DIAGNOZEEEEEE"+this.state.list_diagnosis);
     let res = [];
     let tableData = this.state.list_diagnosis; //listu iz state preuzmi
+    console.log("TABLE"+tableData);
     if (tableData != null) {
       for (var i = 0; i < tableData.length; i++) {
         res.push(
@@ -340,22 +387,231 @@ class MedicalPage extends Component {
           </tr>
         )
       }
+
+     //preuzimanje indexa selectovanog reda tabele
+     var selectedRows = document.getElementById('table_diagJ'),rIndex;
+     console.log(selectedRows);
+     if(selectedRows!=null){
+         console.log(selectedRows);
+         for(var i=0; i<selectedRows.rows.length; i++){
+          selectedRows.rows[i].onclick = function(){
+           rIndex = this.rowIndex;
+           console.log(rIndex);
+           document.getElementById("filter_diagnosis_nameJ").value = this.cells[0].innerHTML;
+         }
+        }
+      }
     }
     return res;
   }
 
- 
+   //kada izaberemo dijagnozu
+   selectDiagnosis = (event) => {
+       event.preventDefault();
+       let diagnosisName = document.getElementById("filter_diagnosis_nameJ").value;
+       //alert(diagnosisName);
+       this.closeIsDiagnosis();
+       document.getElementById("enterDiagnosisJ").value = diagnosisName;
+       //sa becka uzimam lekove kojima se leci dijagnoza
+       const url = 'http://localhost:8081/ccadmin/curesByDiagnosis/'+ diagnosisName;
+       console.log(url);
+       const options = {
+         method: 'GET',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json;charset=UTF-8'
+         },
+       };
+   
+       fetch(url, options)
+         .then(responseWrapped => responseWrapped.json())
+         .then(response => {
+           console.log("RESPONSE");
+           console.log(response);
+           if (response.length > 0) {
+             this.setState({
+               list_cures: response
+             });
+           }
+         });
 
+   }
 
+   closeIsCures = () => {   //za zatvaranje modalnog
+    this.setState({
+      isCures: false
+    });
+  }
 
+  clickCuresEntry = () => {   //za modalni cures dijalog
+    this.setState({
+      isCures: true
+    });
+    
+  }
+
+   //generisemo tabelu gde je moguce cekirati zeljene lekove
+   generateTableOfCures = () => {
+      console.log("usao u generisanje");
+      console.log("LEKOVIIIII"+this.state.list_cures);
+      let res = [];
+      let tableData = this.state.list_cures; //listu iz state preuzmi
+      console.log("TABLE"+tableData);
+      if (tableData != null) {
+        for (var i = 0; i < tableData.length; i++) {  
+           let therapyItem = tableData[i].cure_name + " " + tableData[i].cure_password;                 
+           res.push(
+             <tr>
+                <td key={tableData[i].cure_name} >{tableData[i].cure_name}</td>
+                <td key={tableData[i].cure_password} >{tableData[i].cure_password}</td>
+                <td><input type="checkbox" name={therapyItem} onChange={this.onCheckChange}/></td>
+             </tr>
+           )
+         }
+      } 
+     return res;
+   }
+
+   //CHECKBOX IN REACT
+   onCheckChange = (e) => {
+     // alert(e.target.name);
+     //preuzete targete ubaci u listu list_therapy 
+     let listSelectedCures = this.state.list_therapy;
+     listSelectedCures.push(e.target.name);
+     this.setState({list_therapy:listSelectedCures});     
+   }
+
+   //kada se potvrdi izbor lekova, prebacujem lekove u textaera izvestaja
+   chooseSelected = () => {
+     let listSelectedCures = this.state.list_therapy;
+     document.getElementById("enterTerapijaJ").value = listSelectedCures;
+     this.closeIsCures();
+      
+   }   
 
 
   clickIstorijaBolesti = (event) => {
-    alert("CLICK NA ISTORIJU BOLESTI");
-    //izvuci sve izvestaje koji su u kartonu
-    //prikazati u tabeli->izmena 
+    //izvuci sa beka sve izvestaje koji su u kartonu i prikazati u tabeli
+    console.log("klik na istoriju bolesti");
+    document.getElementById("logo_img").style.visibility = "hidden";
+    this.setState({
+      isZdravstveniKarton: false,
+      isIstorijaBolesti: true,
+      isUnosIzvestaja: false,
+      isUnosRecepta: false,
+      isZakazi: false,
+      prikaziKarton: false,
+      prikaziIzvestaj: false,
+      izmeniIzvestaj: false
+    });
+
+     let mail = this.state.patient_mail;
+     let doctor_id = this.state.doctor_id;  //ovo treba dinamicki
+     const url = 'http://localhost:8081/medicalrecord/getReviewsinRecord/'+ mail + "/" + doctor_id;
+     console.log(url);
+     const options = {
+       method: 'GET',
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json;charset=UTF-8'
+       },
+     };
+ 
+     fetch(url, options)
+       .then(responseWrapped => responseWrapped.json())
+       .then(response => {
+         console.log("RESPONSE");
+         console.log(response);
+         if (response.length > 0) {
+           this.setState({
+             list_reviews: response
+           });
+         }
+       });
+
+  }
+  
+  //sa beka preuzimam izvestaj sa prosledjenim idijem i smestam ga u list_reviews
+  getMedicalReview = (number) =>{
+    console.log("HEREEE"+number);
+    const url = 'http://localhost:8081/medicalreview/getReview/'+ number;
+    console.log(url);
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+
+    fetch(url, options)
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        console.log("RESPONSE");
+        console.log(response);
+        if (response!=null) {
+          console.log("OVDE");
+          this.setState({
+             medical_review : response
+          });
+        }
+        this.setState({
+          prikaziIzvestaj : true,
+          isIstorijaBolesti : false
+        });
+       
+      });
+
   }
 
+
+  //u okviru istorije pregleda izabran je neki izvestaj i sada treba da ga prikazem
+  //na formi imam skriveno polje u koje upisujem id izabranog izvestaja
+  clickShowReview = (event) => {
+      event.preventDefault();
+      console.log("CLICK SHOW REVIEW");
+      let reviewId = document.getElementById("medicalHistoryReviewJ").value;
+      this.getMedicalReview(reviewId);
+  }
+
+  
+  //na osnovu id izvestaja uzimam ga sa beka kako bi ga mogla menjati
+   clickChangeReview = (event) =>{
+       event.preventDefault();
+       console.log("CLICK CHANGE REVIEW");
+       let reviewId = document.getElementById("medicalHistoryReviewJ").value;
+       const url = 'http://localhost:8081/medicalreview/getReview/'+ reviewId;
+       console.log(url);
+       const options = {
+         method: 'GET',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json;charset=UTF-8'
+         },
+       };
+   
+       fetch(url, options)
+         .then(responseWrapped => responseWrapped.json())
+         .then(response => {
+           console.log("RESPONSE");
+           console.log(response);
+           if (response!=null) {
+             console.log("OVDE");
+             this.setState({
+                medical_review : response
+             });
+           }
+           this.setState({
+             izmeniIzvestaj : true,
+             isIstorijaBolesti : false
+           });
+          
+         });       
+
+   }
+
+   
+  
 
   clickUnosRecepta = (event) => {
     alert("Radi se");
@@ -420,6 +676,7 @@ class MedicalPage extends Component {
           clickSaveEntry={this.clickSaveEntry}
           diagnosis={""}
           clickDiagnosisEntry={this.clickDiagnosisEntry}
+          clickCuresEntry={this.clickCuresEntry}
         >
         </MedicalReviewEntry>
       );
@@ -442,13 +699,17 @@ class MedicalPage extends Component {
             </div>
             <div className="filterDiagnosisJ">
                 <form className="tableDiagnosisJ">
-                <table>
+                <table id="table_diagOriginalJ">
                   <tr>
                      <td>Naziv dijagnoze:</td>
                      <td>
                          <input type="text" placeholder="Унесите..."
                             id="filter_diagnosis_nameJ"
-                            onChange={this.change}></input>
+                            onSelect={this.change}
+                            autoFocus></input>
+                     </td>
+                     <td>
+                       <button onClick={this.selectDiagnosis}>Izaberi</button>
                      </td>
                    </tr>
                 </table>
@@ -469,6 +730,89 @@ class MedicalPage extends Component {
         </ModalAwesome>
       );
     }
+
+    let CuresModal = null;  //modalni dijalog za odabir lekova
+    if(this.state.isCures){
+        CuresModal = (
+          <ModalAwesome
+            visible={this.state.isCures}
+            width="450"
+            height="460"
+            effect="fadeInUp"
+            onClickAway={() => this.closeIsCures()}
+          >
+             <div>
+                 <div className="filterDiagnosisHeaderJ">
+                    <h3>Izbor lekova za terapiju</h3>
+                 </div>
+                 <div className="filterDiagnosisJ">
+                   <form className="bodySearchDiagnosisJ">
+                     <table id="table_curesJ">
+                       <thead>
+                         <th>Naziv leka</th>
+                         <th>Sifra leka</th>
+                         <th><button onClick={this.chooseSelected}>Potvrdi izbor</button></th>
+                       </thead>
+                       <tbody>
+                         {this.generateTableOfCures()}
+                       </tbody>
+                     </table>
+                   </form>
+                 </div>
+             </div>
+          </ModalAwesome>      
+        );
+    }
+   
+    let HistoryPage = null;               //komponenta u okviru koje prikazujem izvestaje iz kartona pacijenta
+    if(this.state.isIstorijaBolesti){
+       //console.log("history page klik");
+       //console.log(this.state.list_reviews);
+       HistoryPage = (
+         <MedicalHistory
+            show={this.state.isIstorijaBolesti}
+            list_reviews = {this.state.list_reviews}
+            clickShowReview = {this.clickShowReview}
+            clickChangeReview = {this.clickChangeReview}
+         >
+         </MedicalHistory>
+       );
+    }
+
+    let PrikazanIzvestaj = null;         //prikazujem izvestaj samo za GLEDANJEE
+    if(this.state.prikaziIzvestaj){
+      //console.log("prikazujem izvestaj");
+      //console.log(this.state.medical_review);
+      let d = new Date(this.state.medical_review.date);
+      let dateForm = d.toDateString();
+      PrikazanIzvestaj = (
+        <MedicalReview
+           show={this.state.prikaziIzvestaj}
+           reviewData={this.state.medical_review}
+           dateForm={dateForm}
+        >
+        </MedicalReview>
+      );
+    }
+
+    let IzmenjenIzvestaj = null;
+    if(this.state.izmeniIzvestaj){
+      let d = new Date(this.state.medical_review.date);
+      let dateForm = d.toDateString();
+     // alert(dateForm);
+      IzmenjenIzvestaj = (
+        <MedicalReviewChange
+           show={this.state.izmeniIzvestaj}
+           reviewData={this.state.medical_review}
+           clickDiagnosisEntry={this.clickDiagnosisEntry}
+           clickCuresEntry={this.clickCuresEntry}
+           dateForm={dateForm}
+        >
+
+        </MedicalReviewChange>
+      );
+    }
+
 
     return (
       <div className="main_divJmedicalRecord">
@@ -495,6 +839,10 @@ class MedicalPage extends Component {
         {modalniUnosIzmenaKartona}
         {unosIzvestaja}
         {DiagnosisModal}
+        {CuresModal}
+        {HistoryPage}
+        {PrikazanIzvestaj}
+        {IzmenjenIzvestaj}
 
       </div>
     );

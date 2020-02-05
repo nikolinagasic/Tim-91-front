@@ -9,32 +9,28 @@ const MedicalReviewEntry = (props) => {
              <div className="divMedicalReviewEntryJ" style={{
               display: props.show ? 'block' : 'none'
               }}>
-                <h3>Izvestaj lekara</h3>
+                <h3>Извештај лекара</h3>
                 <form onSubmit={props.clickSaveEntry}>
                     <table>
                        <tbody>
                            <tr>
-                               <td>
-                               <td>Datum:</td>
-                               <td><input type="text" id="enterDatumJ" name="enterDatumJ" style={{marginLeft : "25px"}}/></td>
-                               </td>
+                               <td>Датум:</td>
+                               <td><input type="date" id="enterDatumJ" name="enterDatumJ" /></td>
                            </tr>
                            <tr>
-                              <td>
-                               <td>Nalaz:</td>
-                               <td><textarea rows="2" id="enterNalazJ" name="enterDatumJ" /></td>
-                               </td>
+                               <td>Налаз:</td>
+                               <td><textarea rows="2" id="enterNalazJ" name="enterNalazJ" /></td>
                            </tr>
                            <tr>
-                               <td>
-                               <td>Dijagnoza:</td>
-                               <td onClick={props.clickDiagnosisEntry}><input type="text" name="enterDiagnosisJ"/></td>
-                               <td>Terapija:</td>
-                               <td><input type="text" id="enterTerapijaJ" name="enterTerapijaJ"/></td>
-                               </td>
+                               <td>Дијагноза:</td>
+                               <td onClick={props.clickDiagnosisEntry}><input type="text" id="enterDiagnosisJ" name="enterDiagnosisJ"/></td>
                            </tr>
                            <tr>
-                               <td><input type="submit" id="enterSubmitJ" value="Sacuvaj"/></td>
+                               <td>Tерапија:</td>
+                               <td onClick={props.clickCuresEntry}><textarea rows="2" id="enterTerapijaJ" name="enterTerapijaJ"/></td>
+                           </tr>
+                           <tr>
+                               <td><input type="submit" id="enterSubmitJ" value="Сачувај"/></td>
                            </tr>
                        </tbody>
                     </table>

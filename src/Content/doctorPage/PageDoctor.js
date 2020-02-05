@@ -5,6 +5,7 @@ import PatientList from './PatientList'
 import Window from 'react-awesome-modal'
 import {UserContext} from '../../UserProvider'
 import Navigation from './Navigation'
+import Schedule from '../Schedule';
 
 
 class PageDoctor extends Component {
@@ -20,9 +21,12 @@ class PageDoctor extends Component {
         isCalendar: false,
         isVacation: false,
         isNavigation: false,
+        prikaziKalendar: false,
+        listaKalendar: [],
   
         allPatients: null,
         listPatients: null,
+        listScheduleTerms: null,
         modalIzmena: false,
         headerText: '',
         staraVrednost: '',
@@ -78,8 +82,63 @@ class PageDoctor extends Component {
     }
   
     clickCalendar = (event) => {
-      alert("Страница је у процесу израде");
+         let doctorId = this.state.doctor.id;
+         const url = 'http://localhost:8081/doctor/getTermShedule/' + doctorId;
+         const options = {
+           method: 'GET',
+           headers: {
+             'Accept': 'application/json',
+             'Content-Type': 'application/json;charset=UTF-8'
+           },
+         };
+      
+          fetch(url, options)
+            .then(responseWrapped => responseWrapped.json())
+            .then(response => {
+               console.log(response);
+               this.setState({
+                  listScheduleTerms: response,
+                  isProfile: false,
+                  isAppointment: false,
+                  isPatients: false,
+                  isCalendar: true,
+                  isVacation: false,
+                  isNavigation: false
+             }); 
+               this.parseTerm();
+            });
     }
+
+    parseTerm = () =>{
+       let forChangeList = this.state.listScheduleTerms;
+       let changedList = []; //sredjena lista termina za kalendar
+       for (var i = 0; i < forChangeList.length; i++){
+          var d = new Date(forChangeList[i].date);
+          var d1= d.toLocaleDateString();
+          var res = d1.split("/");  //1,8,2020
+          var id = forChangeList[i].id; //id dogadjaja
+          var subject = forChangeList[i].naziv_pregleda;
+          var datum = res[2]+","+res[1]+ "," + res[0]+",";
+          var startTime = datum+forChangeList[i].startTime;
+          var endTime = datum+forChangeList[i].endTime;
+          var patient_mail = forChangeList[i].patient_mail;
+          var tempObject={
+            id : id,
+            subject : subject,
+            startTime : startTime,
+            endTime : endTime,
+            patient_mail : patient_mail
+          }
+          changedList.push(tempObject);
+       }
+       console.log(changedList);
+       this.setState({
+         listaKalendar: changedList,
+         prikaziKalendar: true,
+       });
+    }
+
+
   
     clickVacation = (event) => {
       alert("Страница је у процесу израде");
@@ -383,6 +442,20 @@ class PageDoctor extends Component {
         </Navigation>
         );
     }
+
+    let kalendar = null;
+        if(this.state.prikaziKalendar){
+          kalendar = (
+             <Schedule
+                listTerm = {this.state.listaKalendar}
+                idDoctor = {this.state.doctor.id}
+                history =  {this.props.history}
+             >
+             </Schedule>
+          );
+    }
+
+
         return (
           <div className="main_div">
             <ul id="unordered_list" className="ul_list">
@@ -419,6 +492,7 @@ class PageDoctor extends Component {
             {modalniSifra}    
             {patients}
             {navigation}
+            {kalendar}
           </div>
         );
       }

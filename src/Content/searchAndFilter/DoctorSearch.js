@@ -31,11 +31,13 @@ class DoctorSearch extends Component {
                 let name = tableData[i].firstName;
                 let l_name = tableData[i].lastName;
                 let id_doctor = tableData[i].id;
+                let rating = tableData[i].rating;
+                rating = this.roundToTwo(rating);
                 res.push(
                     <tr>
                         <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
                         <td key={tableData[i].lastName}>{tableData[i].lastName}</td>
-                        <td key={tableData[i].rating}>{tableData[i].rating}</td>
+                         <td key={tableData[i].rating}>{rating}</td>
                         <td><button className="pogledaj_search_doctor" 
                             onClick={this.clickPogledaj.bind(this, name, l_name, id_doctor)}
                             >Погледај</button></td>
@@ -44,6 +46,10 @@ class DoctorSearch extends Component {
             }
         }
         return res;
+    }
+
+    roundToTwo(num) {    
+        return +(Math.round(num + "e+2")  + "e-2");
     }
 
     generateTerms = (listTerms) => {
@@ -150,6 +156,7 @@ class DoctorSearch extends Component {
         }
         
 
+        console.log(this.state.lista_lekara_original);
         const url = 'http://localhost:8081/doctor/searchDoctors/'+ime+"/"+prezime+"/"+ocena;
         const options = {
             method: 'POST',
@@ -173,7 +180,7 @@ class DoctorSearch extends Component {
     changeFilter = () => {
         let ocenaOd = document.getElementById("filter_doctor_ocenaOd").value;
         let ocenaDo = document.getElementById("filter_doctor_ocenaDo").value;
-        console.log(ocenaOd + "-" + ocenaDo);
+        // console.log(ocenaOd + "-" + ocenaDo);
 
         if(!ocenaOd){
             ocenaOd = "min";
@@ -239,13 +246,15 @@ class DoctorSearch extends Component {
         fetch(url, options)
         .then(response => {
             console.log(response);
-            if(response){
+            console.log(response.ok);
+            if(response.ok){
                 // zatvori sve dijaloge
                 this.closeAllTermsDialog(); 
-                alert('Uspesno ste rezervisali termin.');
+                alert('Захтев успешно послат. О детаљима прегледа бићете обавештени путем адресе е-поште.');
             }
             else{
-                alert('Termin nije rezervisan, neko je pre Vas to uradio.');
+                this.closeAllTermsDialog();
+                alert('Захтев није успешно послат. Покушајте поново.');
             }
         });
     }

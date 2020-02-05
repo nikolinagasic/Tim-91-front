@@ -30,6 +30,11 @@ li.li_list a:hover {
     color: white;
 }
 
+li.li_list a:active {
+    background-color: rgba(93, 109, 126, 0.514);
+    color: white;
+}
+
 div.main_div {
     margin-left: 5%;
 }
@@ -74,7 +79,7 @@ button#btnSifraPatient:hover{
 }
 
 #logout_patient{
-    margin-top: 97.5%;
+    margin-top: 68.5%;
     border-radius: 10px;
     text-align: center;
 }
