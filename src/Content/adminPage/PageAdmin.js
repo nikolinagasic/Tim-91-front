@@ -12,6 +12,7 @@ import ReserveList from "./ReserveList"
 import Window from 'react-awesome-modal'
 import {UserContext} from '../../UserProvider'
 import PredefinedExam from './PredefinedExam'
+import VacationRequests from './VacationRequests';
 
 class PageAdmin extends Component {
   static contextType = UserContext; 
@@ -19,7 +20,8 @@ class PageAdmin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          clinic: this.props.location.state.detail,
+          cadmin: this.props.location.state.detail,
+          clinic: this.props.location.state.detail.clinic,
           isProfile: false,
           isProfileDoctor: false,
           isRegister: false,
@@ -27,6 +29,7 @@ class PageAdmin extends Component {
           isRooms: false,
           isListDoctors: false,
           isClinic: false,
+          isVacation: false,
           
           // unapred_def
           isUnapredDef: false,
@@ -53,6 +56,7 @@ class PageAdmin extends Component {
           listTypes: null,
           listRooms: null,
           listTerms: null,
+          listVacation: null,
           roomTermini: null,
           name_type: null,
           doctor: null,
@@ -60,7 +64,8 @@ class PageAdmin extends Component {
           number_room: null,
           found: null,
           ime: null,
-          prezime: null
+          prezime: null,
+          idZahteva: null
         };
       }
     
@@ -184,7 +189,8 @@ class PageAdmin extends Component {
         modalIzmenaDoktora: false,
         modalIzmenaSale: false,
         isRooms: false,
-        isTermini: false
+        isTermini: false,
+        isRazlog: false
       });
       }
   
@@ -719,9 +725,9 @@ class PageAdmin extends Component {
                 this.clickReservation();
                 this.sendMail(date);
               } else if (response.status == 404) {
-                alert("Doktor je zauzet u zadatom terminu.");
+                alert("Доктор је заузет у изабраном термину.");
               } else {
-                alert("Ova sala je u to vreme zauzeta. Izaberite drugi datum ili salu.");
+                alert("Изабрана сала је изабраном термину заузета. Изаберите други датум или салу.");
               }
           });
         } 
@@ -761,7 +767,8 @@ class PageAdmin extends Component {
                     isListDoctors: false,
                     isClinic: false,
                     isReservation: false,
-                    isTermini: false
+                    isTermini: false,
+                    isVacation: false
                   });
                 
             }
@@ -792,7 +799,8 @@ class PageAdmin extends Component {
                   isListDoctors: false,
                   isReservation: false,
                   isClinic: true,
-                  isTermini: false
+                  isTermini: false,
+                  isVacation: false
               });
             });
             }
@@ -810,7 +818,8 @@ class PageAdmin extends Component {
                 isListDoctors: false,
                 isReservation: false,
                 isListDoctors: false,
-                isClinic: false
+                isClinic: false,
+                isVacation:false
 
               });
             }
@@ -847,7 +856,8 @@ class PageAdmin extends Component {
                 isRegister: false,
                 isRooms: false,
                 isClinic: false,
-                isTermini: false           
+                isTermini: false,
+                isVacation: false           
               });
               }); 
 
@@ -884,7 +894,8 @@ class PageAdmin extends Component {
                   isListDoctors: false,
                   isReservation: true,
                   isClinic: false,
-                  isTermini: false
+                  isTermini: false,
+                  isVacation: false
                 }); 
               });
 
@@ -913,7 +924,7 @@ class PageAdmin extends Component {
                   isRooms: false,
                   isListDoctors: false,
                   isReservation: false,
-
+                  isVacation: false,
                   isClinic: false,
                   isTermini: false           
            
@@ -948,7 +959,8 @@ class PageAdmin extends Component {
                   isListDoctors: true,
                   isReservation: false,
                   isClinic: false,
-                  isTermini: false
+                  isTermini: false,
+                  isVacation: false
               }); 
             });
             }
@@ -979,14 +991,94 @@ class PageAdmin extends Component {
                         isListDoctors: false,
                         isReservation: false,
                         isClinic: false,
-                        isTermini: false
+                        isTermini: false,
+                        isVacation: false
                     }); 
                   });
             }
-            click = (event) => {
-              alert("Страница је у процесу израде");
-            } 
+            clickVacation = (event) => {
+              document.getElementById("logo_img").style.visibility = "hidden"; 
+              console.log(this.state.cadmin.clinic);
+              const url = 'http://localhost:8081/clinicAdministrator/getVacation/'+this.state.cadmin.clinic;
+              const options = {
+                method: 'GET',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json;charset=UTF-8',
+                },
+              };
         
+              fetch(url, options)
+              .then(responseWrapped => responseWrapped.json())
+              .then(response => {
+                console.log(response);
+              this.setState({
+                listVacation: response,
+                isReservation: false,
+                isListDoctors: false,
+                isAppointmentTypes: false,
+                isProfile: false,
+                isProfileDoctor: false,
+                isRegister: false,
+                isRooms: false,
+                isClinic: false,
+                isTermini: false,
+                isVacation: true           
+              });
+              }); 
+            } 
+        odobriGodisnji = (id) => (event) => {
+          event.preventDefault;
+          const url = 'http://localhost:8081/clinicAdministrator/obradiZahtev/'+id+'/'+true+'/'+"null";
+          const options = {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+          };
+         
+          fetch(url, options)         
+          .then(responseWrapped => responseWrapped)
+          .then(response => {
+            if (response.ok) {
+              alert("Захтев успешно одобрен.")
+              this.clickVacation();
+            }
+          });
+         
+        }
+        razlogOdbijanja = (id) => (event) => {
+          this.setState({
+             isRazlog: true,
+             idZahteva: id
+            });
+        }
+        odbijGodisnji = (event) => {
+          let reason = document.getElementById("rzlg").value;
+          if (!reason) {
+            alert("Морате унети разлог одбијања.");
+          } else { console.log(reason+this.state.idZahteva);
+            const url = 'http://localhost:8081/clinicAdministrator/obradiZahtev/'+this.state.idZahteva+'/'+false+'/'+reason;
+            const options = {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8'
+              },
+            };
+          
+            fetch(url, options)         
+            .then(responseWrapped => responseWrapped)
+            .then(response => {
+              if (response.ok) {
+                alert("Захтев успешно одбијен.")
+                this.closeModalHandler()
+                this.clickVacation();
+              }
+            });
+         }
+        }
     generateTableData(allDoctors,clinic){
       let res=[];
       let tableData = allDoctors;
@@ -1000,6 +1092,26 @@ class PageAdmin extends Component {
           <td > <button className="btn_pageAdmin_n" 
             onClick={this.clickProfileDoctor(tableData[i].mail)}>Измени</button></td>
           <td > <button className="btn_pageAdmin_n" onClick={this.deleteDoctor(tableData[i].id,clinic)}>Обриши</button></td>
+          </tr>
+          )
+      }
+      return res;
+    } 
+    generateVacation(listVacation){
+      let res=[];
+      let tableData = listVacation;
+      console.log("usao"+tableData.length);
+      for(var i =0; i < tableData.length; i++){
+        let date1 = new Date(tableData[i].pocetak);
+        let date2 =new Date(tableData[i].kraj)
+          res.push(
+            <tr>
+          <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
+          <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
+          <td key={date1.toDateString()}>{date1.toDateString()}</td>
+          <td key={date2.toDateString()}>{date2.toDateString()}</td>
+          <td > <button onClick={this.odobriGodisnji(tableData[i].id)} className="btn_pageAdmin_n">Одобри</button></td>
+          <td > <button onClick={this.razlogOdbijanja(tableData[i].id)} className="btn_pageAdmin_n">Одбиј</button></td>
           </tr>
           )
       }
@@ -1087,7 +1199,8 @@ class PageAdmin extends Component {
                         isAppointmentTypes: false,
                         isRooms: false,
                         isListDoctors: false,
-                        isClinic: false
+                        isClinic: false,
+                        isVacation: false
                       });       
                   });
         
@@ -1577,6 +1690,40 @@ class PageAdmin extends Component {
             </AppointmentType>
        )
     }
+    let vacation = null;
+    if(this.state.isVacation){
+       vacation = (
+           <VacationRequests
+             
+              generateVacation = {this.generateVacation(this.state.listVacation)}
+            >
+            </VacationRequests>
+       )
+    }
+    let razlog = null;
+    if(this.state.isRazlog){
+       razlog = (
+           <Window
+           visible={this.state.isRazlog}
+           width="370"
+           height="200"
+           effect="fadeInUp"
+           onClickAway={() => this.closeModalHandler()}
+        >        
+           <form className="divModalSale">
+             <h4 className="h4Tittle">Разлог одбијања:</h4>
+            
+             <input type="text"
+               className="inputIzmena"
+               id="rzlg"
+               ></input>
+             <button className="btnModalIzmena" onClick={this.odbijGodisnji}>Пошаљи</button>
+            
+           </form>
+             
+            </Window>
+       )
+    }
     let rooms = null;
     if(this.state.isRooms){
        rooms = (
@@ -1684,7 +1831,7 @@ class PageAdmin extends Component {
           onClick={this.clickUnapredDef}> Дефиниши термине прегледа </a></li> 
           <li className="li_list"><a 
           id="profile" 
-          onClick={this.click}> Захтеви за одсуство </a></li>       
+          onClick={this.clickVacation}> Захтеви за одсуство </a></li>       
           <li className="li_list"><a 
             id="logout"
             onClick={this.clickLogout}> Одјави се </a></li>
@@ -1720,6 +1867,8 @@ class PageAdmin extends Component {
         {component_unapredDef}
         {reservation}
         {termini}
+        {vacation}
+        {razlog}
         </div>
       );
     }
