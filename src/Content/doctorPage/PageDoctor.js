@@ -6,6 +6,7 @@ import Window from 'react-awesome-modal'
 import {UserContext} from '../../UserProvider'
 import Navigation from './Navigation'
 import Schedule from '../Schedule';
+import VacationPage from './VacationPage';
 
 
 class PageDoctor extends Component {
@@ -141,7 +142,15 @@ class PageDoctor extends Component {
 
   
     clickVacation = (event) => {
-      alert("Страница је у процесу израде");
+      document.getElementById("logo_img").style.visibility = "hidden";
+      this.setState({
+        isProfile: false,
+        isAppointment: false,
+        isPatients: false,
+        isCalendar: false,
+        isVacation: true,
+        isNavigation: false
+      });
     }
     clickLogout = (event) => {
       this.context.token = null;
@@ -324,7 +333,7 @@ class PageDoctor extends Component {
       }
       console.log(firstName+lastName+lbo);
       if (!/^\d+$/.test(lbo) && lbo != "~") {
-        alert("ЛБО се састоји само из цифара.");
+        alert("ЛБО се састоји искључиво из цифара.");
       }
       else {
         const url = 'http://localhost:8081/patient/find/'+firstName+'/' + lastName + '/'+ lbo;
@@ -363,7 +372,40 @@ class PageDoctor extends Component {
       }
       return res;
     } 
-    
+    sendVacation = (event) => {
+      let odkad = document.getElementById("datefield").value;
+      let dokad = document.getElementById("datefield1").value;
+      if (!odkad || !dokad) {
+        alert("Одабери датуме.");
+      } else if (dokad<odkad) {
+        alert("Датум почетка одмора мора да буде пре датума краја одмора.");
+      } else {
+        odkad = new Date(odkad);
+        odkad = odkad.getTime();
+        dokad = new Date(dokad);
+        dokad = dokad.getTime();
+        const url = 'http://localhost:8081/doctor/reserveVacation/'+this.state.doctor.id;
+        const obj = {
+          "pocetak" : odkad,
+          "kraj" : dokad
+        }
+        const options = {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify(obj)
+          };
+          fetch(url, options) 
+          .then(response => {
+              if (response.ok) {
+                alert("Захтев успешно послат.");
+              } 
+          });
+      }
+    }
+
     render() {
         let modalniIzmena = null;
         if(this.state.modalIzmena){
@@ -454,6 +496,14 @@ class PageDoctor extends Component {
              </Schedule>
           );
     }
+    let vacation = null;
+        if(this.state.isVacation){
+           vacation = (
+               <VacationPage
+                 sendVacation = {this.sendVacation}>
+                </VacationPage>
+           )
+        }
 
 
         return (
@@ -493,6 +543,7 @@ class PageDoctor extends Component {
             {patients}
             {navigation}
             {kalendar}
+            {vacation}
           </div>
         );
       }
