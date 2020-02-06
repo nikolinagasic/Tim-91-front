@@ -5,8 +5,8 @@ const PatientList = (props) => {
   
     return(
     <div className="divProfileAdmine">
-    <table> 
-    <td>
+    <table > 
+    <td >
       <img id ="imgFindType" src={imgFind} alt="Пронађи"/>
       </td>
       <td>
@@ -27,14 +27,20 @@ const PatientList = (props) => {
       <td>
       <input className="dateSale" id="lbo_patient" type="text" onChange={props.findPatient}></input>
       </td>
+      <td>
+        <p>Град:</p>    
+      </td>
+      <td>
+      <input className="dateSale" id="city_patient" type="text" onChange={props.findPatient}></input>
+      </td>
     </table>
 
     <p/>
-    <table className="New_room_list">
+    <table className="New_room_list" id="tablewidth75">
       <thead>
         <tr>
           <th>ИМЕ</th>
-          <th>ПРЕЗИМЕ</th>
+          <th onClick={props.getSortirane}>ПРЕЗИМЕ</th>
           <th>ЛБО</th>
         </tr>
       </thead>
