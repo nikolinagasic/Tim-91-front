@@ -5,6 +5,8 @@ import Window from 'react-awesome-modal'
 import {UserContext} from '../../UserProvider'
 import Prescription from './Prescription'
 import PatientSorted from './PatientSorted'
+import VacationPage from '../doctorPage/VacationPage'
+import NurseSchedule from './NurseSchedule'
 
 
 class PageNurse extends Component {
@@ -22,6 +24,8 @@ class PageNurse extends Component {
 
       list_cures : null,     //lista lekova koji se overavaju
       list_patients : null,  
+      list_vacations : null, 
+      listKalendar : null,    //lista godisnjih sestre koju prikazujem na kalendaru
       modalIzmena: false,
       headerText: '',
       staraVrednost: '',
@@ -43,13 +47,7 @@ class PageNurse extends Component {
     });
   }
 
-  clickCalendar = (event) => {
-    alert("Страница је у процесу израде");
-  }
-
-  clickVacation = (event) => {
-    alert("Страница је у процесу израде");
-  }
+  
   clickLogout = (event) => {
     this.context.token = null;
     this.context.user = null;
@@ -265,6 +263,116 @@ class PageNurse extends Component {
 
    }
 
+   clickVacation = (event) =>{
+        console.log("klik na godisnji odmor");
+        document.getElementById("logo_img").style.visibility = "hidden"; 
+        this.setState({
+          isPrescription: false,
+          isProfile: false,
+          isPatients: false,
+          isCalendar: false,
+          isVacation: true
+        });
+   }
+
+   sendVacation = (event) =>{
+    let odkad = document.getElementById("datefield").value;
+    let dokad = document.getElementById("datefield1").value;
+    if (!odkad || !dokad) {
+      alert("Одабери датуме.");
+    } else if (dokad<odkad) {
+      alert("Датум почетка одмора мора да буде пре датума краја одмора.");
+    } else {
+      var odkad1 = new Date(odkad);
+      var odkad2 = odkad1.getTime();
+      var dokad1 = new Date(dokad);
+      var dokad2 = dokad1.getTime();
+      const url = 'http://localhost:8081/nurse/reserveVacationNurse/'+this.state.nurse.id;
+      const obj = {
+        "pocetak" : odkad2,
+        "kraj" : dokad2
+      }
+      const options = {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8'
+          },
+          body: JSON.stringify(obj)
+        };
+        fetch(url, options) 
+        .then(response => {
+            if (response.ok) {
+              alert("Захтев успешно послат.");
+            } 
+        });
+    }
+   }
+
+
+   //na klik kalendara prezimam dogadjaje sa beka
+   clickCalendar = (event) => {
+      console.log("klik na kalendar");
+      document.getElementById("logo_img").style.visibility = "hidden"; 
+      const url = 'http://localhost:8081/nurse/getScheduleVacation/' + this.state.nurse.id;
+      console.log(url);
+      const options = {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+      };
+  
+      fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+          console.log("RESPONSE");
+          console.log(response);
+          if (response.length > 0) {
+            this.setState({
+              list_vacations: response
+            });
+          }
+          this.parseTerm();
+        });
+
+   }
+
+   //pripremim dogadjaje za prikaz na kalendaru
+   parseTerm = () => {
+    let forChangeList = this.state.list_vacations;
+    let changedList = []; //sredjena lista termina za kalendar
+    for (var i = 0; i < forChangeList.length; i++){
+       var d = new Date(forChangeList[i].pocetak);
+       var d1= d.toLocaleDateString();
+       var res = d1.split("/"); 
+       var dat = new Date(forChangeList[i].kraj);
+       var d2 = dat.toLocaleDateString();
+       var res2 = d2.split("/");
+       var id = forChangeList[i].id; //id dogadjaja
+       var datum = res[2]+","+res[1]+ "," + res[0]+",";
+       var datum2 = res2[2]+","+res2[1]+ "," + res2[0]+","; 
+       var startTime = datum+ "0,0";
+       var endTime = datum2+"0,0";;
+       var tempObject={
+         id : id,
+         subject : "годишњи",
+         startTime : startTime,
+         endTime : endTime,
+       }
+       changedList.push(tempObject);
+    }
+    console.log(changedList);
+    this.setState({
+      listKalendar: changedList,
+      isPrescription: false,
+      isProfile: false,
+      isPatients: false,
+      isCalendar: true,
+      isVacation: false
+    });
+   }
 
 
 
@@ -348,6 +456,26 @@ class PageNurse extends Component {
         );
       }
 
+      let vacation = null;
+      if(this.state.isVacation){
+         vacation = (
+             <VacationPage
+               sendVacation = {this.sendVacation}>
+              </VacationPage>
+         );
+      }
+
+
+      let kalendar = null;
+      if(this.state.isCalendar){
+        kalendar = (
+           <NurseSchedule
+              listKalendar= {this.state.listKalendar}
+           >
+           </NurseSchedule>
+        );
+      }
+
 
       return (
         <div className="main_div">
@@ -385,6 +513,8 @@ class PageNurse extends Component {
           {modalniSifra}    
           {listaZaOveru}
           {sortiraniPacijenti}
+          {vacation}
+          {kalendar}
         </div>
       );
     }

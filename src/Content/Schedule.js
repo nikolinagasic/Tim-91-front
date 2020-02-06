@@ -134,8 +134,8 @@ class Schedule extends React.Component{
           var temp={
             Id : forChangeList[i].id,
             Subject : forChangeList[i].subject,
-            StartTime : new Date(s2[0],s2[1],s2[2],s2[3],s2[4]),
-            EndTime : new Date(s4[0],s4[1],s4[2],s4[3],s4[4]),
+            StartTime : new Date(s2[0],s2[1]-1,s2[2],s2[3],s2[4]),
+            EndTime : new Date(s4[0],s4[1]-1,s4[2],s4[3],s4[4]),
             PatientMail : forChangeList[i].patient_mail
           }
           localData.push(temp);
@@ -145,7 +145,7 @@ class Schedule extends React.Component{
 
 
         return (
-          <ScheduleComponent currentView="Month" selectedDate={new Date(2020,8,8)}
+          <ScheduleComponent currentView="Month" selectedDate={new Date(2020,7,8)}
           eventSettings={{dataSource: localData}}
           editorTemplate={this.editorWindowTemplate.bind(this)}
           >
