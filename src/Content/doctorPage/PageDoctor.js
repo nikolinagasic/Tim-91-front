@@ -52,7 +52,7 @@ class PageDoctor extends Component {
   
     clickPatients = (event) => {
       document.getElementById("logo_img").style.visibility = "hidden"; 
-              const url = 'http://localhost:8081/patient/getAll';
+              const url = 'http://localhost:8081/patient/getPatientsSorted';
               const options = {
                 method: 'GET',
                 headers: {
@@ -318,6 +318,7 @@ class PageDoctor extends Component {
       let firstName = document.getElementById("name_patient").value;
       let lastName = document.getElementById("lastName_patient").value;
       let lbo = document.getElementById("lbo_patient").value;
+      let city = document.getElementById("city_patient").value;
       if (!firstName) {
         firstName = "~";
       }
@@ -327,12 +328,15 @@ class PageDoctor extends Component {
       if (!lbo) {
         lbo = "~";
       }
-      console.log(firstName+lastName+lbo);
+      if (!city) {
+        city = "~";
+      }
+      console.log(firstName+lastName+lbo+city);
       if (!/^\d+$/.test(lbo) && lbo != "~") {
         alert("ЛБО се састоји искључиво из цифара.");
       }
       else {
-        const url = 'http://localhost:8081/patient/find/'+firstName+'/' + lastName + '/'+ lbo;
+        const url = 'http://localhost:8081/patient/find/'+firstName+'/' + lastName + '/'+ lbo + '/'+city;
           const options = {
               method: 'GET',
               headers: {
@@ -344,12 +348,35 @@ class PageDoctor extends Component {
           fetch(url, options)
           .then(responseWrapped => responseWrapped.json())
           .then(response => {
+            
               this.setState({
                   listPatients: response,
                   isPatients: true
               });
           });
       }
+    }
+    getSortirane = (listPatients) => (event) => {
+      const url = 'http://localhost:8081/patient/getSortByLastName';
+          const options = {
+              method: 'POST',
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json;charset=UTF-8',
+              },
+              body: JSON.stringify(listPatients)
+          };
+  
+          fetch(url, options)
+          .then(responseWrapped => responseWrapped.json())
+          .then(response => {
+            
+              this.setState({
+                  listPatients: response,
+                  isPatients: true
+              });
+          });
+      
     }
     generateTableData(listPatients){
       let res=[];
@@ -459,9 +486,11 @@ class PageDoctor extends Component {
         }
         let patients = null;
         if(this.state.isPatients){
+          console.log(this.state.listPatients);
            patients = (
                <PatientList
                   findPatient={this.findPatient}
+                  getSortirane={this.getSortirane(this.state.listPatients)}
             generateTableData = {this.generateTableData(this.state.listPatients)}
                 >
                 </PatientList>

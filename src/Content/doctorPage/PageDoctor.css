@@ -10,6 +10,9 @@ table#tabProfileDoctor {
     border-collapse: collapse;
     width: 60%;
 }
+#tablewidth75 {
+    width: 76%;
+}
 
 table#tabProfileDoctor th , table#tabProfileDoctor td{
     padding: 18px;
