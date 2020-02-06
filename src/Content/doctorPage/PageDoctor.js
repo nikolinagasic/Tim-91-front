@@ -36,10 +36,6 @@ class PageDoctor extends Component {
       };
     }
   
-    clickAppointment = (event) => {
-      alert("Страница је у процесу израде");
-    }
-  
     clickProfile = (event) => {
       console.log('kliknuo na profil');
       document.getElementById("logo_img").style.visibility = "hidden"; 
@@ -437,7 +433,8 @@ class PageDoctor extends Component {
           patient={this.state.patient}
           doctor={this.state.doctor}
           clickProfilePatient = {this.clickProfilePatient}
-          token = {this.context.token}       
+          token = {this.context.token}  
+          history =  {this.props.history}     
           >
         </Navigation>
         );
@@ -462,9 +459,6 @@ class PageDoctor extends Component {
               <li className="li_list"><a 
               id="profile" 
               onClick={this.clickProfile}> Профил корисника </a></li>
-              <li className="li_list"><a 
-              id="appointment"
-              onClick={this.clickАppointment}> Започни преглед </a></li>
               <li className="li_list"><a 
               id="patients" 
               onClick={this.clickPatients}> Листа пацијената </a></li>

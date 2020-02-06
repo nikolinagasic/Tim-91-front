@@ -8,6 +8,7 @@ import MedicalHistory from './MedicalHistory';
 import MedicalReview from './MedicalReview';
 import MedicalReviewChange from './MedicalReviewChange';
 import { differenceInCalendarWeeksWithOptions } from 'date-fns/esm/fp';
+import MedicalRecipe from './MedicalRecipe';
 
 
 
@@ -34,8 +35,11 @@ class MedicalPage extends Component {
 
       medical_record: null,
       medical_review:null,
+      diagnosis : null, //izabrana dijagnoza pri unosu izvestaja
+      therapy: null,    //izabrana terapija pri unosu izvestaja
       firstName: null,
       lastName: null,
+      doctor : null,
       modalDialog: false,
       staraVrednost: '',
       changedValue: '',
@@ -295,6 +299,11 @@ class MedicalPage extends Component {
     let mail = this.state.patient_mail;
     let doctor_id = this.state.doctor_id; //ovo postaviti dinamicki
 
+    this.setState({
+       diagnosis : Diagnosis,
+       therapy: Therapy
+    });
+
     let temp = {  //objekat koji saljemo na beck
       date: Datum,
       medicalResults: MedicalResults,
@@ -305,6 +314,7 @@ class MedicalPage extends Component {
     }
 
     console.log(temp);
+     
 
     const url = 'http://localhost:8081/medicalreview/save_review';
     const options = {
@@ -459,7 +469,7 @@ class MedicalPage extends Component {
       console.log("TABLE"+tableData);
       if (tableData != null) {
         for (var i = 0; i < tableData.length; i++) {  
-           let therapyItem = tableData[i].cure_name + " " + tableData[i].cure_password;                 
+           let therapyItem = tableData[i].cure_name + "," + tableData[i].cure_password;                 
            res.push(
              <tr>
                 <td key={tableData[i].cure_name} >{tableData[i].cure_name}</td>
@@ -614,9 +624,55 @@ class MedicalPage extends Component {
   
 
   clickUnosRecepta = (event) => {
-    alert("Radi se");
+     console.log("klik na unos recepta bolesti");
+     document.getElementById("logo_img").style.visibility = "hidden";
+     let diagnosis = this.state.diagnosis;
+     let therapy = this.state.therapy;
+     if(diagnosis===null){
+       alert("Mora se prvo popuniti izvestaj");
+       return;
+     }
+     if(therapy===null){
+      alert("Mora se prvo popuniti izvestaj");
+      return;
+     }
+
+     this.setState({
+        isZdravstveniKarton: false,
+        isIstorijaBolesti: false,
+        isUnosIzvestaja: false,
+        isUnosRecepta: true,
+        isZakazi: false,
+        prikaziKarton: false,
+        prikaziIzvestaj: false,
+        izmeniIzvestaj: false
+      });
+
   }
 
+
+  ClickDoctorPage = (event) =>{
+    console.log("click doctor page");
+    const url = 'http://localhost:8081/doctor/getDoctorById/' + this.state.doctor_id;
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+    fetch(url, options)
+    .then(responseWrapped => responseWrapped.json())
+    .then(response => {
+        console.log("RESPONSE");
+        console.log(response);
+        let temp = response;
+        this.props.history.push({
+          pathname: '/pagedoctor',
+          state: { detail: temp }               
+        })
+     });
+  }
 
 
   ClickZakazi = (event) => {
@@ -813,6 +869,21 @@ class MedicalPage extends Component {
       );
     }
 
+    let UnosRecepta = null;              //OVAJ DEO POPRAVIIIIII
+    if(this.state.isUnosRecepta){
+      let temp = this.state.therapy;
+      let therapy = temp.split(",");
+      UnosRecepta = (
+        <MedicalRecipe
+           show = {this.state.isUnosRecepta}
+           sifraDijagnoze = {this.state.diagnosis}
+           nazivLeka = {therapy[0]}
+           sifraLeka = {therapy[1]}
+           doctor_id = {this.state.doctor_id}
+        >
+        </MedicalRecipe>
+      );
+    }
 
     return (
       <div className="main_divJmedicalRecord">
@@ -832,6 +903,9 @@ class MedicalPage extends Component {
           <li className="li_listJmedicalRecord"><a
             id="id_zakaziJ"
             onClick={this.ClickZakazi}> Закажи </a></li>
+           <li className="li_listJmedicalRecord"><a
+            id="id_doctorPageJ"
+            onClick={this.ClickDoctorPage}> Moja почетна </a></li>
         </ul>
 
 
@@ -843,6 +917,7 @@ class MedicalPage extends Component {
         {HistoryPage}
         {PrikazanIzvestaj}
         {IzmenjenIzvestaj}
+        {UnosRecepta}
 
       </div>
     );

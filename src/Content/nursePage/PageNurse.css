@@ -37,3 +37,24 @@ button#btnSifraNurse:hover{
     border: 1px solid black;
     box-shadow: 3px 5px #e2e2e2;
 }
+
+.divPrescriptionJ{
+    margin-left: 25%;
+    padding-top: 1%;
+    font-size: large;
+}
+
+.divPrescriptionJ table{
+    border-collapse: collapse;
+    width: 80%;
+    margin-top: 15px;
+}
+
+.divPrescriptionJ table th, .divPrescriptionJ table td {
+    text-align: center;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    font-family: 'Sofia';
+    font-size: 17px;
+}
+

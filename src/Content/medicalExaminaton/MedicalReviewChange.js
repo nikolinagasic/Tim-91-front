@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ModalAwesome from 'react-awesome-modal';
+
 
 
 class MedicalReviewChange extends Component{

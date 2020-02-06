@@ -3,6 +3,8 @@ import "./PageNurse.css"
 import ProfileNurse from './ProfileNurse'
 import Window from 'react-awesome-modal'
 import {UserContext} from '../../UserProvider'
+import Prescription from './Prescription'
+import PatientSorted from './PatientSorted'
 
 
 class PageNurse extends Component {
@@ -18,6 +20,8 @@ class PageNurse extends Component {
       isCalendar: false,
       isVacation: false,
 
+      list_cures : null,     //lista lekova koji se overavaju
+      list_patients : null,  
       modalIzmena: false,
       headerText: '',
       staraVrednost: '',
@@ -26,10 +30,6 @@ class PageNurse extends Component {
     };
   }
 
-
-  clickPrescription = (event) => {
-    alert("Страница је у процесу израде");
-  }
 
   clickProfile = (event) => {
     console.log('kliknuo na profil');
@@ -41,10 +41,6 @@ class PageNurse extends Component {
       isCalendar: false,
       isVacation: false
     });
-  }
-
-  clickPatients = (event) => {
-    alert("Страница је у процесу израде");
   }
 
   clickCalendar = (event) => {
@@ -81,7 +77,8 @@ class PageNurse extends Component {
 
     if(naziv === 'ime'){
       this.setState({headerText: "Измена имена"});
-      this.setState({staraVrednost: this.state.nurse.firstName});
+      let ime = this.state.nurse.firstName;
+      this.setState({staraVrednost: ime});
     }
     else if(naziv === 'prezime'){
       this.setState({headerText: "Измена презимена"});
@@ -191,6 +188,86 @@ class PageNurse extends Component {
     }); 
   }
 
+
+  clickPrescription = (event) => {
+     console.log("Kliknuto na overu recepta");
+     document.getElementById("logo_img").style.visibility = "hidden"; 
+     const url = 'http://localhost:8081/medicalrecipe/getRecipes';
+     console.log(url);
+     const options = {
+       method: 'GET',
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json;charset=UTF-8'
+       },
+     };
+ 
+     fetch(url, options)
+       .then(responseWrapped => responseWrapped.json())
+       .then(response => {
+         console.log("RESPONSE");
+         console.log(response);
+         if (response.length > 0) {
+           this.setState({
+             list_cures: response
+           });
+         }
+         this.setState({
+          list_cures: response,
+          isPrescription: true,
+          isProfile: false,
+          isPatients: false,
+          isCalendar: false,
+          isVacation: false
+        });
+       });
+  }
+
+
+   clickOsveziStranicu = () =>{
+       this.setState({
+         isPrescription : false
+       });
+       this.clickPrescription();
+   }
+
+   clickPatients = (event) => {
+       console.log("klik na listu pacijenata");
+       document.getElementById("logo_img").style.visibility = "hidden"; 
+       const url = 'http://localhost:8081/patient/getPatientsSorted';
+       console.log(url);
+       const options = {
+         method: 'GET',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json;charset=UTF-8'
+         },
+       };
+   
+       fetch(url, options)
+         .then(responseWrapped => responseWrapped.json())
+         .then(response => {
+           console.log("RESPONSE");
+           console.log(response);
+           if (response.length > 0) {
+             this.setState({
+               list_patients: response
+             });
+           }
+           this.setState({
+            isPrescription: false,
+            isProfile: false,
+            isPatients: true,
+            isCalendar: false,
+            isVacation: false
+          });
+         });
+
+   }
+
+
+
+
   render() {
       let modalniIzmena = null;
       let modalniSifra = null;
@@ -247,6 +324,30 @@ class PageNurse extends Component {
         </Window> );
       }
 
+      let listaZaOveru = null;
+      if(this.state.isPrescription){
+         listaZaOveru = (
+           <Prescription
+               show = {this.state.isPrescription}
+               list_cures = {this.state.list_cures}
+               id_nurse = {this.state.nurse.id}
+               osveziStranicu = {this.clickOsveziStranicu}
+           >
+           </Prescription>
+         );
+      }
+
+      let sortiraniPacijenti = null;
+      if(this.state.isPatients){
+        sortiraniPacijenti = (
+          <PatientSorted
+              show = {this.state.isPatients}
+              list_patients = {this.state.list_patients}
+          >
+          </PatientSorted>
+        );
+      }
+
 
       return (
         <div className="main_div">
@@ -282,6 +383,8 @@ class PageNurse extends Component {
 
           {modalniIzmena} 
           {modalniSifra}    
+          {listaZaOveru}
+          {sortiraniPacijenti}
         </div>
       );
     }
