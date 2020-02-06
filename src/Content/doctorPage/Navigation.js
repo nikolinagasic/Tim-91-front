@@ -33,6 +33,7 @@ class Navigation extends Component {
         this.getTypes();
 
       }
+
     clickPatientProfile = (event) => {
         this.setState({
             isProfilePatient: true,
@@ -41,6 +42,22 @@ class Navigation extends Component {
             isDetailTerm: false
         });
     }
+
+     
+    clickStartMedicalExamintaion = (event) =>{
+        this.setState({
+            isProfilePatient: false,
+            isScheduleAppointment: false,
+            isDetailTerm: false
+        });
+        this.props.history.push({
+            pathname: '/medicalPage',
+            state: { detail: this.props.patient.mail,
+                     id_doctor : this.props.doctor.id }
+         });
+    }
+
+
     clickScheduleAppointment = (event) => {
         let clinic = this.state.doctor.clinic;
         console.log("klinika:"+clinic);
@@ -454,7 +471,7 @@ let surgery = null;
                  <button id="btnProfileDoc">Здравствени картон</button>
                 </tr>
                 <tr>
-                  <button id="btnProfileDoc">Започни преглед</button>
+                  <button onClick={this.clickStartMedicalExamintaion} id="btnProfileDoc">Започни преглед</button>
                 </tr>
                 <tr>
                   <button onClick={this.clickScheduleAppointment} id="btnProfileDoc">Закажи нови преглед</button>
