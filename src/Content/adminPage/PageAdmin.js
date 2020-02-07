@@ -999,7 +999,7 @@ class PageAdmin extends Component {
             clickVacation = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden"; 
               console.log(this.state.cadmin.clinic);
-              const url = 'http://localhost:8081/clinicAdministrator/getVacation/'+this.state.cadmin.clinic;
+              const url = 'http://localhost:8081/clinicAdministrator/getAllVacation/'+this.state.cadmin.clinic;
               const options = {
                 method: 'GET',
                 headers: {
@@ -1693,8 +1693,7 @@ class PageAdmin extends Component {
     let vacation = null;
     if(this.state.isVacation){
        vacation = (
-           <VacationRequests
-             
+           <VacationRequests       
               generateVacation = {this.generateVacation(this.state.listVacation)}
             >
             </VacationRequests>
