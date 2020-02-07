@@ -5,11 +5,10 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .divProfileAdmine{
-    margin-left: 38%;
+    margin-left: 36%;
     margin-top: 2%;
     font-size: large;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
 }
 .divModalSale {
     margin-left: 2%;
@@ -99,7 +98,7 @@ tbody.tbody_pageAdmin_n tr:hover {
 }
 .dateSale {
     height: 30px;
-    width: 120px;
+    width: 110px;
     border: none;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     border-bottom: 2px solid rgb(149,177,149);
