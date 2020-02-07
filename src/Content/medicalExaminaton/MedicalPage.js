@@ -9,6 +9,7 @@ import MedicalReview from './MedicalReview';
 import MedicalReviewChange from './MedicalReviewChange';
 import { differenceInCalendarWeeksWithOptions } from 'date-fns/esm/fp';
 import MedicalRecipe from './MedicalRecipe';
+import MedicalReserve from './MedicalReserve';
 
 
 
@@ -40,13 +41,66 @@ class MedicalPage extends Component {
       firstName: null,
       lastName: null,
       doctor : null,
+      patient : null,
       modalDialog: false,
       staraVrednost: '',
       changedValue: '',
       headerText: ''
 
     };
+    this.clickInit();
   }
+
+  
+  clickInit = (event) =>{
+    const url = 'http://localhost:8081/doctor/getDoctorById/' + this.state.doctor_id;
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+    fetch(url, options)
+    .then(responseWrapped => responseWrapped.json())
+    .then(response => {
+        console.log("RESPONSE");
+        console.log(response);
+        let temp = response;
+        this.setState({
+          doctor : temp
+        });
+        this.clickInitPatient();
+     });
+   }
+
+
+   clickInitPatient = (event) =>{
+    let mail = this.state.patient_mail;
+    const url = 'http://localhost:8081/medicalrecord/getNamePatient/' + mail;
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+    fetch(url, options)
+    .then(responseWrapped => responseWrapped.json())
+    .then(response => {
+        console.log("RESPONSE");
+        console.log(response);
+        let temp = response;
+        this.setState({
+             firstName : temp.firstName,
+             lastName : temp.lastName,
+             patient : temp
+        });
+     });
+
+   }
+
+
 
   //VIDETI STA SA IMENOM I PREZIMENOM PACIJENTA-->traziti ih sa becka na osnovu mejla
   //UBACITI IH I U REKORD???
@@ -81,7 +135,8 @@ class MedicalPage extends Component {
         let temp = response;
         this.setState({
              firstName : temp.firstName,
-             lastName : temp.lastName
+             lastName : temp.lastName,
+             patient : temp
         });
         this.preuzmiKarton();
      });
@@ -676,8 +731,19 @@ class MedicalPage extends Component {
 
 
   ClickZakazi = (event) => {
-    alert("Radi se");
-  }
+      console.log("klik na zakazi");
+      document.getElementById("logo_img").style.visibility = "hidden";
+      this.setState({
+        isZdravstveniKarton: false,
+        isIstorijaBolesti: false,
+        isUnosIzvestaja: false,
+        isUnosRecepta: false,
+        isZakazi: true,
+        prikaziKarton: false,
+        prikaziIzvestaj: false,
+        izmeniIzvestaj: false
+      });
+    } 
 
 
 
@@ -885,6 +951,17 @@ class MedicalPage extends Component {
       );
     }
 
+    let ZakaziPreglede = null;
+    if(this.state.isZakazi){
+       ZakaziPreglede = (
+           <MedicalReserve
+              doctor = {this.state.doctor}
+              patient = {this.state.patient}
+           >
+           </MedicalReserve>
+       );
+    }
+
     return (
       <div className="main_divJmedicalRecord">
         <ul id="unordered_list" className="ul_listJmedicalRecord ">
@@ -918,6 +995,7 @@ class MedicalPage extends Component {
         {PrikazanIzvestaj}
         {IzmenjenIzvestaj}
         {UnosRecepta}
+        {ZakaziPreglede}
 
       </div>
     );

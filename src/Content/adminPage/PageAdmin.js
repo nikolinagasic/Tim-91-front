@@ -857,7 +857,7 @@ class PageAdmin extends Component {
                 isRooms: false,
                 isClinic: false,
                 isTermini: false,
-                isVacation: false           
+                isVacation: false         
               });
               }); 
 
@@ -1402,7 +1402,9 @@ class PageAdmin extends Component {
       alert('Потребно је прво изабрати лекара.');
     }
   }
-    
+
+   
+    //lista termina  
     generateTableDataTerms(listTerms){
       let res=[];
       let tableData = listTerms;
@@ -1421,7 +1423,9 @@ class PageAdmin extends Component {
           )
       }
       return res;
-    }    
+    }   
+    
+    
     sendChangedPassword = () => {
       let pass1 = document.getElementById('firstPassword_input1').value;
       let pass2 = document.getElementById('firstPassword_input2').value;
@@ -1753,7 +1757,8 @@ class PageAdmin extends Component {
        reservation = (
            <ReserveList
               clickRooms = {this.clickRooms}
-              generateTableDataTerms = {this.generateTableDataTerms(this.state.listTerms)}
+              clinic = {this.state.clinic}
+              clickReservation = {this.clickReservation}
               >
             </ReserveList>
        )
