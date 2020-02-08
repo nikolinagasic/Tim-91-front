@@ -7,6 +7,8 @@ import Prescription from './Prescription'
 import PatientSorted from './PatientSorted'
 import VacationPage from '../doctorPage/VacationPage'
 import NurseSchedule from './NurseSchedule'
+import PatientList from '../doctorPage/PatientList';
+import PatientMedicalRecord from '../mainPage/PatientMedicalRecord';
 
 
 class PageNurse extends Component {
@@ -21,12 +23,14 @@ class PageNurse extends Component {
       isPatients: false,
       isCalendar: false,
       isVacation: false,
+      isProfilePatient: false,
 
       list_cures : null,     //lista lekova koji se overavaju
       list_patients : null,  
       list_vacations : null, 
       listKalendar : null,    //lista godisnjih sestre koju prikazujem na kalendaru
       modalIzmena: false,
+      medical_record: null,
       headerText: '',
       staraVrednost: '',
       changedValue: '',
@@ -43,7 +47,8 @@ class PageNurse extends Component {
       isProfile: true,
       isPatients: false,
       isCalendar: false,
-      isVacation: false
+      isVacation: false,
+      isProfilePatient: false
     });
   }
 
@@ -216,7 +221,8 @@ class PageNurse extends Component {
           isProfile: false,
           isPatients: false,
           isCalendar: false,
-          isVacation: false
+          isVacation: false,
+          isProfilePatient: false
         });
        });
   }
@@ -257,11 +263,134 @@ class PageNurse extends Component {
             isProfile: false,
             isPatients: true,
             isCalendar: false,
-            isVacation: false
+            isVacation: false,
+            isProfilePatient: false
           });
          });
 
    }
+
+   findPatient = (event)=> {
+    let firstName = document.getElementById("name_patient").value;
+    let lastName = document.getElementById("lastName_patient").value;
+    let lbo = document.getElementById("lbo_patient").value;
+    let city = document.getElementById("city_patient").value;
+    if (!firstName) {
+      firstName = "~";
+    }
+    if (!lastName) {
+      lastName = "~";
+    }
+    if (!lbo) {
+      lbo = "~";
+    }
+    if (!city) {
+      city = "~";
+    }
+    console.log(firstName+lastName+lbo+city);
+    if (!/^\d+$/.test(lbo) && lbo != "~") {
+      alert("ЛБО се састоји искључиво из цифара.");
+    }
+    else {
+      const url = 'http://localhost:8081/patient/find/'+firstName+'/' + lastName + '/'+ lbo + '/'+city;
+        const options = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+            },
+        };
+
+        fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+          
+            this.setState({
+                list_patients: response,
+                isPatients: true
+            });
+
+        });
+    }
+  }
+
+
+
+   getSortirane = (listPatients) => (event) => {
+    const url = 'http://localhost:8081/patient/getSortByLastName';
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+            },
+            body: JSON.stringify(listPatients)
+        };
+
+        fetch(url, options)
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+          
+            this.setState({
+                list_patients: response,
+                isPatients: true
+            });
+        });
+    
+  }
+
+  clickProfilePatient= (mail) => (event) => {
+    event.preventDefault;
+    document.getElementById("logo_img").style.visibility = "hidden"; 
+    const url = 'http://localhost:8081/medicalrecord/getRecord/' + mail;
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+    fetch(url, options)
+    .then(responseWrapped => responseWrapped.json())
+    .then(response => {
+       console.log("RESPONSE");
+       console.log(response);
+       this.setState({
+         medical_record: response,
+         isPrescription: false,
+         isProfile: false,
+         isPatients: false,
+         isCalendar: false,
+         isVacation: false,
+         isProfilePatient : true
+       });
+       console.log(this.state.medical_record);
+    });
+  }
+  
+
+
+
+
+  generateTableData(listPatients){
+    let res=[];
+    let tableData = listPatients;
+    for(var i =0; i < tableData.length; i++){
+        res.push(
+          <tr>
+        <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
+        <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
+        <td key={tableData[i].lbo}>{tableData[i].lbo}</td> 
+        <td > <button className="btn_pageAdmin_n" 
+            onClick={this.clickProfilePatient(tableData[i].mail)}>Профил</button></td>
+        </tr>
+        )
+    }
+    return res;
+  } 
+
+
+
 
    clickVacation = (event) =>{
         console.log("klik na godisnji odmor");
@@ -343,6 +472,7 @@ class PageNurse extends Component {
    parseTerm = () => {
     let forChangeList = this.state.list_vacations;
     let changedList = []; //sredjena lista termina za kalendar
+    if(forChangeList!=null){
     for (var i = 0; i < forChangeList.length; i++){
        var d = new Date(forChangeList[i].pocetak);
        var d1= d.toLocaleDateString();
@@ -363,6 +493,7 @@ class PageNurse extends Component {
        }
        changedList.push(tempObject);
     }
+  }
     console.log(changedList);
     this.setState({
       listKalendar: changedList,
@@ -372,8 +503,8 @@ class PageNurse extends Component {
       isCalendar: true,
       isVacation: false
     });
-   }
-
+   
+  }
 
 
   render() {
@@ -448,11 +579,12 @@ class PageNurse extends Component {
       let sortiraniPacijenti = null;
       if(this.state.isPatients){
         sortiraniPacijenti = (
-          <PatientSorted
-              show = {this.state.isPatients}
-              list_patients = {this.state.list_patients}
+          <PatientList
+          findPatient={this.findPatient}
+          getSortirane={this.getSortirane(this.state.list_patients)}
+          generateTableData = {this.generateTableData(this.state.list_patients)}
           >
-          </PatientSorted>
+          </PatientList>
         );
       }
 
@@ -476,6 +608,17 @@ class PageNurse extends Component {
         );
       }
 
+
+      let karton = null;
+      if(this.state.isProfilePatient){
+        karton = (
+          <PatientMedicalRecord
+             pat = {this.state.medical_record}
+             show = {this.state.isProfilePatient}
+          >
+         </PatientMedicalRecord>
+        );
+      }
 
       return (
         <div className="main_div">
@@ -513,6 +656,7 @@ class PageNurse extends Component {
           {modalniSifra}    
           {listaZaOveru}
           {sortiraniPacijenti}
+          {karton}
           {vacation}
           {kalendar}
         </div>

@@ -427,11 +427,9 @@ class MedicalPage extends Component {
       .then(response => {
         console.log("RESPONSE");
         console.log(response);
-        if (response.length > 0) {
           this.setState({
             list_diagnosis: response
           });
-        }
       });
   }
 
@@ -816,13 +814,13 @@ class MedicalPage extends Component {
         >
           <div>
             <div className="filterDiagnosisHeaderJ">
-              <h3>Izbor dijagnoze</h3>
+              <h3>Избор дијагнозе</h3>
             </div>
             <div className="filterDiagnosisJ">
                 <form className="tableDiagnosisJ">
                 <table id="table_diagOriginalJ">
                   <tr>
-                     <td>Naziv dijagnoze:</td>
+                     <td>Назив дијагнозе:</td>
                      <td>
                          <input type="text" placeholder="Унесите..."
                             id="filter_diagnosis_nameJ"
@@ -838,8 +836,8 @@ class MedicalPage extends Component {
               <form className="bodySearchDiagnosisJ">
                 <table id="table_diagJ">
                   <thead>
-                    <th>Naziv dijagnoze</th>
-                    <th>Sifra dijagnoze</th>
+                    <th>Назив дијагнозе</th>
+                    <th>Шифра дијагнозе</th>
                   </thead>
                   <tbody>
                     {this.generateTableOfDiagnosis()}
@@ -864,15 +862,15 @@ class MedicalPage extends Component {
           >
              <div>
                  <div className="filterDiagnosisHeaderJ">
-                    <h3>Izbor lekova za terapiju</h3>
+                    <h3>Избор лекова за терапију</h3>
                  </div>
                  <div className="filterDiagnosisJ">
                    <form className="bodySearchDiagnosisJ">
                      <table id="table_curesJ">
                        <thead>
-                         <th>Naziv leka</th>
-                         <th>Sifra leka</th>
-                         <th><button onClick={this.chooseSelected}>Potvrdi izbor</button></th>
+                         <th>Назив лека</th>
+                         <th>Шифра лека</th>
+                         <th><button onClick={this.chooseSelected}>Потврди избор</button></th>
                        </thead>
                        <tbody>
                          {this.generateTableOfCures()}

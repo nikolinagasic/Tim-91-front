@@ -58,7 +58,7 @@ class Prescription extends Component{
                  <td key={tableData[i].nazivLeka} >{tableData[i].nazivLeka}</td>
                  <td key={tableData[i].nacinKoriscenja}>{tableData[i].nacinKoriscenja}</td>
                  <td key={tableData[i].doctor_name}>{tableData[i].doctor_name}</td>
-                 <td><button id = "button" onClick={this.clickOveri.bind(this,i)}>Overi</button></td>
+                 <td><button id = "button" onClick={this.clickOveri.bind(this,i)}>Овери</button></td>
              </tr>
             )
          }
@@ -75,14 +75,14 @@ class Prescription extends Component{
                 <div className="divPrescriptionJ" style={{
                 display: this.props.show ? 'block' : 'none'
                 }}>
-                <h3>Overavanje recepata</h3>
+                <h3>Оверавање рецепата</h3>
                    <form className="bodyMedicalHistoryJ">
                       <table id="table_reviewsJ">
                         <thead>
-                           <th>Sifra leka</th>
-                           <th>Naziv leka</th>
-                           <th>Nacin koriscenja</th>
-                           <th>Propisao lekar</th>
+                           <th>Шифра лека</th>
+                           <th>Назив лека</th>
+                           <th>Начин коришћења</th>
+                           <th>Прописао лекар</th>
                            <th></th>
                         </thead>
                         <tbody>
