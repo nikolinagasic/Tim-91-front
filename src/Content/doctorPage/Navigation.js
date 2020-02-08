@@ -4,7 +4,6 @@ import Radium from 'radium'
 import PatientProfile from './PatientProfile'
 import Window from 'react-awesome-modal'
 import ScheduleDoctors from './ScheduleDoctors';
-import { Thumbnail } from 'react-bootstrap';
 
 class Navigation extends Component {
     static contextType = UserContext;     // instanciram context

@@ -10,6 +10,7 @@
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css">
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -21,8 +22,17 @@
     -->
     <title>Zdravstveni Informacioni Sistem</title>
     <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+
+    <style>
+      .leaflet-container {
+          height: 200px;
+          width: 620px;
+      }
+      </style>
   </head>
   <body>
+   
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>

@@ -4,12 +4,13 @@
     font-size: large;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-.divProfileAdmine{
+.divProfileAdmine {
     margin-left: 36%;
     margin-top: 2%;
     font-size: large;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 .divModalSale {
     margin-left: 2%;
     padding-top: 2%;
@@ -166,15 +167,28 @@ button.btn_pageAdmin_n:hover {
     cursor: pointer;
 }
 #btnReport {
-    margin-left: 18%;
+    margin-left: 20%;
     height: 40px;
-    width: 25%;
+    width: 200px;
     font-size: 90%;
     background-color: rgb(149,177,149);
     border: none;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 #btnReport:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+#btnCenovnik {
+    margin-left: 60%;
+    height: 40px;
+    width: 200px;
+    font-size: 90%;
+    background-color: rgb(149,177,149);
+    border: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#btnCenovnik:hover {
     background-color: #f1f1f1;
     cursor: pointer;
 }

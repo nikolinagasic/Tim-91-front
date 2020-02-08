@@ -13,6 +13,8 @@ import Window from 'react-awesome-modal'
 import {UserContext} from '../../UserProvider'
 import PredefinedExam from './PredefinedExam'
 import VacationRequests from './VacationRequests';
+import PriceList from './PriceList'
+import Report from './Report'
 
 class PageAdmin extends Component {
   static contextType = UserContext; 
@@ -30,6 +32,8 @@ class PageAdmin extends Component {
           isListDoctors: false,
           isClinic: false,
           isVacation: false,
+          isPriceList: false,
+          isReport: false,
           
           // unapred_def
           isUnapredDef: false,
@@ -65,7 +69,13 @@ class PageAdmin extends Component {
           found: null,
           ime: null,
           prezime: null,
-          idZahteva: null
+          idZahteva: null,
+          lng: null,
+          lat: null,
+          priceList: null,
+          ratingClinic: null,
+          ratingDoctor: null,
+          reportDetail: null
         };
       }
     
@@ -755,6 +765,52 @@ class PageAdmin extends Component {
      
 
         }
+        priceList  = (clinic) => (event) => {
+          document.getElementById("logo_img").style.visibility = "hidden";
+          console.log(clinic);
+          const url = 'http://localhost:8081/doctor/getDoctors/'+clinic;
+          const options = {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+          };
+          
+          fetch(url, options)
+          .then(responseWrapped => responseWrapped.json())
+          .then(response => {
+            this.setState({
+              allDoctors: response,
+              isClinic: false,
+              isPriceList: true
+          }); 
+        });
+        }
+        report  = (clinic) => (event) => {
+          document.getElementById("logo_img").style.visibility = "hidden";
+          console.log(clinic);
+          const url = 'http://localhost:8081/clinic/getRatings/'+clinic;
+          const options = {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+          };
+          
+          fetch(url, options)
+          .then(responseWrapped => responseWrapped.json())
+          .then(response => {
+            console.log(response[0]+"  "+response[1]);
+            this.setState({
+              ratingClinic: response[1],
+              ratingDoctor: response[0],
+              isClinic: false,
+              isReport: true
+          }); 
+        });
+        }
             clickProfile = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden";
                   this.setState({
@@ -768,11 +824,14 @@ class PageAdmin extends Component {
                     isClinic: false,
                     isReservation: false,
                     isTermini: false,
-                    isVacation: false
+                    isPriceList: false,
+                    isVacation: false,
+                    isReport: false
                   });
                 
             }
             clickClinic = (event) => {
+              this.reportDetail();
               document.getElementById("logo_img").style.visibility = "hidden"; 
               let name = this.context.user.clinic;
               console.log(name);
@@ -790,6 +849,7 @@ class PageAdmin extends Component {
               .then(response => {
                 this.setState({
                   clinic: response,
+                  isPriceList: false,
                   isUnapredDef: false,
                   isProfile: false,
                   isProfileDoctor: false,
@@ -800,14 +860,18 @@ class PageAdmin extends Component {
                   isReservation: false,
                   isClinic: true,
                   isTermini: false,
-                  isVacation: false
+                  isVacation: false,
+                  isReport: false
               });
+              console.log("dosao do");
+              this.geocode();         
+
             });
             }
             clickRegister = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden"; 
               this.setState({
-
+                isReport: false,
                 isTermini: false,
                 isUnapredDef: false,
                 isProfile: false,
@@ -819,6 +883,7 @@ class PageAdmin extends Component {
                 isReservation: false,
                 isListDoctors: false,
                 isClinic: false,
+                isPriceList: false,
                 isVacation:false
 
               });
@@ -849,6 +914,7 @@ class PageAdmin extends Component {
               this.setState({
                 listTerms: response,
                 isReservation: true,
+                isReport: false,
                 isListDoctors: false,
                 isAppointmentTypes: false,
                 isProfile: false,
@@ -857,7 +923,10 @@ class PageAdmin extends Component {
                 isRooms: false,
                 isClinic: false,
                 isTermini: false,
-                isVacation: false         
+                isPriceList: false,
+                isVacation: false,
+                isUnapredDef: false        
+
               });
               }); 
 
@@ -882,8 +951,10 @@ class PageAdmin extends Component {
                 this.setState({
                   allRooms: response,
                   listRooms: response,
-                  term: term,           
-                  isUnapredDef: false,               
+                  term: term,   
+                  isReport: false,        
+                  isUnapredDef: false,   
+                  isPriceList: false,            
                   isListDoctors: false,
                   isAppointmentTypes: false,
                   isProfile: false,
@@ -917,7 +988,9 @@ class PageAdmin extends Component {
                 this.setState({
                   listTypes: response,
                   isUnapredDef: false,
+                  isReport: false,
                   isProfile: false,
+                  isPriceList: false,
                   isProfileDoctor: false,
                   isRegister: false,
                   isAppointmentTypes: true,
@@ -951,6 +1024,8 @@ class PageAdmin extends Component {
                   allDoctors: response,
                   listDoctors: response,
                   isUnapredDef: false,
+                  isPriceList: false,
+                  isReport: false,
                   isProfile: false,
                   isProfileDoctor: false,
                   isRegister: false,
@@ -984,6 +1059,8 @@ class PageAdmin extends Component {
                         doctor: response,
                         isUnapredDef: false,
                         isProfile: false,
+                        isReport: false,
+                        isPriceList: false,
                         isProfileDoctor: true,
                         isRegister: false,
                         isAppointmentTypes: false,
@@ -1015,6 +1092,8 @@ class PageAdmin extends Component {
               this.setState({
                 listVacation: response,
                 isReservation: false,
+                isReport: false,
+                isPriceList: false,
                 isListDoctors: false,
                 isAppointmentTypes: false,
                 isProfile: false,
@@ -1097,6 +1176,23 @@ class PageAdmin extends Component {
       }
       return res;
     } 
+    generatePriceList(allDoctors){
+      let res=[];
+      let tableData = allDoctors;
+      console.log("usao"+tableData.length);
+      for(var i =0; i < tableData.length; i++){
+          res.push(
+            <tr>
+          <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
+          <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
+          <td key={tableData[i].tip}>{tableData[i].tip}</td>
+          <td key={tableData[i].price+"RSD"}>{tableData[i].price+"RSD"}</td>
+          <td key={tableData[i].rating}>{tableData[i].rating}</td>
+          </tr>
+          )
+      }
+      return res;
+    } 
     generateVacation(listVacation){
       let res=[];
       let tableData = listVacation;
@@ -1148,7 +1244,29 @@ class PageAdmin extends Component {
       }
       return res;
     }    
+    reportDetail = (event) => {
+      document.getElementById("logo_img").style.visibility = "hidden"; 
+      console.log(this.state.cadmin.clinic);
+      let date = new Date(new Date().setHours(1,0,0,0));
+      console.log(date);
+      const url = 'http://localhost:8081/clinic/getReport/'+this.state.cadmin.clinic+'/'+date.getTime();;
+      const options = {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      };
 
+      fetch(url, options)
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        console.log(response);
+      this.setState({
+        reportDetail : response      
+      });
+      });
+    }
     // unapred_def
   // ide na false, kada ove ostale stavljam na true (profil, odsustva ...)
   clickUnapredDef = () => {
@@ -1200,7 +1318,10 @@ class PageAdmin extends Component {
                         isRooms: false,
                         isListDoctors: false,
                         isClinic: false,
-                        isVacation: false
+                        isVacation: false,
+                        isPriceList: false,
+                        isReservation: false,
+                        isReport: false
                       });       
                   });
         
@@ -1483,6 +1604,28 @@ class PageAdmin extends Component {
   closeTermini() {
     this.setState({ isTermini:false})
   }
+  geocode(){
+    console.log("usao");
+    var location = this.state.clinic.address;
+    var key = "AIzaSyC_QzFcCy6guhPDfHhEohbYHXBndMIJ8FU";
+    const url = 'https://maps.googleapis.com/maps/api/geocode/json'+'?address='+location+'&key='+key;
+    const options = {
+      method: 'GET',
+      headers: {
+        
+      }
+    };
+    fetch(url, options)
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        console.log(response);
+        this.setState({ 
+          lng: response.results[0].geometry.location.lng,
+          lat: response.results[0].geometry.location.lat})
+    });
+    console.log(this.state.lng+" " +this.state.lat);
+
+  }
   render() {
     // unapred_def
     let component_unapredDef = null;
@@ -1682,6 +1825,16 @@ class PageAdmin extends Component {
             </DoctorList>
         )
     }
+    let priceList = null;
+    if(this.state.isPriceList){
+      console.log(this.state.clinic.name);
+        priceList = (
+            <PriceList
+              generatePriceList = {this.generatePriceList(this.state.allDoctors)}
+            >
+            </PriceList>
+        )
+    }
     let types = null; ///////ovde i dole i gore
     if(this.state.isAppointmentTypes){
        types = (
@@ -1811,7 +1964,17 @@ class PageAdmin extends Component {
             </Window>
         );
     }
-
+    let report = null;
+    if (this.state.isReport) {
+        report = (
+          <Report
+          ratingClinic = {this.state.ratingClinic}
+          ratingDoctor = {this.state.ratingDoctor}
+          reportDetail = {this.state.reportDetail}
+          >
+        </Report>
+        );
+    }
       return (
         <div className="main_div">
         <ul id="unordered_list" className="ul_list">
@@ -1857,6 +2020,10 @@ class PageAdmin extends Component {
           show = {this.state.isClinic} 
           clickIzmena={this.clickIzmenaKlinike}
           clickZabrana={this.clickZabrana}
+          priceList={this.priceList(this.state.cadmin.clinic)}
+          report = {this.report(this.state.cadmin.clinic)}
+          lng={this.state.lng}
+          lat={this.state.lat}
           >
         </ClinicProfile>
         {modalniSifra}
@@ -1873,6 +2040,8 @@ class PageAdmin extends Component {
         {termini}
         {vacation}
         {razlog}
+        {priceList}
+        {report}
         </div>
       );
     }
