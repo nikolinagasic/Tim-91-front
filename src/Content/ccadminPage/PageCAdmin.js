@@ -165,6 +165,32 @@ class PageCAdmin extends Component {
   }
 
 
+  clickRefresh = () => {
+    document.getElementById("logo_img").style.visibility = "hidden";
+    //preuzimam iz baze listu svih zahteva za registraciju
+    console.log('click zahtevi');
+    const url = 'http://localhost:8081/ccadmin/requests';
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    };
+
+    fetch(url, options)
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        // console.log("RESPONSE");
+        // console.log(response);
+        this.setState({
+          listRequest: response
+        });
+      });
+
+  }
+
+
   //kada se klikne na dugme odobri zahtev za registraciju
   clickHandler1 = (mail) => {
     console.log("KLIK NA DUGME")
@@ -201,6 +227,7 @@ class PageCAdmin extends Component {
               this.setState({
                 listRequest: response
               });
+              this.clickRefresh();
             });
 
         }
@@ -259,6 +286,7 @@ class PageCAdmin extends Component {
               this.setState({
                 listRequest: response
               });
+              this.clickRefresh();
             });
         }
       });
@@ -459,7 +487,7 @@ class PageCAdmin extends Component {
             this.state.ispostDiagnosis=false;
             this.setState({post_list:{}});
           }else{
-            alert("Vec postoji ta kombinacija");
+            alert("Комбинација већ постоји у систему");
           }
           this.clickDiagnosis();
         });
@@ -477,22 +505,22 @@ class PageCAdmin extends Component {
           show={this.state.modalShowing}
           close={(event) => this.closeModalHandler(event)}
           send={this.sendModalHandler} //posalji    
-          header={"Sifarnik dijagnoza i lekova"}     
+          header={"Шифарник дијагноза и лекова"}     
         >
           <form>
-            <p>Sifra leka:</p>
+            <p>Шифра лека:</p>
             <input type="text"
               className="input_field"
               id="curePassword_input"></input>
-            <p>Naziv leka:</p>
+            <p>Назив лека:</p>
             <input type="text"
               className="input_field"
               id="cureName_input"></input>
-            <p>Sifra dijagnoze:</p>
+            <p>Шифра дијагнозе:</p>
             <input type="text"
               className="input_field"
               id="diagnosisPassword_input"></input>
-            <p>Naziv dijagnoze:</p>
+            <p>Назив дијагнозе:</p>
             <input type="text"
               className="input_field"
               id="diagnosisName_input"></input>
@@ -530,10 +558,10 @@ class PageCAdmin extends Component {
            show={this.state.modalDeny}
            close={(event) => this.closeModalHandler(event)}
            send={this.sendRejectionReason}
-           header="Razlog odbijanja zahteva"
+           header="Разлог одбијања захтева"
         >
         <form>
-          <p>Unesi razlog:</p>
+          <p>Унеси разлог:</p>
           <input type="text"
              className="input_field"
              id="reasonValue_input"></input>
@@ -558,7 +586,8 @@ class PageCAdmin extends Component {
     if (this.state.isRegisterAdmin) {
       registerAdmin = (
         <RegisterAdmin
-          pat={this.state.ccadmin}>
+          pat={this.state.ccadmin}
+        >
         </RegisterAdmin>
       );
     }

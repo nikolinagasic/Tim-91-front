@@ -83,24 +83,24 @@ class MedicalRecipe extends Component{
             <div className="divMedicalRecipeEntryJ" style={{
              display: this.props.show ? 'block' : 'none'
              }}>
-             <h3>Recept za lek</h3>
+             <h3>Рецепт за лек</h3>
              <form onSubmit={this.clickSaveRecipe}>
                 <table>
                     <tbody>
                        <tr>
-                           <td>Sifra leka:</td>
+                           <td>Шифра лека:</td>
                            <td><input type="text" id="sifraLekaInputJ" name="sifraLekaInputJ" defaultValue={this.props.sifraLeka} disabled="true"/></td>
                        </tr>
                        <tr>
-                           <td>Sifra dijagnoze:</td>
+                           <td>Шифра дијагнозе:</td>
                            <td><input type="text" id="sifraDijagnozeInputJ" name="sifraDijagnozeInputJ" defaultValue={this.props.sifraDijagnoze} disabled="true"/></td>
                        </tr>
                        <tr>
-                           <td>Rp:</td>
+                           <td>Рп:</td>
                            <td><input type="text" id="nazivLekaInputJ" name="nazivLekaInputJ" defaultValue={this.props.nazivLeka} disabled="true"/></td>
                        </tr>
                        <tr>
-                           <td>S:</td>
+                           <td>С:</td>
                            <td>
                                <select id="selectInputJ" name="selectInputJ" >
                                   <option value="2x1">2x1</option>
@@ -115,7 +115,7 @@ class MedicalRecipe extends Component{
                        <tr>
                            <td></td>
                            <td></td>
-                           <td>Ime i prezime lekara:</td>
+                           <td>Име и презиме лекара:</td>
                        </tr>
                        <tr>
                            <td></td>
