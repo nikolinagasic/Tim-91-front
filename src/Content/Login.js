@@ -86,7 +86,7 @@ class Login extends Component {
             
             let isChangePass = false;
             // ako se prvi put loguje nek promeni sifru
-            if(response.firstLogin && response.role !== 'patient' && response.role !== 'ccadmin'){
+            if(response.firstLogin && response.role !== 'patient'){
               isChangePass = true;
               this.setState({
                 modalChangePassword: true
