@@ -102,8 +102,7 @@ class MedicalPage extends Component {
 
 
 
-  //VIDETI STA SA IMENOM I PREZIMENOM PACIJENTA-->traziti ih sa becka na osnovu mejla
-  //UBACITI IH I U REKORD???
+  
 
   ClickZdravstveniKarton = (event) => {
     console.log("klik na karton");
@@ -529,7 +528,7 @@ class MedicalPage extends Component {
              <tr>
                 <td key={tableData[i].cure_name} >{tableData[i].cure_name}</td>
                 <td key={tableData[i].cure_password} >{tableData[i].cure_password}</td>
-                <td><input type="checkbox" name={therapyItem} onChange={this.onCheckChange}/></td>
+                <td><input type="radio" name={therapyItem} onChange={this.onCheckChange}/></td>
              </tr>
            )
          }

@@ -1759,6 +1759,7 @@ class PageAdmin extends Component {
               clickRooms = {this.clickRooms}
               clinic = {this.state.clinic}
               clickReservation = {this.clickReservation}
+              
               >
             </ReserveList>
        )
