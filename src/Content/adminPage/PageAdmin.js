@@ -43,7 +43,6 @@ class PageAdmin extends Component {
           listaSatnica_ud: [],
 
           isReservation: false,
-
           isTermini: false,    
           term: null,
           modalIzmena: false,
@@ -511,6 +510,7 @@ class PageAdmin extends Component {
       }
         deleteDoctor = (id,clinic) => (event) => {
           event.preventDefault;
+          let brDoc = this.state.allDoctors.length;
           console.log("usao u brisanje: "+id+clinic);
           const url = 'http://localhost:8081/doctor/delete/'+id+'/'+clinic;
           const options = {
@@ -524,6 +524,11 @@ class PageAdmin extends Component {
           fetch(url, options) 
           .then(responseWrapped => responseWrapped.json())
           .then(response => {
+            if (brDoc == this.state.allDoctors.length)
+              alert("Не можете обрисати доктора који има заказане прегледе.");
+             else 
+              alert("Доктор успешно обрисан.");
+
               this.setState({
                   listDoctors: response,
                   isListDoctors: true
@@ -576,7 +581,8 @@ class PageAdmin extends Component {
       //    let name = this.state.staraVrednost;
   
           //saljemo na back da te promene sacuvamo u bazi
-          const url = 'http://localhost:8081/room/changeAttribute/'+changedName+"/"+newValue+"/"+this.state.staraVrednost[1];
+          console.log(changedName+newValue+this.state.staraVrednost);
+          const url = 'http://localhost:8081/room/changeAttribute/'+changedName+"/"+newValue+"/"+this.state.staraVrednost[0];
           const options = {
             method: 'POST',
             headers: {
@@ -589,11 +595,11 @@ class PageAdmin extends Component {
             console.log(response.ok);
             console.log(response)
             if(response.ok === true){
-              alert("Успешно сте изменили поље '" + changedName+"'.");
+              alert("Успешно сте изменили назив сале.");
               this.clickRooms();
             }
             else {
-              alert("Дошло је до грешке приликом измене поља '" + changedName + "'.");
+              alert("Сала под именом "+newValue+" већ постоји.");
             }
           });
       
@@ -648,10 +654,11 @@ class PageAdmin extends Component {
             });
             }
           }
-        deleteRoom = (number,clinic) => (event) => {
+        deleteRoom = (name,clinic) => (event) => {
           event.preventDefault;
-          console.log("usao u brisanje: "+number+clinic);
-          const url = 'http://localhost:8081/room/delete/'+number+'/'+clinic;
+          let brSoba = this.state.allRooms.length;
+          console.log("usao u brisanje: "+name+clinic);
+          const url = 'http://localhost:8081/room/delete/'+name+'/'+clinic;
           const options = {
             method: 'POST',
             headers: {
@@ -668,6 +675,10 @@ class PageAdmin extends Component {
                   allRooms: response,
                   isRooms: true
               });
+             if (brSoba == this.state.allRooms.length) {
+                alert("Сала не може бити обрисана јер се у њој одржава преглед.");
+            } else
+               alert("Сала успешно обрисана.");
           });
         }
         findRoom = (allRooms) => (event) => {
@@ -931,7 +942,7 @@ class PageAdmin extends Component {
               }); 
 
             }
-            clickRooms = (term)=> (event) => { //////ovde
+            clickRooms = (event) => { //////ovde
               document.getElementById("logo_img").style.visibility = "hidden"; 
               let klinika = this.context.user.clinic;
               const url = 'http://localhost:8081/room/getByClinic/'+klinika;
@@ -947,11 +958,9 @@ class PageAdmin extends Component {
               .then(responseWrapped => responseWrapped.json())
               .then(response => {
                 console.log(response);
-                console.log("term"+term.start_term);
                 this.setState({
                   allRooms: response,
                   listRooms: response,
-                  term: term,   
                   isReport: false,        
                   isUnapredDef: false,   
                   isPriceList: false,            
@@ -1102,7 +1111,8 @@ class PageAdmin extends Component {
                 isRooms: false,
                 isClinic: false,
                 isTermini: false,
-                isVacation: true           
+                isVacation: true ,
+                isUnapredDef: false         
               });
               }); 
             } 
@@ -1187,7 +1197,7 @@ class PageAdmin extends Component {
           <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
           <td key={tableData[i].tip}>{tableData[i].tip}</td>
           <td key={tableData[i].price+"RSD"}>{tableData[i].price+"RSD"}</td>
-          <td key={tableData[i].rating}>{tableData[i].rating}</td>
+          <td key={Math.round((tableData[i].rating + Number.EPSILON) * 100) / 100}>{Math.round((tableData[i].rating + Number.EPSILON) * 100) / 100}</td>
           </tr>
           )
       }
@@ -1228,17 +1238,19 @@ class PageAdmin extends Component {
       }
       return res;
     } 
+    
     generateTableDataRooms(listRooms,clinic){
       let res=[];
       let tableData = listRooms;
       for(var i =0; i < tableData.length; i++){
+        let date = new Date(tableData[i].first_free_date)
           res.push(
             <tr>
           <td key= {tableData[i].number}>{tableData[i].number}</td>
-          <td key={tableData[i].name}>{tableData[i].name}</td>          
+          <td key={tableData[i].name}>{tableData[i].name}</td>   
+          <td  key={date.toDateString()}>{date.toDateString()}</td>        
           <td > <button className="btn_pageAdmin_n" onClick={this.clickIzmenaSale(tableData[i].name,tableData[i].number)}>Измени</button></td>
-          <td > <button className="btn_pageAdmin_n" onClick={this.deleteRoom(tableData[i].number,clinic)}>Обриши</button></td>
-          <td > <button className="btn_pageAdmin_n" onClick={this.reserveRoom(tableData[i].id)}>Резервиши</button></td>
+          <td > <button className="btn_pageAdmin_n" onClick={this.deleteRoom(tableData[i].name,clinic)}>Обриши</button></td>
           </tr>
           )
       }
@@ -1580,30 +1592,14 @@ class PageAdmin extends Component {
         })
       });
     }
- /*   generateTerms = () => {
-      let res = [];
-        let listTerms = this.state.roomTermini;
-        if (listTerms != null) {
-            let tableData = listTerms;
-            for (var i = 0; i < tableData.length; i++) {
-                let date = tableData[i].date;
-                let vreme = tableData[i].start_term +'-'+tableData[i].end_term;
-                res.push(
-                    <tr>
-                        <td key={vreme}>{vreme}</td>
-                        <td> <button className="btn_pageAdmin_n" onClick={this.reserveRoom(date,tableData[i].start_term)}> Одабери </button></td>
-                    </tr>
-                )
-            }
-        }
-        return res;
-    }*/
+
   changePassword = () => {
       this.setState({modalPassword:true})
   }
   closeTermini() {
     this.setState({ isTermini:false})
   }
+ 
   geocode(){
     console.log("usao");
     var location = this.state.clinic.address;
@@ -1627,6 +1623,8 @@ class PageAdmin extends Component {
 
   }
   render() {
+
+
     // unapred_def
     let component_unapredDef = null;
     if(this.state.isUnapredDef){
@@ -1911,8 +1909,7 @@ class PageAdmin extends Component {
            <ReserveList
               clickRooms = {this.clickRooms}
               clinic = {this.state.clinic}
-              clickReservation = {this.clickReservation}
-              
+              clickReservation = {this.clickReservation}             
               >
             </ReserveList>
        )

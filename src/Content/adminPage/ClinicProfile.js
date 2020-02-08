@@ -42,10 +42,10 @@ const ClinicProfile = (props) => {
         </tr>
         <tr>
           <th>Оцена</th>
-          <td onClick={props.clickZabrana.bind(this, 'ocena')}>{props.clinic.rating}</td>
+          <td onClick={props.clickZabrana.bind(this, 'ocena')}>{Math.round((props.clinic.rating + Number.EPSILON) * 100) / 100}</td>
         </tr>
       </table>
-      <div style={{ width: "40vw", height: "30vh" }}>
+      <div className="mape" style={{ width: "40vw", height: "30vh" }}>
       <GoogleMapReact
       bootstrapURLKeys={{
         key: "AIzaSyC_QzFcCy6guhPDfHhEohbYHXBndMIJ8FU", 

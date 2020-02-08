@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import RoomList from './RoomList';
+import Rooms from './Rooms';
 import Window from 'react-awesome-modal';
 import ModalAwesome from 'react-awesome-modal';
+import Calendar from './Calendar'
 
 class ReserveList extends Component{
   
@@ -21,7 +22,10 @@ class ReserveList extends Component{
           changedValue: '',
           allDoctors: null,           //svi slobodni lekari 
           selectedDoctors: [],       //izabrani lekari
-          modalDodelaLekara: false
+          modalDodelaLekara: false,
+          listaKalendar: null,
+          prikaziKalendar: false,
+          listRoomTerms:null,
       };
    }
 
@@ -99,7 +103,7 @@ class ReserveList extends Component{
       console.log(exam);
       let temp = "";
       if(exam === false){    //dugme iscrtavam samo ako imam listu zahteva za operaciju
-        temp = <button onClick={this.clickAllDoctors.bind(this,tableData[i])}>Dodeli lekara</button>
+        temp = <button  className="btn_pageAdmin_n" onClick={this.clickAllDoctors.bind(this,tableData[i])}>Dodeli lekara</button>
       }
      
         res.push(
@@ -107,7 +111,7 @@ class ReserveList extends Component{
              <td key= {datum.toDateString()}>{datum.toDateString()}</td>
              <td key= {vreme}>{vreme}</td>
              <td key={doktor}>{doktor}</td>
-             <td key={doktor+vreme}><button onClick={this.clickRooms.bind(this,tableData[i])}>Dodeli salu</button></td> 
+             <td key={doktor+vreme}><button className="btn_pageAdmin_n" onClick={this.clickRooms.bind(this,tableData[i])}>Dodeli salu</button></td> 
              <td key={vreme+doktor}>{temp}</td>          
           </tr>
         )
@@ -314,12 +318,12 @@ class ReserveList extends Component{
       let res=[];
       let tableData = listRooms;
       for(var i =0; i < tableData.length; i++){
+        let date = new Date(tableData[i].first_free_date)
           res.push(
             <tr>
           <td key= {tableData[i].number}>{tableData[i].number}</td>
           <td key={tableData[i].name}>{tableData[i].name}</td>     
-          <td > <button className="btn_pageAdmin_n" onClick={this.clickIzmenaSale(tableData[i].name,tableData[i].number)}>Измени</button></td>
-          <td > <button className="btn_pageAdmin_n" onClick={this.deleteRoom(tableData[i].number,clinic)}>Обриши</button></td>     
+          <td className="pointerStyle" onClick={this.showCalendar(tableData[i].name)} key={date.toDateString()}>{date.toDateString()}</td>        
           <td > <button className="btn_pageAdmin_n" onClick={this.reserveRoom(tableData[i].id)}>Резервиши</button></td>
           </tr>
           )
@@ -327,21 +331,57 @@ class ReserveList extends Component{
       return res;
     }    
 
+    showCalendar = (name) => (event) => {
+      console.log(name);
+      const url = 'http://localhost:8081/room/getTerms/' + name;
+      const options = {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+      };
+   
+       fetch(url, options)
+         .then(responseWrapped => responseWrapped.json())
+         .then(response => {
+            console.log("uzeo listu termina"+response[0].start_term);
+            this.setState({
+               listRoomTerms: response,
+          }); 
+            this.parseTerm();
+         });
+ }
 
-
-
-    clickIzmenaSale = (name,number) => (event) => {
-      event.preventDefault();
-      this.setState({
-        modalIzmenaSale: true
-      });
-       this.setState({changedValue: 'naziv'});
-       this.setState({headerText: "Измена назива сале"});
-       this.setState({staraVrednost: [name,number]});
-  
+ parseTerm = (event) =>{
+    let forChangeList = this.state.listRoomTerms;
+    let changedList = []; //sredjena lista termina za kalendar
+    for (var i = 0; i < forChangeList.length; i++){
+       var d = new Date(forChangeList[i].date);
+       var d1= d.toLocaleDateString();
+       var res = d1.split("/");  //1,8,2020
+       var id = forChangeList[i].id; //id dogadjaja
+       var datum = res[2]+","+res[1]+ "," + res[0]+",";
+       var startTime = datum+forChangeList[i].start_term;
+       var endTime = datum+forChangeList[i].end_term;
+       var tempObject={
+         id : id,
+         startTime : startTime,
+         endTime : endTime,
+       }
+       changedList.push(tempObject);
     }
-
-
+    console.log(changedList);
+    this.setState({
+      listaKalendar: changedList,
+      prikaziKalendar: true,
+    });
+ }
+ closeCalendar() {
+  this.setState({
+    prikaziKalendar: false
+  });
+}
 
     reserveRoom = (idr) => (event) => {
       event.preventDefault;
@@ -404,7 +444,7 @@ class ReserveList extends Component{
          .then(response => {
           console.log(response.status);
           if(response.ok){
-            alert("Poslati mejlovi.");
+            
           }
           else{
             alert("Nisu poslati mejlovi.");
@@ -413,154 +453,25 @@ class ReserveList extends Component{
       }
   
 
-      sendChangeRoomHandler = (number) => { //izmena sale, dugme posalji
-        this.setState({
-          modalIzmenaSale: false
-        });
-        let newValue = document.getElementById("newValue_input").value;
-        let changedName = this.state.changedValue;
-    
- //       const sve_ok = this.promenaStateClinic(changedName, newValue);
- //       if(!sve_ok){
- //         return;
-  //      }
-    //    let name = this.state.staraVrednost;
-
-        //saljemo na back da te promene sacuvamo u bazi
-        const url = 'http://localhost:8081/room/changeAttribute/'+changedName+"/"+newValue+"/"+this.state.staraVrednost[1];
-        const options = {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json;charset=UTF-8'
-          },
-        };
-        fetch(url, options)
-        .then(response => {
-          console.log(response.ok);
-          console.log(response)
-          if(response.ok === true){
-            alert("Успешно сте изменили поље '" + changedName+"'.");
-            this.clickRooms();
-          }
-          else {
-            alert("Дошло је до грешке приликом измене поља '" + changedName + "'.");
-          }
-        });
-    
-      }
-
-
-      addRoom  = (clinic) => (event) => {
-        let naziv = document.getElementById("name_room").value;
-        let broj = document.getElementById("number_room").value;
-        let all = this.state.allRooms;
-        let postoji = false;
-        for (var i = 0; i<all.length;i++) {
-          if (all[i].number == broj) {
-              postoji = true;
-          }
-        }
-        if(!naziv || !broj){
-          alert("Унесите назив и број сале.");       
-        
-        } else if (!/^\d+$/.test(broj)) {
-          alert("Број сале мора бити број.");       
-        } else if (postoji) {
-          alert("Број сале "+broj+" већ постоји.");
-        }
-        else {
-          console.log("usao u dodavanje: "+naziv);
-          const url = 'http://localhost:8081/room/save';
-          let obj = {
-            "name" : naziv,
-            "number" : broj,
-            "clinic" : clinic
-          }
-          const options = {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json;charset=UTF-8'
-            },
-            body: JSON.stringify(obj)
-
-          };
-
-          fetch(url, options) 
-          .then(response => {
-            console.log(response.status);
-            if (response.ok == true) {
-              alert("Нова сала је додата.");
-              this.clickRooms();
-            }  else if(response.status == 409) {
-              alert("Сала под називом " + naziv * " већ постоји.");
-            } else {
-              alert("Грешка.");
-            }
-          });
-          }
-        }
-
-
-
-
-      deleteRoom = (number,clinic) => (event) => {
-        event.preventDefault;
-        console.log("usao u brisanje: "+number+clinic);
-        const url = 'http://localhost:8081/room/delete/'+number+'/'+clinic;
-        const options = {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json;charset=UTF-8'
-          },
-        };
-
-        fetch(url, options) 
-        .then(responseWrapped => responseWrapped.json())
-        .then(response => {
-            this.setState({
-                listRooms: response,
-                allRooms: response,
-                isRooms: true
-            });
-        });
-      }
-
-
-
    render(){
-    
-    let modalniIzmenaSale = null;   
-    if (this.state.modalIzmenaSale) {  //modalni dijalog za izmenu profila doktora
-      modalniIzmenaSale = (
+    let kalendar = null;
+    if (this.state.prikaziKalendar) {  //modalni dijalog za izmenu profila 
+      kalendar = (
         <Window
-          visible={this.state.modalIzmenaSale}
-          width="370"
-          height="250"
+          visible={this.state.prikaziKalendar}
+          width="650"
+          height="400"
           effect="fadeInUp"
-          onClickAway={() => this.setState({modalIzmenaSale : false})}
-       >
-         
-          <form className="divModalSale">
-            <h4 className="h4Tittle">{this.state.headerText}</h4>
-            <div ><p>Стара вредност:</p>
-            <input type="text"
-              className="inputIzmena"
-              value={this.state.staraVrednost[0]}
-              disabled></input>
-            <p>Нова вредност:</p>
-            <input type="text"
-              className="inputIzmena"
-              id="newValue_input"></input>
-            <button className="btnModalIzmena" onClick={this.sendChangeRoomHandler}>Сачувај</button>
-            </div>
-          </form>
+          onClickAway={() => this.closeCalendar()}
+       > <div>
+         <Calendar
+            listTerm = {this.state.listaKalendar}
+         >
+         </Calendar>
+          </div>
         </Window>);
 
     }
-
 
 
     let rooms = null;
@@ -575,16 +486,13 @@ class ReserveList extends Component{
         onClickAway={() => this.closeModalHandler()}
     >
         <div>
-            <RoomList
+            <Rooms
               findRoom={this.findRoom(this.state.allRooms)}
-              addRoom = {this.addRoom(this.state.clinic)}
               changeHandler = {this.changeHandler}
-              closeModalHandler = {this.closeModalHandler}
               generateTableDataRooms = {this.generateTableDataRooms(this.state.listRooms,this.props.clinic)}
             >
-            </RoomList>
+            </Rooms>
         </div>
-        {modalniIzmenaSale}
     </Window>
        )
     }
@@ -628,11 +536,14 @@ class ReserveList extends Component{
     return(
     <div className="divProfileAdmine">
       <table>
-         <td>
-            <button id="btnPrikaziZahteve" onClick={this.getTerminiPregleda}>Прикажи захтеве за прегледе</button>
+      <td>
+            <button id="btnPrikaziZahteve" onClick={this.props.clickRooms}>Сале</button>
          </td>
          <td>
-            <button id="btnPrikaziZahteve" onClick={this.getTerminiOperacija}>Прикажи захтеве за операције</button>
+            <button id="btnPrikaziZahtev" onClick={this.getTerminiPregleda}>Прикажи захтеве за прегледе</button>
+         </td>
+         <td>
+            <button id="btnPrikaziZahtev" onClick={this.getTerminiOperacija}>Прикажи захтеве за операције</button>
          </td>
       </table>
      <table className="New_room_list">
@@ -649,6 +560,7 @@ class ReserveList extends Component{
     </table>
          {rooms}
          {DoktorModal}
+         {kalendar}
     </div>
     );
   }

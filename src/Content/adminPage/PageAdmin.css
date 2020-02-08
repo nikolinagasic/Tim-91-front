@@ -56,7 +56,7 @@ table#tabProfileAdmin td:hover:not(#btnSifraAdminTd){
     height: 25px;
 }
 #logout{
-    margin-top: 16%;
+    margin-top: 6%;
     text-align: center;
 }
 
@@ -167,29 +167,35 @@ button.btn_pageAdmin_n:hover {
     cursor: pointer;
 }
 #btnReport {
-    margin-left: 20%;
+    margin-left: 0%;
     height: 40px;
-    width: 200px;
+    width: 278px;
     font-size: 90%;
-    background-color: rgb(149,177,149);
+    background-color: #f1f1f1;
     border: none;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 #btnReport:hover {
-    background-color: #f1f1f1;
+    background-color: rgb(149,177,149);
+    cursor: pointer;
+}
+.mape {
+    margin-left: -3%;
+}
+.pointerStyle:hover {
     cursor: pointer;
 }
 #btnCenovnik {
-    margin-left: 60%;
+    margin-left: 0%;
     height: 40px;
-    width: 200px;
+    width: 275px;
     font-size: 90%;
-    background-color: rgb(149,177,149);
+    background-color: #f1f1f1;
     border: none;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 #btnCenovnik:hover {
-    background-color: #f1f1f1;
+    background-color: rgb(149,177,149);
     cursor: pointer;
 }
 #imgFindType {
@@ -229,9 +235,9 @@ button.btn_pageAdmin_n:hover {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 #btnPrikaziZahteve {
-    margin-left: 95%;
+    margin-left: -1%;
     height: 40px;
-    width: 100%;
+    width: 188px;
     background-color: rgb(149,177,149);
     border: none;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -240,7 +246,18 @@ button.btn_pageAdmin_n:hover {
     background-color: #f1f1f1;
     cursor: pointer;
 }
-
+#btnPrikaziZahtev {
+    margin-left: -1%;
+    height: 40px;
+    width: 205px;
+    background-color: rgb(149,177,149);
+    border: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#btnPrikaziZahtev:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
 
 .filterDiagnosisHeaderJK{
     background: gray;
