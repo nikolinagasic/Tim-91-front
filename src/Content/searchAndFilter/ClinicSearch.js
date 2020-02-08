@@ -119,6 +119,7 @@ class ClinicSearch extends React.Component {
     }
 
     generateTableData(listClinics) {
+        console.log(listClinics);
         let res = [];
         if (listClinics != null) {
             let tableData = listClinics;
@@ -130,20 +131,15 @@ class ClinicSearch extends React.Component {
                 rating = this.roundToTwo(rating);
                 res.push(
                     <tr className="tr_clinic_search"
-                        id={tableData[i].name}>
+                        id={tableData[i].id+i}>
                         <td id="a_tr_clinic_search_prikazi"
-                            key={tableData[i].id}
                             onClick={() => this.clickOnPrikaziClinic(id)}>
                             Прикажи
                         </td>
-                        <td onClick={() => this.clickOnClinic(name)}
-                         key={tableData[i].name}>{tableData[i].name}</td>
-                        <td onClick={() => this.clickOnClinic(name)}
-                         key={tableData[i].rating}>{rating}</td>
-                        <td onClick={() => this.clickOnClinic(name)}
-                         key={tableData[i].address}>{tableData[i].address}</td>
-                        <td onClick={() => this.clickOnClinic(name)}
-                         key={tableData[i].price}>{tableData[i].price} рсд</td>
+                        <td onClick={() => this.clickOnClinic(name)}>{tableData[i].name}</td>
+                        <td onClick={() => this.clickOnClinic(name)}>{rating}</td>
+                        <td onClick={() => this.clickOnClinic(name)}>{tableData[i].address}</td>
+                        <td onClick={() => this.clickOnClinic(name)}>{tableData[i].price} рсд</td>
                     </tr>
                 )
             }
