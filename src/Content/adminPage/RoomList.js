@@ -45,6 +45,7 @@ const RoomList = (props) => {
         <tr>
           <th>ИД</th>
           <th>НАЗИВ</th>
+          <th>ПРВИ СЛОБОДАН ДАТУМ</th>
           <th></th>
           <th></th>
         </tr>

@@ -518,13 +518,14 @@ class PageDoctor extends Component {
 
     let kalendar = null;
         if(this.state.prikaziKalendar){
-          kalendar = (
+          kalendar = (<div className="scheduleInDoctor">
              <Schedule
                 listTerm = {this.state.listaKalendar}
                 idDoctor = {this.state.doctor.id}
                 history =  {this.props.history}
              >
              </Schedule>
+             </div>
           );
     }
 
