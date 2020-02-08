@@ -47,6 +47,7 @@ class PageDoctor extends Component {
         isCalendar: false,
         isVacation: false,
         isNavigation: false,
+        prikaziKalendar: false
       });
     }
   
@@ -73,7 +74,8 @@ class PageDoctor extends Component {
                   isPatients: true,
                   isCalendar: false,
                   isVacation: false,
-                  isNavigation: false
+                  isNavigation: false,
+                  prikaziKalendar: false
                 }); 
               });
     }
@@ -145,7 +147,8 @@ class PageDoctor extends Component {
         isPatients: false,
         isCalendar: false,
         isVacation: true,
-        isNavigation: false
+        isNavigation: false,
+        prikaziKalendar: false
       });
     }
     clickLogout = (event) => {
@@ -213,6 +216,7 @@ class PageDoctor extends Component {
               isAppointment: false,
               isPatients: false,
               isCalendar: false,
+              prikaziKalendar: false,
               isVacation: false,
               isNavigation: true
           }); 
@@ -385,9 +389,9 @@ class PageDoctor extends Component {
       for(var i =0; i < tableData.length; i++){
           res.push(
             <tr>
-          <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
-          <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
-          <td key={tableData[i].lbo}>{tableData[i].lbo}</td>
+          <td >{tableData[i].firstName}</td>
+          <td >{tableData[i].lastName}</td>
+          <td >{tableData[i].lbo}</td>
           <td > <button className="btn_pageAdmin_n" 
             onClick={this.clickProfilePatient(tableData[i].mail)}>Профил</button></td>
           
