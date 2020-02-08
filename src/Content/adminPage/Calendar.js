@@ -17,7 +17,7 @@ import {L10n} from '@syncfusion/ej2-base';
     }
  })
 
-class Calendar extends React.Component{
+class Schedule extends React.Component{
 
      constructor(props) {
          super(props);
@@ -46,14 +46,33 @@ class Calendar extends React.Component{
      //localData=this.state.localData;
 
 
+
+
    //funkciju koja ce na klik dugmeta da omoguci zapocinjanje pregleda
    //ovde jos treba prosledjivati info o lekaru i terminu(u statu)
+   clickStart = () => {
+      console.log("ZAPOCET PREGLED");
+      let patient_mail = document.getElementById("PatientMail").value;
+      console.log(patient_mail);
+      this.props.history.push({
+        pathname: '/medicalPage',
+        state: { detail: patient_mail,
+                 id_doctor : this.props.idDoctor }
+      })
+
+   }
+
 
 
    editorWindowTemplate (props:any) : JSX.Element{
         return(
         <table className="custom-event-editor" style={{width: '100%'}}>
           <tbody>
+             <tr>
+               <td className="e-textlabel">Summary</td>
+               <td><input id="Summary" name="Subject" className="e-field e-input" type="text" 
+                    style={{width: '100%'}}/></td>
+             </tr>
              <tr>
                <td className="e-textlabel">From</td>
                <td>
@@ -72,6 +91,17 @@ class Calendar extends React.Component{
                  </DatePickerComponent>
                </td>
              </tr>
+             <tr>
+               <td className="e-textlanel">Email</td>
+               <td><input id="PatientMail" name="PatientMail" className="e-field e-input" type="text" 
+                    style={{width: '100%'}}/></td>
+             </tr>
+             <tr>
+               <button id= "buttonScheduleJ" onClick= {this.clickStart}
+                style={{width: '150%',rowsSpan: '2',borderRadius: '8px',fontSize: '17px'}} >
+                 Zapocni 
+               </button>
+             </tr>
           </tbody>
         </table>
         );
@@ -87,8 +117,10 @@ class Calendar extends React.Component{
           var s4 = s3.split(",");
           var temp={
             Id : forChangeList[i].id,
+            Subject : forChangeList[i].subject,
             StartTime : new Date(s2[0],s2[1]-1,s2[2],s2[3],s2[4]),
             EndTime : new Date(s4[0],s4[1]-1,s4[2],s4[3],s4[4]),
+            PatientMail : forChangeList[i].patient_mail
           }
           localData.push(temp);
         }   
@@ -97,7 +129,7 @@ class Calendar extends React.Component{
 
 
         return (
-          <ScheduleComponent currentView="Month" selectedDate={new Date()}
+          <ScheduleComponent currentView="Month" selectedDate={new Date(2020,7,8)}
           eventSettings={{dataSource: localData}}
           editorTemplate={this.editorWindowTemplate.bind(this)}
           >
@@ -109,4 +141,4 @@ class Calendar extends React.Component{
 
 }
 
-export default Calendar;
+export default Schedule;

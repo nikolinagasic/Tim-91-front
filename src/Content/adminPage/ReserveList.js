@@ -361,11 +361,18 @@ class ReserveList extends Component{
        var d1= d.toLocaleDateString();
        var res = d1.split("/");  //1,8,2020
        var id = forChangeList[i].id; //id dogadjaja
+       var subject; 
+       if (forChangeList[i].examination) {
+         subject="Преглед";
+       } else {
+         subject="Операција";
+       }
        var datum = res[2]+","+res[1]+ "," + res[0]+",";
        var startTime = datum+forChangeList[i].start_term;
        var endTime = datum+forChangeList[i].end_term;
        var tempObject={
          id : id,
+         subject : subject,
          startTime : startTime,
          endTime : endTime,
        }
