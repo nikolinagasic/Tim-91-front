@@ -184,7 +184,8 @@ class ClinicSearch extends React.Component {
                         <td key={tableData[i].discount}
                             >{tableData[i].discount}%</td>
                         <td key={tableData[i].id}>
-                            <button className="a_rezervisi_unapredDef" 
+                            <button id="a_btn_predefined_term"
+                                className="a_rezervisi_unapredDef" 
                                 onClick={() => this.clickRezUnapreDef(id)}>
                                 Резервиши
                             </button></td>
