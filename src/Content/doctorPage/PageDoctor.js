@@ -106,6 +106,36 @@ class PageDoctor extends Component {
             });
     }
 
+    iseciNule = (broj) => {
+      if(broj === "01"){
+          return "1";
+      }
+      if(broj === "01"){
+        return "2";
+    }
+    if(broj === "03"){
+      return "3";
+  }
+  if(broj === "04"){
+    return "4";
+}
+if(broj === "05"){
+  return "5";
+}
+if(broj === "06"){
+  return "6";
+}
+if(broj === "07"){
+  return "7";
+}
+if(broj === "08"){
+  return "8";
+}
+if(broj === "09"){
+  return "9";
+}
+    }
+
     parseTerm = () =>{
        let forChangeList = this.state.listScheduleTerms;
        let changedList = []; //sredjena lista termina za kalendar
@@ -113,6 +143,8 @@ class PageDoctor extends Component {
           var d = new Date(forChangeList[i].date);
           var d1= d.toLocaleDateString();
           var res = d1.split("/");  //1,8,2020
+          res[0] = this.iseciNule(res[0]);
+          res[1] = this.iseciNule(res[1]);
           var id = forChangeList[i].id; //id dogadjaja
           var subject = forChangeList[i].naziv_pregleda;
           var datum = res[2]+","+res[1]+ "," + res[0]+",";

@@ -29,19 +29,18 @@ class Schedule extends React.Component{
     
     //u localData se nalaze podaci koji ce biti prikazani na kalendaru
     //povlacati ovo sa beka!!!!!!!!!
-  /* localData=[{
-       Id:1,
-       Subject: 'Pregled',
-       StartTime: new Date(2019,4,7,6,15),
-       EndTime: new Date(2019,4,7,7,0),
-       PatientMail: 'lela.jelena321@gmail.com',
-       Description: 'Ime pacijenta: Pera, LBO:11234567999'
-   },{
-       Id:2,
-       Subject: 'Operacija',
-       StartTime: new Date(2019,4,17,16,0),
-       EndTime: new Date(2019,4,17,7,0)
-   }];*/
+  //  localData=[{
+  //      Id:1,
+  //      Subject: 'Pregled',
+  //      StartTime: new Date(2019,4,7,6,15),
+  //      EndTime: new Date(2019,4,7,7,0),
+  //      PatientMail: 'lela.jelena321@gmail.com'
+  //  },{
+  //      Id:2,
+  //      Subject: 'Operacija',
+  //      StartTime: new Date(2019,4,17,16,0),
+  //      EndTime: new Date(2019,4,17,7,0)
+  //  }];
 
      //localData=this.state.localData;
 
@@ -126,23 +125,26 @@ class Schedule extends React.Component{
     render() {
         var localData = [];
         var forChangeList = this.props.listTerm;
-        console.log("HERE JEKOO");
-        console.log(forChangeList);
+        console.log("forchange: ");
+        // console.log(forChangeList);
         for (var i = 0; i < forChangeList.length; i++){
           var s1 = forChangeList[i].startTime;
           var s2 = s1.split(",");
           var s3 = forChangeList[i].endTime;
           var s4 = s3.split(",");
+          
+          console.log('start:');
+          console.log(s2[0],s2[1]-1,s2[2],s2[3],s2[4]);
           var temp={
             Id : forChangeList[i].id,
             Subject : forChangeList[i].subject,
-            StartTime : new Date(s2[0],s2[2]-1,s2[1],s2[3],s2[4]),
-            EndTime : new Date(s4[0],s4[2]-1,s4[1],s4[3],s4[4]),
+            StartTime : new Date(s2[0],s2[1]-1,s2[2],s2[3],s2[4]),
+            EndTime : new Date(s4[0],s4[1]-1,s4[2],s4[3],s4[4]),
             PatientMail : forChangeList[i].patient_mail
           }
           localData.push(temp);
         }   
-        console.log("ovdee sam");
+        console.log("localdata:[kalendar]");
         console.log(localData);
 
 

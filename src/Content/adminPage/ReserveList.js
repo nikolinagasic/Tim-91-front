@@ -217,7 +217,7 @@ class ReserveList extends Component{
         fetch(url, options)
         .then(responseWrapped => responseWrapped.json())
         .then(response => {
-            if (response.ok){
+            if (response === 0){
               alert("Sacuvano");
               this.getTerminiOperacija();
             }
