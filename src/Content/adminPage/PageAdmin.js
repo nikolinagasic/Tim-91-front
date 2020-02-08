@@ -813,13 +813,14 @@ class PageAdmin extends Component {
           fetch(url, options)
           .then(responseWrapped => responseWrapped.json())
           .then(response => {
-            console.log(response[0]+"  "+response[1]);
+            console.log(response.ok);
             this.setState({
               ratingClinic: response[1],
               ratingDoctor: response[0],
               isClinic: false,
               isReport: true
-          }); 
+          });
+         
         });
         }
             clickProfile = (event) => {
@@ -1274,9 +1275,11 @@ class PageAdmin extends Component {
       .then(responseWrapped => responseWrapped.json())
       .then(response => {
         console.log(response);
+        
       this.setState({
         reportDetail : response      
       });
+    
       });
     }
     // unapred_def
@@ -1425,6 +1428,10 @@ class PageAdmin extends Component {
     let satnica = document.getElementById("a_selectSatnica_predefinedExam");
     let satnica_id = satnica.options[satnica.selectedIndex].id;
     let room = document.getElementById("a_selectRoom_predefinedExam");
+    if(!room){
+      alert("Морате изабрати салу.");
+      return;
+    }
     let room_id = room.options[room.selectedIndex].id;
     let type = document.getElementById("a_selectType_predefinedExam");
     let type_id = type.options[type.selectedIndex].id;

@@ -600,11 +600,12 @@ class PageNurse extends Component {
 
       let kalendar = null;
       if(this.state.isCalendar){
-        kalendar = (
+        kalendar = (<div className="scheduleInDoctor">
            <NurseSchedule
               listKalendar= {this.state.listKalendar}
            >
            </NurseSchedule>
+           </div>
         );
       }
 
