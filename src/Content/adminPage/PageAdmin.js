@@ -926,6 +926,7 @@ class PageAdmin extends Component {
                 isPriceList: false,
                 isVacation: false,
                 isUnapredDef: false        
+
               });
               }); 
 
@@ -1075,7 +1076,7 @@ class PageAdmin extends Component {
             clickVacation = (event) => {
               document.getElementById("logo_img").style.visibility = "hidden"; 
               console.log(this.state.cadmin.clinic);
-              const url = 'http://localhost:8081/clinicAdministrator/getVacation/'+this.state.cadmin.clinic;
+              const url = 'http://localhost:8081/clinicAdministrator/getAllVacation/'+this.state.cadmin.clinic;
               const options = {
                 method: 'GET',
                 headers: {
@@ -1522,7 +1523,9 @@ class PageAdmin extends Component {
       alert('Потребно је прво изабрати лекара.');
     }
   }
-    
+
+   
+    //lista termina  
     generateTableDataTerms(listTerms){
       let res=[];
       let tableData = listTerms;
@@ -1541,7 +1544,9 @@ class PageAdmin extends Component {
           )
       }
       return res;
-    }    
+    }   
+    
+    
     sendChangedPassword = () => {
       let pass1 = document.getElementById('firstPassword_input1').value;
       let pass2 = document.getElementById('firstPassword_input2').value;
@@ -1845,8 +1850,7 @@ class PageAdmin extends Component {
     let vacation = null;
     if(this.state.isVacation){
        vacation = (
-           <VacationRequests
-             
+           <VacationRequests       
               generateVacation = {this.generateVacation(this.state.listVacation)}
             >
             </VacationRequests>
@@ -1906,7 +1910,8 @@ class PageAdmin extends Component {
        reservation = (
            <ReserveList
               clickRooms = {this.clickRooms}
-              generateTableDataTerms = {this.generateTableDataTerms(this.state.listTerms)}
+              clinic = {this.state.clinic}
+              clickReservation = {this.clickReservation}
               >
             </ReserveList>
        )

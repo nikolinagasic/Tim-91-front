@@ -353,6 +353,7 @@ class PageDoctor extends Component {
                   listPatients: response,
                   isPatients: true
               });
+
           });
       }
     }
@@ -395,6 +396,8 @@ class PageDoctor extends Component {
       }
       return res;
     } 
+
+
     sendVacation = (event) => {
       let odkad = document.getElementById("datefield").value;
       let dokad = document.getElementById("datefield1").value;
@@ -490,8 +493,10 @@ class PageDoctor extends Component {
            patients = (
                <PatientList
                   findPatient={this.findPatient}
+
                   getSortirane={this.getSortirane(this.state.listPatients)}
-            generateTableData = {this.generateTableData(this.state.listPatients)}
+                  generateTableData = {this.generateTableData(this.state.listPatients)}
+
                 >
                 </PatientList>
            )
@@ -522,6 +527,8 @@ class PageDoctor extends Component {
              </Schedule>
           );
     }
+
+
     let vacation = null;
         if(this.state.isVacation){
            vacation = (

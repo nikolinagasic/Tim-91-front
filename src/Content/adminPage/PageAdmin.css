@@ -240,3 +240,49 @@ button.btn_pageAdmin_n:hover {
     background-color: #f1f1f1;
     cursor: pointer;
 }
+
+
+.filterDiagnosisHeaderJK{
+    background: gray;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 25px;
+}
+
+.filterDiagnosisHeaderJK h3{
+    margin-top: -5px;
+}
+
+.tableDiagnosisJK table{
+    margin-left: 50px;
+    margin-top: 10px;
+    font-family: 'Sofia';
+    font-size: 17px;
+}
+
+
+.bodySearchDiagnosisJK{
+    padding: 10px 15px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.bodySearchDiagnosisJK table{
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.bodySearchDiagnosisJK table th, .bodySearchDiagnosisJK table td {
+    text-align: center;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    font-family: 'Sofia';
+    font-size: 17px;
+}
+
+.bodySearchDiagnosisJK table td{
+    font-size: 15px;
+}
