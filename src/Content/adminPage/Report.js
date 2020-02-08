@@ -173,7 +173,7 @@ const Report = (props) => {
     return (
       <div className="divProfileAdmine">
             
-        <table >
+        <table>
           <tr>
     <td> <h4 >Просечна оцена лекара:</h4></td>
             <td>{Math.round((props.ratingDoctor + Number.EPSILON) * 100) / 100}</td>

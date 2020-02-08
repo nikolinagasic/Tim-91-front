@@ -36,7 +36,7 @@ const ProfileDoctor = (props) => {
             </tr>
             <tr>
               <th>Оцена</th>
-              <td onClick={props.clickZabrana.bind(this, 'ocena')}>{props.pat.rating}</td>
+              <td onClick={props.clickZabrana.bind(this, 'ocena')}>{Math.round((props.pat.rating+Number.EPSILON)*100)/100}</td>
             </tr>
             <tr>
               <th>Смена</th>

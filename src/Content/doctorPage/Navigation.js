@@ -467,9 +467,6 @@ let surgery = null;
                  <button onClick={this.clickPatientProfile} id="btnProfileDoc">Профил</button>
                 </tr>
                 <tr>
-                 <button id="btnProfileDoc">Здравствени картон</button>
-                </tr>
-                <tr>
                   <button onClick={this.clickStartMedicalExamintaion} id="btnProfileDoc">Започни преглед</button>
                 </tr>
                 <tr>
