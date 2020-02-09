@@ -135,7 +135,8 @@ if(broj === "08"){
 }
 if(broj === "09"){
   return "9";
-}
+} else 
+  return broj;
     }
 
     parseTerm = () =>{
