@@ -10,9 +10,9 @@ const ClinicProfile = (props) => {
             <h1>"{props.name}"</h1>            
             <h3>Просечна оцена: <em>{props.rating}</em></h3>
             
-            <h2 className="a_grad_opstina_inline">Адреса: <em>{props.address}</em></h2>
-            <h2 className="a_grad_opstina_inline">Град/општина: <em>{props.location}</em></h2>
-
+            <h2 className="a_grad_opstina_inline">
+                Адреса: <em>{props.address}, {props.location}</em></h2>
+        
             <p></p>
             <div id="a_div_opis_clinicProfile">
                 <h2 className="a_opis_clinicProfile_inline">Опис:</h2>
@@ -56,7 +56,6 @@ const ClinicProfile = (props) => {
                         <p>Датум прегледа:</p>
                         <input type="date"
                             onChange={props.changeClinicProfile}
-                            min="2019-12-20" max="2020-02-12"
                             id="a_date_doctor_clinicProfile"></input>
                     </div>
 
