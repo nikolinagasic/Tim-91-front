@@ -716,66 +716,7 @@ class PageAdmin extends Component {
           });
           console.log(this.state.listDoctors);
         }
-        reserveRoom = (idr) => (event) => {
-          event.preventDefault;
-          let date = document.getElementById("date_room").value;
-
-          if(!date){
-            console.log("-1:"+date);
-            date = -1;
-          }else{
-            console.log(":"+date);
-            let dat = new Date(date);
-            date = dat.getTime();
-            console.log(":"+date);
-        }
-        console.log("id:"+this.state.term.id+" idr:"+idr+"date:"+date);
-          const url = 'http://localhost:8081/room/reserveRoom/'+this.state.term.id+'/'+idr+'/'+date;
-          const options = {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json;charset=UTF-8'
-            },
-          };
-          fetch(url, options) 
-          .then(response => {
-              if (response.ok) {
-                alert("Sala uspesno rezervisana.");
-                this.closeModalHandler();
-                this.clickReservation();
-                this.sendMail(date);
-              } else if (response.status == 404) {
-                alert("Доктор је заузет у изабраном термину.");
-              } else {
-                alert("Изабрана сала је изабраном термину заузета. Изаберите други датум или салу.");
-              }
-          });
-        } 
-        sendMail(date) {
-    console.log("salje"+this.state.term.id+date);
-      let  url = 'http://localhost:8081/clinicAdministrator/sendMail/'+this.state.term.id+'/'+date;
-      const options = {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json;charset=UTF-8'
-        }
-      };
-
-      fetch(url, options)
-        .then(response => {
-          console.log(response.status);
-          if(response.ok){
-            alert("Poslati mejlovi.");
-          }
-          else{
-           alert("Nisu poslati mejlovi.");
-          }
-        });
-     
-
-        }
+        
         priceList  = (clinic) => (event) => {
           document.getElementById("logo_img").style.visibility = "hidden";
           console.log(clinic);
@@ -1915,7 +1856,7 @@ class PageAdmin extends Component {
        reservation = (
            <ReserveList
               clickRooms = {this.clickRooms}
-              clinic = {this.state.clinic}
+              clinic = {this.state.cadmin.clinic}
               clickReservation = {this.clickReservation}             
               >
             </ReserveList>

@@ -396,11 +396,15 @@ class ReserveList extends Component{
         date = dat.getTime();
         console.log(":"+date);
       }
+      let changed = false;
+      if (this.state.term.date != date) {
+        changed = true;
+      }
       this.setState({
         reservedRoom : idr
       });
       console.log("id:"+this.state.term.id+" idr:"+idr+"date:"+date);
-      const url = 'http://localhost:8081/room/reserveRoom/'+this.state.term.id+'/'+idr+'/'+date;
+      const url = 'http://localhost:8081/room/reserveRoom/'+this.state.term.id+'/'+idr+'/'+date+'/'+changed;
       const options = {
         method: 'POST',
         headers: {
@@ -418,7 +422,7 @@ class ReserveList extends Component{
             }else{
               
             }
-            this.sendMail(date);
+            this.sendMail(changed);
           } else if (response.status == 404) {
             alert("Доктор је заузет у изабраном термину.");
           } else {
@@ -430,6 +434,12 @@ class ReserveList extends Component{
 
 
       sendMail(date) {
+        if (date) {
+          date = this.state.term.date;
+        }
+        else {
+          date = -1;
+        }
         console.log("salje"+this.state.term.id+date);
          let  url = 'http://localhost:8081/clinicAdministrator/sendMail/'+this.state.term.id+'/'+date;
          const options = {
@@ -490,11 +500,14 @@ class ReserveList extends Component{
               findRoom={this.findRoom(this.state.allRooms)}
               changeHandler = {this.changeHandler}
               generateTableDataRooms = {this.generateTableDataRooms(this.state.listRooms,this.props.clinic)}
+              term = {this.state.term}
             >
             </Rooms>
         </div>
+        
     </Window>
-       )
+       );
+
     }
 
 
