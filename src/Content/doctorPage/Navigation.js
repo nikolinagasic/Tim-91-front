@@ -322,6 +322,10 @@ class Navigation extends Component {
     }
 
 render() {
+    var today = new Date(new Date() + 1);
+  var day = ("0" + today.getDate()).slice(-2);
+  var month = ("0" + (today.getMonth() + 1)).slice(-2);
+  var today = today.getFullYear()+"-"+(month)+"-"+(day) ;
     let profilePatient = null;
         if (this.state.isProfilePatient) {
         profilePatient = (
@@ -379,7 +383,7 @@ let surgery = null;
                         </td>
                         <td>
                         <input className="dateSale" type="date"
-                            min="2019-12-20" max="2020-02-12"
+                            min={today}
                             id="idDateScheduleAppointment"
                             disableDays=""
                             onChange={this.spisakTermina}></input>

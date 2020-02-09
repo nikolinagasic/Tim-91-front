@@ -220,6 +220,8 @@ class ReserveList extends Component{
             if (response === 0){
               alert("Sacuvano");
               this.getTerminiOperacija();
+            } else {
+              alert("Morate prvo izabrati salu.");
             }
         });
 
@@ -415,7 +417,7 @@ class ReserveList extends Component{
       fetch(url, options) 
       .then(response => {
           if (response.ok) {
-            alert("Sala uspesno rezervisana.");
+            alert("Сала успешно резервисана.");
             this.closeModalHandler();
             if(this.state.pregled_operacija == "pregled"){
               this.getTerminiPregleda();
@@ -426,7 +428,7 @@ class ReserveList extends Component{
           } else if (response.status == 404) {
             alert("Доктор је заузет у изабраном термину.");
           } else {
-            alert("Изабрана сала је изабраном термину заузета. Изаберите други датум или салу.");
+            alert("Сала је заузета у изабраном термину.");
           }
         });
       } 
