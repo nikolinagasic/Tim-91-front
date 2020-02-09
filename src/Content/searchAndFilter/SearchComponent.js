@@ -7,7 +7,7 @@ const SearchComponent = (props) => {
     let showFilter = false;
 
     let filter_click = () => {
-        if(showFilter == true){
+        if(showFilter){
             showFilter = false;
             document.getElementById("div_filter_clinic").style.display = 'none';
         }
@@ -22,7 +22,7 @@ const SearchComponent = (props) => {
             <form className="headerSearchClinic">
                 <div className="headerSearchDate">
                     <p>Датум прегледа:</p>
-                    <input type="date" min="2019-12-20" max="2020-02-12"
+                    <input type="date"
                         id="headerSearchClinicDate"></input>
                 </div>
 
@@ -35,7 +35,7 @@ const SearchComponent = (props) => {
 
                 <div className="headerSearchOcena">
                     <p>Оцена</p>
-                    <input type="number" min="1" max="10" placeholder="1 - 10"
+                    <input type="number" min="0" max="10" placeholder="0 - 10"
                         id="headerSearchClinicOcena"></input>
                 </div>
 
@@ -75,10 +75,13 @@ const SearchComponent = (props) => {
             <form className="bodySearchClinic">
                 <table>
                     <thead>
-                        <th>Назив клинике</th>
-                        <th>Просечна оцена</th>
-                        <th>Адреса клинике</th>
-                        <th>Цена прегледа</th>    
+                        <tr>
+                            <th>Профил клинике</th>
+                            <th onClick={props.sortClinicName}>Назив клинике</th>
+                            <th>Просечна оцена</th>
+                            <th onClick={props.sortClinicAddress}>Адреса клинике</th>
+                            <th>Цена прегледа</th>    
+                        </tr>
                     </thead>        
                     <tbody>
                         {props.generateTable}

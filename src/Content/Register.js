@@ -179,7 +179,7 @@ class Register extends Component {
           <p></p>
           {this.state.errormessage}
           <p></p>
-          <input type="submit" id="id_submit" value="Региструј се"></input>
+          <input type="submit" id="id_submit" value="Региструј се" ></input>
         </td>
         </tr>
         </tbody>

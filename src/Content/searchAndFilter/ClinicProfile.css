@@ -1,0 +1,114 @@
+/* OPIS KLINIKE SA BACK-a */
+div.a_div_clinic_profile{
+    text-align: center;
+    margin-left: 120px;
+}
+
+p.a_back_to_clinics {
+    margin-top: 40px;
+    margin-left: -48%;
+    color: blue;
+    font-size: 14px;
+    cursor: pointer;
+    border-bottom: 0.5px solid #e2e2e2;
+}
+
+p.a_back_to_clinics:hover{
+    color: rgba(0, 0, 255, 0.7);
+    text-decoration: underline;
+}
+
+p#a_click_unapredDef{
+    margin-top: 40px;
+    margin-left: 5%;
+    color: blue;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+p#a_click_unapredDef:hover{
+    color: rgba(0, 0, 255, 0.7);
+    text-decoration: underline;
+}
+
+.a_grad_opstina_inline{
+    display: inline;
+    margin-right: 40px;
+    margin-left: 40px;
+}
+
+.a_opis_clinicProfile_inline{
+    display: inline;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+textarea.a_opis_clinicProfile_inline{
+    font-size: 1.9ex;
+    font-family: 'Sofia';
+    border-radius: 10px;
+    padding: 5px;
+}
+
+#a_div_opis_clinicProfile{
+    margin-top: 50px;
+}
+
+/* PRETRAGA DOKTORA */
+div#a_div_pretraga_clinicProfile{
+    margin-left: -28%;
+    margin-top: 50px;
+    border-top: 1px solid #e1e1e1; 
+    border-radius: 8px;
+}
+
+#aa_headerSearchSelect{
+    margin-left: 58%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+#aa_bodySearchDoctor{
+    margin-left: 12%;
+    margin-bottom: 100px;
+}
+
+table#a_table_predefinedTerm {
+    margin-top: 5%;
+    margin-left: 20%;
+    border-collapse: collapse;
+    width: 72%;
+}
+
+table#a_table_predefinedTerm th, table#a_table_predefinedTerm td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  height: 60px;
+}
+
+h1#a_h1_unapredDef{
+    margin-top: 3%;
+    margin-left: 5%;
+    text-decoration: underline;
+}
+
+button.a_rezervisi_unapredDef{
+    background-color: transparent;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    box-shadow: 1px 2px #e2e2e2;
+    font-family: 'Sofia';
+    font-size: 15px;
+    width: 90px;
+    height: 30px;
+    cursor: pointer;
+}
+
+button.a_rezervisi_unapredDef:hover{
+    background-color: #f1f1f1;
+    box-shadow: 1px 2px #cdcdcd;
+    width: 100px;
+    height: 35px;
+    font-size: 17px;
+}

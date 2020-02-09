@@ -16,6 +16,7 @@ form.bodySearchClinic th, form.bodySearchClinic td{
   padding: 8px;
   text-align: center;
   border-bottom: 1px solid #ddd;
+  height: 40px;
 }
 
 form.bodySearchDoctor th, form.bodySearchDoctor td{
@@ -205,4 +206,13 @@ form#filter_options_doctor{
     margin-left: 5%;
     margin-bottom: 30px;
     text-decoration: underline;
+}
+
+td#a_tr_clinic_search_prikazi:hover{
+    font-size: large;
+    font-weight: bold;
+    text-decoration: underline;
+    background-color: #e2e2e2;
+    cursor: pointer;
+    border-radius: 10px;
 }

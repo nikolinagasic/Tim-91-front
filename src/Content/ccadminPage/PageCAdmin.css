@@ -11,8 +11,9 @@
     font-size: medium;
 }
 
-.RegisterAdmin{
-   
+#btnAddDiagnosisJ{
+    border-radius: 8px;
+    height: 20px;
 }
 
 table#tabProfileCAdmin {

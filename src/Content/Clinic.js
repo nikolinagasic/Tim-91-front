@@ -70,7 +70,6 @@ class Clinic extends Component {
               name='name'
               onChange={this.myChangeHandler}
               required></input>
-          
           <p id="adresa">Адреса:</p>
           <input  type='text'
               name='address'

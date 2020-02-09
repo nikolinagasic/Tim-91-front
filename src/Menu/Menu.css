@@ -1,6 +1,5 @@
 .Menu {
-    
-    position: absolute;
+    position: fixed;
     padding: 0px 0px 0px 0px;
     margin-left: -20px;
     text-align: center;

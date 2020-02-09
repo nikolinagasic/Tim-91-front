@@ -1,6 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 const ProfileDoctor = (props) => {
+  let workShift = props.pat.workShift;
+  let smena;
+  if (workShift == 1) {
+    smena = "Пре подне";
+  } else {
+    smena = "После подне";
+  }
       return (
         <div>
       <div className="divProfileDoctor" style={{
@@ -29,11 +36,15 @@ const ProfileDoctor = (props) => {
             </tr>
             <tr>
               <th>Оцена</th>
-              <td onClick={props.clickZabrana.bind(this, 'ocena')}>{props.pat.rating}</td>
+              <td onClick={props.clickZabrana.bind(this, 'ocena')}>{Math.round((props.pat.rating+Number.EPSILON)*100)/100}</td>
             </tr>
             <tr>
-              <td colspan="2" id="btnSifraDoctorTd">
-                <button id="btnSifraDoctor" onClick={props.clickSifra}> Промени лозинку </button>
+              <th>Смена</th>
+              <td onClick={props.clickZabrana.bind(this, 'smena')}>{smena}</td>
+            </tr>
+            <tr>
+            <td colspan="2" id="btnSifraDoctorTd">
+                <button id="btnChangePassword" onClick={props.clickSifra}> Промени лозинку </button>
               </td>
             </tr>
           </table>

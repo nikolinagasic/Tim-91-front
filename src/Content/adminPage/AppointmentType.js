@@ -13,11 +13,11 @@ const AppointmentType = (props) => {
         <p>Назив типа:</p>    
       </td>
       <td>
-      <input id="name_type" type="text" name="name_type" onChange={props.findType}></input>
+      <input className="dateSale" id="name_type" type="text" name="name_type" onChange={props.findType}></input>
       </td>
       
       <td>
-      <button onClick={props.addType} id="btnTip">Додај нови тип</button>
+      <button onClick={props.addType} id="btnRoom">Додај нови тип</button>
       </td>
     </table>
 

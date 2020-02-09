@@ -1,36 +1,51 @@
 import React from 'react'
+import imgFind from "../Images/find.png"
 
 const RoomList = (props) => {
   
     return(
-    <div className="divProfileAdmin">
-    <table id="formSearch"> 
-    
+    <div className="divModalSale">
+     
+       <h4 className="h4Tittle">Списак сала</h4>
+       <table className="formSearchDate">
+         <td></td>
+        <td>
+          <p >Датум:</p>
+        </td>
+        <td>
+          <input id="date_room" className="dateSale" type="date" min="2019-12-20"></input>    
+        </td>
+        <td></td>
+      </table>
+    <table className="formSearchSale">
+    <td>
+            <img id="imgFindType" src={imgFind} alt="Пронађи"/>   
+            </td>
       <td>
-        <p>Назив сале:</p>    
+        <p>Назив:</p>    
       </td>
       <td>
-      <input id="name_room" type="text" onChange={props.findRoom}></input>
+      <input className="dateSale" id="name_room" type="text" onChange={props.findRoom}></input>
       </td>
       <td>
-        <p>Број сале:</p>    
+        <p>Број:</p>    
       </td>
       <td>
-      <input id="number_room" type="text" onChange={props.findRoom}></input>
+      <input className="dateSale" id="number_room" type="text" onChange={props.findRoom}></input>
       </td>
+      
       <td>
-      </td>
-      <td>
-      <button onClick={props.addRoom} id="btnRoom">Додај</button>
+      <button onClick={props.addRoom} id="btnRoom">Додај салу</button>
       </td>
     </table>
 
     <p/>
-    <table className="New_room_list">
+    <table className="New_sale_list">
       <thead>
         <tr>
+          <th>ИД</th>
           <th>НАЗИВ</th>
-          <th>БРОЈ</th>
+          <th>ПРВИ СЛОБОДАН ДАТУМ</th>
           <th></th>
           <th></th>
         </tr>
@@ -39,6 +54,7 @@ const RoomList = (props) => {
         {props.generateTableDataRooms}
       </tbody>
     </table>
+
     </div>
     );
 }

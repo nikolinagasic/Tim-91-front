@@ -3,11 +3,15 @@
     margin-left: 38%;
     padding-top: 5%;
     font-size: large;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 table#tabProfileDoctor {
     border-collapse: collapse;
     width: 60%;
+}
+#tablewidth75 {
+    width: 76%;
 }
 
 table#tabProfileDoctor th , table#tabProfileDoctor td{
@@ -31,19 +35,61 @@ button#btnSifraDoctor{
     cursor: pointer;
     border-radius: 10px;
 }
-
+.scheduleInDoctor {
+    margin-left: 20% ;
+}
 button#btnSifraDoctor:hover{
     background-color: #f1f1f1;
     border: 1px solid black;
     box-shadow: 3px 5px #e2e2e2;
 }
 #logout_d{
-    margin-top: 70.5%;
-    border-radius: 10px;
+    margin-top: 95%;
     text-align: center;
 }
 
 #logout_d:hover{
     background-color: crimson;
     color: white;
+}
+#btnChangePassword {
+    background-color: rgb(149,177,149);
+    border: none;
+    height: 40px;
+    width: 40%;
+    font-size: 95%;
+    margin-left: 4px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#btnChangePassword:hover {
+    cursor: pointer;
+    background-color: #f1f1f1;
+}
+table#tabProfileDoc {
+    border-collapse: collapse;
+    width: 400px;
+    margin-left: -10%;
+}
+
+table#tabProfileDoc th , table#tabProfileDoc td{
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+#btnProfileDoc {
+    height: 50px;
+    width: 300px;
+    font-size: 15px;
+    background-color: rgb(149,177,149);
+    border: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#btnProfileDoc:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+#marginNavigation {
+    position: absolute;
+    right: 5%;
 }

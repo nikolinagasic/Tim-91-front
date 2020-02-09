@@ -40,29 +40,43 @@ class RegisterAdmin extends Component {
   }
 
   mySubmitHandler = (event) => {
+    console.log("OVDEEE");
     event.preventDefault();
     let pass = "12345678";
     let err = '';
-    let nameClinic = document.getElementById("hidden_id").value;
-   // console.log("IME"+nameClinic);
-    this.setState({
-      clinic: nameClinic
-    });
-    
+
+    let nameClinic ='';
+    if(document.getElementById("clinic").checked){
+       nameClinic = document.getElementById("hidden_id").value;
+      // console.log("IME"+nameClinic);
+      this.setState({
+        clinic: nameClinic
+      });
+    }
 
     if (pass.length < 7) {
       err = <strong>Лозинка мора садржати минимално 7 карактера.</strong>;
       this.setState({errormessage:err});
     }
-    else if(!(document.getElementById("clinic").checked || document.getElementById("cliniccentre").checked)){
+
+    let flag = false;
+    if(this.props.pat.mail === "admin@gmail.com"){
+       if(!(document.getElementById("clinic").checked || document.getElementById("cliniccentre").checked)){
         err = <strong>Морате изабрати тип администратора за регистрацију.</strong>;
         this.setState({errormessage:err});
+        flag = true;
       }
+    }
+    else if(!(document.getElementById("clinic").checked)){
+        err = <strong>Морате изабрати тип администратора за регистрацију.</strong>;
+        this.setState({errormessage:err});
+        flag = true;
+    }
   /*  else if (document.getElementById("clinic").checked && document.getElementById("clinic_id").value.length == 0) {
         err = <strong>Морате изабрати клинику за администратора клинике.</strong>;
         this.setState({errormessage:err});
     }*/
-    else{
+    if(!flag){
       this.setState({errormessage:''});
       console.log('sve ok, salji objekat');
      // console.log(this.state.email);
@@ -70,7 +84,6 @@ class RegisterAdmin extends Component {
       
       let obj;      
       var url;
-
       if ( document.getElementById("clinic").checked === true) {
         url = 'http://localhost:8081/ccadmin/register_admin';
           obj = { 
@@ -170,6 +183,16 @@ class RegisterAdmin extends Component {
           </SelectBox>
        );
     }
+
+    let temp1 = null;
+    let temp2 = null;
+    if(this.props.pat.mail === "admin@gmail.com"){
+       temp1 = (<input id="cliniccentre" type="radio" name="container"
+       onChange={this.myChangeHandler}></input>);
+       temp2 = ( <label id="text">Администратор клиничког центра</label>);
+    }
+
+
     return (
     <div className="RegisterAdmin">
       <form name="adminRegForm" onSubmit={this.mySubmitHandler}>
@@ -193,9 +216,8 @@ class RegisterAdmin extends Component {
           onChange={this.myChangeHandler}></input>
           <label id="text">Администратор клинике</label>
           <p></p>
-          <input id="cliniccentre" type="radio" name="container"
-          onChange={this.myChangeHandler}></input>
-          <label id="text">Администратор клиничког центра</label>
+          {temp1}
+          {temp2}
           <p id="pp">Клиника:</p>
           <div
             id = 'id_clinic'

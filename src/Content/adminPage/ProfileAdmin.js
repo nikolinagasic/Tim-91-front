@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 const ProfileAdmin = (props) => {
   return (
     <div>
-  <div className="divProfileAdmin" style={{
+  <div className="divProfileAdmine" style={{
         display: props.show ? 'block' : 'none'
       }}> 
       <table id="tabProfileAdmin">
@@ -39,6 +39,11 @@ const ProfileAdmin = (props) => {
           <th>Телефон</th>
           <td onClick={props.clickIzmena.bind(this, 'telefon')}>{props.admin.telephone}</td>
         </tr>
+        <tr>
+              <td colspan="2" id="btnSifraAdminTd">
+                <button id="btnChangePassword" onClick={props.clickSifra}> Промени лозинку </button>
+              </td>
+            </tr>
       </table>
     </div>
     </div>

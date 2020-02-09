@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.png';
-import {HashRouter, Route, Switch} from 'react-router-dom';
+import {HashRouter, Route} from 'react-router-dom';
 import Home from "./Content/Home";
 import Register from "./Content/Register";
 import Login from "./Content/Login";
@@ -22,6 +22,7 @@ import PageNurse from './Content/nursePage/PageNurse';
 import ProfileNurse from './Content/nursePage/ProfileNurse';
 import DoctorList from './Content/adminPage/DoctorList';
 import ClinicSearch from './Content/searchAndFilter/ClinicSearch';
+import ReserveTerm from './Content/searchAndFilter/ReserveTerm';
 import Schedule from './Content/Schedule';
 import MedicalPage from './Content/medicalExaminaton/MedicalPage';
 import './App.css';

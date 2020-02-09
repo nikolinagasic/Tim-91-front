@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import "./PagePatient.css" 
 import ProfilePatient from './ProfilePatient'
-import Modal from "../Modal"
+import Modal from "../ModalChange/ModalChange"
 import Radium from 'radium' 
 import ClinicSearch from '../searchAndFilter/ClinicSearch';
 import {UserContext} from '../../UserProvider'
 import PatientMedicalRecord from './PatientMedicalRecord';
+import PatientHistory from './PatientHistory';
+import PatientRating from './PatientRate';
 
 class PagePatient extends Component {
   static contextType = UserContext;
@@ -17,8 +19,9 @@ class PagePatient extends Component {
       //token: this.props.location.state.token,
       isKarton: false,
       isProfil: false,
-      isIstorija: false,
+      isIstorija: false,    // ocenjivanje
       isKlinike: false,
+      isRating: false,   // istorija
 
       modalShowing: false,
       headerText: '',
@@ -27,7 +30,10 @@ class PagePatient extends Component {
       modalPassword: false, 
       lista_klinika: null, 
       lista_tipova: null,
-      medical_record: null
+      medical_record: null,
+      lista_klinika_istorija: null,
+      lista_doktora_istorija: null,
+      lista_pregleda_istorija2: null
     };
   }
 
@@ -61,15 +67,92 @@ class PagePatient extends Component {
          isKarton: true,
          isProfil: false,
          isIstorija: false,
-         isKlinike: false
+         isKlinike: false,
+         isRating: false
        });
        console.log(this.state.medical_record);
     });
 
   }
   
-  clickIstorija = (event) => {
-    alert("Страница је у процесу израде");
+  clickOcenjivanje = (event) => {
+    console.log('click ocenjivanje');
+    document.getElementById("logo_img").style.visibility = "hidden"; 
+    
+    fetch('http://localhost:8081/clinic/getPatientHistoryClinics', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Auth-Token": this.context.token
+      },
+    })
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        this.setState({
+          lista_klinika_istorija: response
+        });
+
+        fetch('http://localhost:8081/doctor/getPatientHistoryDoctors', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Auth-Token": this.context.token
+          },
+        })
+        .then(responseWrapped => responseWrapped.json())
+        .then(response1 => {
+          console.log(response1);
+          this.setState({
+            lista_doktora_istorija: response1,
+            isKarton: false,
+            isProfil: false,
+            isIstorija: true,
+            isKlinike: false,
+            isRating: false
+          });
+        });
+    });
+  }
+
+  clickIstorija = () => {
+    document.getElementById("logo_img").style.visibility = "hidden"; 
+
+    fetch('http://localhost:8081/patient/getAllExaminations', {
+      method: 'GET',
+      headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
+      "Auth-Token": this.context.token
+      },
+    })
+      .then(responseWrapped => responseWrapped.json())
+      .then(response => {
+        console.log(response);
+        this.setState({
+          lista_pregleda_istorija2 : response
+        });
+
+        fetch('http://localhost:8081/type/getAll', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Auth-Token": this.context.token}
+        })
+        .then(responseWrapped => responseWrapped.json())
+        .then(response => {
+          this.setState({
+            lista_tipova: response,
+            isKarton: false,
+            isProfil: false,
+            isIstorija: false,
+            isKlinike: false,
+            isRating: true
+          });
+        });
+      });
   }
 
   clickKlinike = (event) => {
@@ -101,7 +184,8 @@ class PagePatient extends Component {
           isKarton: false,
           isProfil: false,
           isIstorija: false,
-          isKlinike: true
+          isKlinike: true,
+          isRating: false
         });
       });
     });
@@ -111,6 +195,7 @@ class PagePatient extends Component {
     console.log('kliknuo na profil');
     document.getElementById("logo_img").style.visibility = "hidden"; 
 
+    console.log(this.context.token);
     const url = 'http://localhost:8081/patient/getPat';
     const options = {
       method: 'GET',
@@ -124,12 +209,14 @@ class PagePatient extends Component {
     fetch(url, options)
     .then(responseWrapped => responseWrapped.json())
       .then(response => {
+        console.log(response);
         console.log('patient first name: ' + response.firstName);
         
         this.setState({
           //patient: response,
           isKarton: false,
           isProfil: true,
+          isRating: false,
           isIstorija: false,
           isKlinike: false
         });
@@ -311,6 +398,7 @@ class PagePatient extends Component {
     }); 
   }
 
+
   render() {
       let modalni = null;
       if(this.state.modalShowing){
@@ -382,6 +470,25 @@ class PagePatient extends Component {
         );
       }
 
+      let istorija = null;
+      if(this.state.isIstorija){
+        istorija = (
+          <PatientHistory 
+            klinike = {this.state.lista_klinika_istorija}
+            doktori = {this.state.lista_doktora_istorija}
+          />
+        );
+      }
+      let istorija2 = null;
+      if(this.state.isRating){
+        istorija2 = (
+          <PatientRating 
+            lista_pregleda = {this.state.lista_pregleda_istorija2}
+            options = {this.state.lista_tipova}
+          />
+        );
+      }
+
 
       return (
         <div className="main_div">
@@ -393,8 +500,11 @@ class PagePatient extends Component {
             id="profil" 
             onClick={this.clickProfil}> Профил корисника </a></li>
             <li className="li_list"><a 
-            id="istorija" 
+            id="istorija2" 
             onClick={this.clickIstorija}> Историја </a></li>
+            <li className="li_list"><a 
+            id="istorija" 
+            onClick={this.clickOcenjivanje}> Оцењивање </a></li>
             <li className="li_list"><a 
             id="klinike"
             onClick={this.clickKlinike}> Листа клиника </a></li>
@@ -411,13 +521,13 @@ class PagePatient extends Component {
             clickSifra={this.changePassword}
             > 
           </ProfilePatient>
-          
-         
 
           {modalni} 
           {modalniSifra}
           {klinike}   
           {karton} 
+          {istorija}
+          {istorija2}
         </div>
       );
     }

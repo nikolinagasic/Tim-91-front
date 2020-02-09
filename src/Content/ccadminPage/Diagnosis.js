@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 const Diagnosis = (props) => {
  
@@ -9,7 +9,7 @@ const Diagnosis = (props) => {
           <tr>
             <th>ШИФРА ЛЕКА</th>
             <th>НАЗИВ ЛЕКА</th>
-            <th>ДИЈАГНОЗА</th>
+            <th>ШИФРА_ДИЈАГНОЗЕ</th>
             <th>НАЗИВ_ДИЈАГНОЗЕ</th>           
           </tr>
         </thead>
@@ -17,7 +17,7 @@ const Diagnosis = (props) => {
            {props.generateTableData}
            <tr>
               <td colspan="4" align="center">
-                <button id="btnAdd" onClick={props.clickAdd}> УНЕСИ НОВУ КОМБИНАЦИЈУ </button>
+                <button id="btnAddDiagnosisJ" onClick={props.clickAdd}> УНЕСИ НОВУ КОМБИНАЦИЈУ </button>
               </td>
             </tr>
         </tbody>
