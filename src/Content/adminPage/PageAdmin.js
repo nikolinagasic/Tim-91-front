@@ -1428,7 +1428,7 @@ class PageAdmin extends Component {
     let satnica = document.getElementById("a_selectSatnica_predefinedExam");
     let satnica_id = satnica.options[satnica.selectedIndex].id;
     let room = document.getElementById("a_selectRoom_predefinedExam");
-    if(!room){
+    if(!room.value){
       alert("Морате изабрати салу.");
       return;
     }

@@ -12,7 +12,6 @@ const PredefinedExam = (props) => {
                         <tr>
                             <th>Датум прегледа:*</th>
                             <td><input type="date"
-                                min="2020-01-19" max="2020-02-12"
                                 id="a_date_predefinedExam" /></td>
                         </tr>
                         <tr>
@@ -43,7 +42,7 @@ const PredefinedExam = (props) => {
                             <th>Лекар:*</th>
                             <select className="a_select_predefinedExam" 
                                 id="a_selectDoctors_predefinedExam"
-                                onChange={props.changeLekar}
+                                onClick={props.changeLekar}
                                 >
                                 {props.generateDoctors}
                             </select>

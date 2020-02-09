@@ -129,6 +129,8 @@ class ClinicSearch extends React.Component {
                 let id = tableData[i].id;
                 let rating = tableData[i].rating;
                 rating = this.roundToTwo(rating);
+                let cena = tableData[i].price;
+                cena = this.roundToTwo(cena);
                 res.push(
                     <tr className="tr_clinic_search"
                         id={tableData[i].id+i}>
@@ -139,7 +141,7 @@ class ClinicSearch extends React.Component {
                         <td onClick={() => this.clickOnClinic(name)}>{tableData[i].name}</td>
                         <td onClick={() => this.clickOnClinic(name)}>{rating}</td>
                         <td onClick={() => this.clickOnClinic(name)}>{tableData[i].address}</td>
-                        <td onClick={() => this.clickOnClinic(name)}>{tableData[i].price} рсд</td>
+                        <td onClick={() => this.clickOnClinic(name)}>{cena} рсд</td>
                     </tr>
                 )
             }
