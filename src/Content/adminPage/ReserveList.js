@@ -415,7 +415,7 @@ class ReserveList extends Component{
       fetch(url, options) 
       .then(response => {
           if (response.ok) {
-            alert("Сала успешно резервисана.");
+            alert("Sala uspesno rezervisana.");
             this.closeModalHandler();
             if(this.state.pregled_operacija == "pregled"){
               this.getTerminiPregleda();
@@ -426,21 +426,21 @@ class ReserveList extends Component{
           } else if (response.status == 404) {
             alert("Доктор је заузет у изабраном термину.");
           } else {
-            alert("Сала је заузета у изабраном термину.");
+            alert("Изабрана сала је изабраном термину заузета. Изаберите други датум или салу.");
           }
         });
       } 
 
 
 
-      sendMail(changed) {
-        console.log("salje"+this.state.term.id+changed);
-        let date;
-        if (changed) {
+      sendMail(date) {
+        if (date) {
           date = this.state.term.date;
-        } else {
+        }
+        else {
           date = -1;
         }
+        console.log("salje"+this.state.term.id+date);
          let  url = 'http://localhost:8081/clinicAdministrator/sendMail/'+this.state.term.id+'/'+date;
          const options = {
            method: 'GET',
