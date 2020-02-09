@@ -378,11 +378,11 @@ class PageNurse extends Component {
     for(var i =0; i < tableData.length; i++){
         res.push(
           <tr>
-        <td key={tableData[i].firstName}>{tableData[i].firstName}</td>
-        <td key= {tableData[i].lastName}>{tableData[i].lastName}</td>
-        <td key={tableData[i].lbo}>{tableData[i].lbo}</td> 
+        <td >{tableData[i].firstName}</td>
+        <td >{tableData[i].lastName}</td>
+        <td >{tableData[i].lbo}</td> 
         <td > <button className="btn_pageAdmin_n" 
-            onClick={this.clickProfilePatient(tableData[i].mail)}>Профил</button></td>
+            onClick={this.clickProfilePatient(tableData[i].mail)}>Картон</button></td>
         </tr>
         )
     }
@@ -400,7 +400,9 @@ class PageNurse extends Component {
           isProfile: false,
           isPatients: false,
           isCalendar: false,
-          isVacation: true
+          isVacation: true,
+          isProfilePatient: false
+
         });
    }
 
@@ -501,7 +503,9 @@ class PageNurse extends Component {
       isProfile: false,
       isPatients: false,
       isCalendar: true,
-      isVacation: false
+      isVacation: false,
+      isProfilePatient: false
+
     });
    
   }

@@ -66,11 +66,12 @@ class NurseSchedule extends React.Component{
           var s2 = s1.split(",");
           var s3 = forChangeList[i].endTime;
           var s4 = s3.split(",");
+          console.log(s4[0],s4[1]-1,s4[2],s4[3],s4[4]);
           var temp={
             Id : forChangeList[i].id,
             Subject : forChangeList[i].subject,
-            StartTime : new Date(s2[0],s2[1]-1,s2[2],s2[3],s2[4]),
-            EndTime : new Date(s4[0],s4[1]-1,s4[2],s4[3],s4[4]),
+            StartTime : new Date(s2[0],s2[2]-1,s2[1],s2[3],s2[4]),
+            EndTime : new Date(s4[0],s4[2]-1,s4[1],s4[3],s4[4]),
           }
           localData.push(temp);
         }   

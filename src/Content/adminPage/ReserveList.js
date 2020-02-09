@@ -396,11 +396,15 @@ class ReserveList extends Component{
         date = dat.getTime();
         console.log(":"+date);
       }
+      let changed = false;
+      if (this.state.term.date != date) {
+        changed = true;
+      }
       this.setState({
         reservedRoom : idr
       });
       console.log("id:"+this.state.term.id+" idr:"+idr+"date:"+date);
-      const url = 'http://localhost:8081/room/reserveRoom/'+this.state.term.id+'/'+idr+'/'+date;
+      const url = 'http://localhost:8081/room/reserveRoom/'+this.state.term.id+'/'+idr+'/'+date+'/'+changed;
       const options = {
         method: 'POST',
         headers: {
@@ -411,26 +415,32 @@ class ReserveList extends Component{
       fetch(url, options) 
       .then(response => {
           if (response.ok) {
-            alert("Sala uspesno rezervisana.");
+            alert("Сала успешно резервисана.");
             this.closeModalHandler();
             if(this.state.pregled_operacija == "pregled"){
               this.getTerminiPregleda();
             }else{
               
             }
-            this.sendMail(date);
+            this.sendMail(changed);
           } else if (response.status == 404) {
             alert("Доктор је заузет у изабраном термину.");
           } else {
-            alert("Изабрана сала је изабраном термину заузета. Изаберите други датум или салу.");
+            alert("Сала је заузета у изабраном термину.");
           }
         });
       } 
 
 
 
-      sendMail(date) {
-        console.log("salje"+this.state.term.id+date);
+      sendMail(changed) {
+        console.log("salje"+this.state.term.id+changed);
+        let date;
+        if (changed) {
+          date = this.state.term.date;
+        } else {
+          date = -1;
+        }
          let  url = 'http://localhost:8081/clinicAdministrator/sendMail/'+this.state.term.id+'/'+date;
          const options = {
            method: 'GET',
@@ -490,11 +500,14 @@ class ReserveList extends Component{
               findRoom={this.findRoom(this.state.allRooms)}
               changeHandler = {this.changeHandler}
               generateTableDataRooms = {this.generateTableDataRooms(this.state.listRooms,this.props.clinic)}
+              term = {this.state.term}
             >
             </Rooms>
         </div>
+        
     </Window>
-       )
+       );
+
     }
 
 

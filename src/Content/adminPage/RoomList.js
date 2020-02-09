@@ -2,7 +2,10 @@ import React from 'react'
 import imgFind from "../Images/find.png"
 
 const RoomList = (props) => {
-  
+  var today = new Date(new Date() + 1);
+  var day = ("0" + today.getDate()).slice(-2);
+  var month = ("0" + (today.getMonth() + 1)).slice(-2);
+  var today = today.getFullYear()+"-"+(month)+"-"+(day) ;
     return(
     <div className="divModalSale">
      
@@ -13,7 +16,7 @@ const RoomList = (props) => {
           <p >Датум:</p>
         </td>
         <td>
-          <input id="date_room" className="dateSale" type="date" min="2019-12-20"></input>    
+          <input id="date_room" className="dateSale" type="date" min={today}></input>    
         </td>
         <td></td>
       </table>

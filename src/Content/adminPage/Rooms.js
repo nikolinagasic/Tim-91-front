@@ -2,7 +2,14 @@ import React from 'react'
 import imgFind from "../Images/find.png"
 
 const Rooms = (props) => {
-  
+  var date = new Date(props.term.date);
+  var day = ("0" + date.getDate()).slice(-2);
+  var month = ("0" + (date.getMonth() + 1)).slice(-2);
+  var date = date.getFullYear()+"-"+(month)+"-"+(day) ;
+  var today = new Date(new Date() + 1);
+  var day = ("0" + today.getDate()).slice(-2);
+  var month = ("0" + (today.getMonth() + 1)).slice(-2);
+  var today = today.getFullYear()+"-"+(month)+"-"+(day) ;
     return(
     <div className="divModalSale">
      
@@ -27,7 +34,7 @@ const Rooms = (props) => {
           <p >Датум:</p>
         </td>
         <td>
-          <input id="date_room" className="dateSale" type="date" min="2019-12-20" ></input>    
+          <input id="date_room"  name="date_room" className="dateSale" type="date" min={today} defaultValue={date} ></input>    
         </td>
         <td></td>
       </table>
@@ -49,5 +56,6 @@ const Rooms = (props) => {
 
     </div>
     );
+    
 }
 export default Rooms;
