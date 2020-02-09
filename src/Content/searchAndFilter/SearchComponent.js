@@ -23,7 +23,6 @@ const SearchComponent = (props) => {
                 <div className="headerSearchDate">
                     <p>Датум прегледа:</p>
                     <input type="date"
-                        min="2019-12-20" max="2020-02-12"
                         id="headerSearchClinicDate"></input>
                 </div>
 

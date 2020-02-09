@@ -107,6 +107,12 @@ class DoctorSearch extends Component {
     }
 
     clickPogledaj = (ime, prezime, id) => {
+        if(ime == null){
+            ime = '-';
+        }
+        if(prezime == null){
+            prezime = '-';
+        }
         let doctorName = ime + " " + prezime;
         console.log(doctorName + " " + this.state.date);
         
@@ -295,9 +301,19 @@ class DoctorSearch extends Component {
 
         let showDetailTerm = null;
         if(this.state.isDetailTerm){
-            let doctorFirstLastName = 'др ' + this.state.reservationDetail.firstNameDoctor + ' ' +
-               this.state.reservationDetail.lastNameDoctor;
-            
+            let doctorFirstLastName = '';
+            if(this.state.reservationDetail.firstNameDoctor != null){
+                doctorFirstLastName = 'др ' + this.state.reservationDetail.firstNameDoctor;
+            }
+            else{
+                doctorFirstLastName = 'др -'; 
+            }
+            if(this.state.reservationDetail.lastNameDoctor != null){
+                doctorFirstLastName += ' ' + this.state.reservationDetail.lastNameDoctor;
+            }
+            else{
+                doctorFirstLastName += ' -';
+            }
             let d = new Date(this.state.reservationDetail.date);
             let dateReservedTerm = d.toDateString();
             
