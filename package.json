@@ -13,7 +13,7 @@
     "google-maps-react": "^2.0.2",
     "leaflet": "^1.6.0",
     "moment": "^2.24.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "radium": "^0.26.0",
     "react": "0.0.0-b53ea6ca0",
     "react-awesome-modal": "^2.0.5",
