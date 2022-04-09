@@ -12,7 +12,7 @@
     "google-map-react": "^1.1.6",
     "google-maps-react": "^2.0.2",
     "leaflet": "^1.6.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "node-sass": "^4.13.0",
     "radium": "^0.26.0",
     "react": "0.0.0-b53ea6ca0",
